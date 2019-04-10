@@ -1,0 +1,15 @@
+
+application/views/revision_trabajo_investigacion/listas_gestor.php
+application/config/database_.php
+application/views/errors/html/error_404.php
+application/views/errors/html/error_404.php
+application/views/errors/html/error_404.php
+application/views/errors/html/error_db.php
+application/views/errors/html/error_exception.php
+application/views/errors/html/error_general.php
+application/views/errors/html_____/error_404.php
+application/views/errors/html_____/error_db.php
+application/views/errors/html_____/error_general.php
+application/views/errors/html_____/error_exception.php
+application/views/errors/html_____/error_php.php
+application/views/errors/html_____/index.html
