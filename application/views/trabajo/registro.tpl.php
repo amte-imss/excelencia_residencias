@@ -1,4 +1,4 @@
-<?php echo js('trabajo_investigacion/registro.js'); ?>
+<?php echo js('registro/registro.js'); ?>
 <?php // pr($language_text);  ?>
 
 <div class="panel panel-default from-trabajos">

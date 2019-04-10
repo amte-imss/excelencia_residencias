@@ -46,4 +46,54 @@ class Registro_excelencia_model extends CI_Model {
 
         return $res->result_array();
     }
+
+    public function pnpc_anio(){
+        $anios = array();
+        for ($i=date("Y"); $i >= 2015; $i--) { 
+            $anios[$i] = $i;
+        }
+        return $anios;
+    }
+
+    public function tipo_categoria(){
+        $categoria = array(
+            En_carrera::ASOCIADO_A => 'Asociado A',
+            En_carrera::ASOCIADO_B => 'Asociado B',
+            En_carrera::ASOCIADO_C => 'Asociado C',
+            En_carrera::TITULAR_A => 'Titular A',
+            En_carrera::TITULAR_B => 'Titular B',
+            En_carrera::TITULAR_C => 'Titular C',
+        );
+        
+        return $categoria;
+    }
+
+    public function categoria_docente(){
+        $categoria = array(
+            En_tipo_docente::TITULAR => 'Profesor Titular',
+            En_tipo_docente::ADJUNTO => 'Adjunto',
+            En_tipo_docente::AYUDANTE => 'Ayudante',
+            En_tipo_docente::AUXILIAR_PRACTICA_CLINICA => 'Auxiliar de práctica clínica'
+        );
+        
+        return $categoria;
+    }
+
+    public function curso($filtros = null){
+        $this->db->flush_cache();
+        $this->db->reset_query();
+
+        if (!is_null($filtros))
+            $this->db->where($filtros);
+        
+        $this->db->order_by('especialidades', 'asc');
+
+        $res = $this->db->get('excelencia.especialidades');
+
+        $this->db->flush_cache();
+        $this->db->reset_query();
+
+        return $res->result_array();
+    }
+
 }

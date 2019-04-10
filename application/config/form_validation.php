@@ -141,6 +141,29 @@ $config["form_registro_investigacion"] = array(
     )
 );
 
+$config["form_registro_excelencia"] = array(
+    array(
+        'field' => 'carrera',
+        'label' => '¿Tiene carrera docente?',
+        'rules' => 'required',
+    ),
+    array(
+        'field' => 'tipo_categoria',
+        'label' => '¿Qué categoría tiene?',
+        'rules' => 'trim',
+    ),
+    array(
+        'field' => 'pnpc',
+        'label' => '¿Tiene PNPC?',
+        'rules' => 'trim|required',
+    ),
+    array(
+        'field' => 'pnpc_anio',
+        'label' => 'De qué año',
+        'rules' => 'trim',
+    ),
+);
+
 $config["login"] = array(
     array(
         'field' => 'usuario',

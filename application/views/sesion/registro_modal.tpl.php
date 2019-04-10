@@ -10,10 +10,10 @@
         <!-- <div class="form-header color">
         </div> -->
         <div class="login-page">
-            <ul class="nav nav-tabs">
+            <!--ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#r_internos"><?php echo $language_text['registro_usuario']['tab_interno']; ?></a></li>
                 <li><a data-toggle="tab" href="#r_externos"><?php echo $language_text['registro_usuario']['tab_externo']; ?></a></li>
-            </ul>
+            </ul-->
             <div class="tab-content">
                 <div id="r_internos" class="tab-pane fade in active">
                     <?php
@@ -24,9 +24,9 @@
                 </div>
                 <div id="r_externos" class="tab-pane fade">
                     <?php
-                    if (isset($registro_externos)) {
+                    /*if (isset($registro_externos)) {
                         echo $registro_externos;
-                    }
+                    }*/
                     ?>
                 </div>
             </div>

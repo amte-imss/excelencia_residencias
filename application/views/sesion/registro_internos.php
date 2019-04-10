@@ -52,49 +52,6 @@ if (isset($registro_valido)) {
             ?>
         </div>
         <div class="form-group">
-            <label class="pull-left form-etiquetas pull-right col-sm-5"><?php echo $language_text['registro_usuario']['telefono_personal']; ?></label>
-
-            <?php
-            echo $this->form_complete->create_element(array('id' => 'telefono_personal',
-                'type' => 'numeric',
-                'value' => isset($post['telefono_personal']) ? $post['telefono_personal'] : '',
-                'attributes' => array(
-                    'class' => 'input form-control',
-            )));
-
-            echo form_error_format('telefono_personal');
-            ?>
-        </div>
-        <div class="form-group">
-            <label class="pull-left form-etiquetas pull-right col-sm-5"><?php echo $language_text['registro_usuario']['telefono_oficina']; ?></label>
-
-            <?php
-            echo $this->form_complete->create_element(array('id' => 'telefono_oficina',
-                'type' => 'numeric',
-                'value' => isset($post['telefono_oficina']) ? $post['telefono_oficina'] : '',
-                'attributes' => array(
-                    'class' => ' input form-control',
-            )));
-
-            echo form_error_format('telefono_oficina');
-            ?>
-        </div>
-        <div class="form-group">
-            <label class="pull-left form-etiquetas pull-right col-sm-5"><?php echo $language_text['registro_usuario']['pais_origen']; ?></label>
-            <?php
-            echo $this->form_complete->create_element(array('id' => 'pais_origen',
-                'type' => 'dropdown',
-                'first' => array('' => $language_text['registro_usuario']['pais_origen']),
-                'options' => $paises,
-                'value' => isset($post['pais_origen']) ? $post['pais_origen'] : 'MX',
-                'attributes' => array(
-                    'class' => 'form-control',
-                    'style' => 'max-width:210px'
-            )));
-            echo form_error_format('pais_origen');
-            ?>
-        </div>
-        <div class="form-group">
             <label class="pull-left form-etiquetas pull-right col-sm-5"><?php echo $language_text['registro_usuario']['reg_password']; ?></label>
             <?php
             echo $this->form_complete->create_element(array('id' => 'reg_password',
