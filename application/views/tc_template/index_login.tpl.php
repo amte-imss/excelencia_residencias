@@ -100,34 +100,43 @@
                     <div class="header-wrapper clearfix">
 
                         <!-- Logo -->
-                        <div class="logo col-sm-4 col-md-4 col-lg-4">
-                            <a href="#home" class="scroll-to">
-                                <img height="100px" src="<?php echo asset_url(); ?>img/logo_foro_naranja.png" />
+                        <div class=" col-sm-2 col-md-2 col-lg-2" style="margin-right:10px">
+                            <a href="#home" class="">
+                                <img height="60px" src="<?php echo asset_url(); ?>img/gob_1.png" />
+                            </a>
+                           
+                        </div>
+                        <div class=" col-sm-1 col-md-1 col-lg-1" style="margin-right:20px">
+                        <a href="#home" class="">
+                                <img height="60px" src="<?php echo asset_url(); ?>img/ces.png" />
+                            </a>
+                           
+                        </div>
+                        <div class="logo col-sm-1 col-md-1 col-lg-1">
+                        <a href="#home" class="">
+                                <img height="70px" src="<?php echo asset_url(); ?>img/imss.png" />
                             </a>
                         </div>
                         <!-- /Logo -->
-                        <div class="col-sm-8 col-md-8 col-lg-8 pull-right text-right">
+                       <!--  <div class="col-sm-6 col-md-6 col-lg-6 pull-right text-right">
                             <a href="#" class="languaje_catalogo" data-cvelanguage="es">
-                                <img img-responsive src="<?php echo asset_url(); ?>img/language/mx.png"
+                                <img img-responsive src="<?php //echo asset_url(); ?>img/language/mx.png"
                                      class="logos"
-                                     alt="<?php echo $language_text['template_general']['espaniol']; ?>"
-                                     title="<?php echo $language_text['template_general']['espaniol']; ?>"
+                                     alt="<?php //echo $language_text['template_general']['espaniol']; ?>"
+                                     title="<?php //echo $language_text['template_general']['espaniol']; ?>"
                                      target="_blank"
                                      width="20px;"/>
                             </a>
-                            <!-- <a href="#"><img img-responsive class"logos" height="70px" src="assets/img/sipimss.png" alt=""></a> -->
+                            <a href="#"><img img-responsive class"logos" height="70px" src="assets/img/sipimss.png" alt=""></a> 
                             <a href="#" class="languaje_catalogo" data-cvelanguage="en">
-                                <img img-responsive src="<?php echo asset_url(); ?>img/language/us.png"
+                                <img img-responsive src="<?php// echo asset_url(); ?>img/language/us.png"
                                      class="logos"
-                                     alt="<?php echo $language_text['template_general']['ingles']; ?>"
-                                     title="<?php echo $language_text['template_general']['ingles']; ?>"
+                                     alt="<?php //echo $language_text['template_general']['ingles']; ?>"
+                                     title="<?php// echo $language_text['template_general']['ingles']; ?>"
                                      target="_blank"
                                      width="20px;"/>
-                            </a>
-                        </div>
-
-                        <!-- Navigation -->
-                        <div class="col-sm-8 col-md-8 col-lg-8 right">
+                            </a>-->
+                            <div class="col-sm-7 col-md-7 col-lg-7 right">
                             <?php
                             if (isset($menu) && !is_null($menu)) {
                                 // pr($menu);
@@ -143,6 +152,10 @@
                             ?>
                             <!-- /Navigation -->
                         </div>
+                        </div>
+
+                        <!-- Navigation -->
+                        
 
                         <!-- /Redes sociales -->
                         <!--div id="div_redes" class="right col-sm-2 col-md-2 col-lg-2">
@@ -216,7 +229,7 @@
                         </div> -->
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 text-left">
                             <a href="http://www.qroo.gob.mx/sedetur" class="scroll-to">
-                                <img src="<?php echo asset_url(); ?>img/logo-Cancun.png" />
+                            <!--     <img src="<?php //echo asset_url(); ?>img/logo-Cancun.png" />-->
                             </a>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 text-center">
@@ -227,7 +240,7 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 text-center">
                             <a href="http://www.imss.gob.mx/" class="scroll-to">
-                                <img src="<?php echo asset_url(); ?>img/logo-imss.png" />
+                             <!--   <img src="<?php //echo asset_url(); ?>img/logo-imss.png" />-->
                             </a>
                         </div>
                     </div>

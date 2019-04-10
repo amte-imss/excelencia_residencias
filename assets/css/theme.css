@@ -380,8 +380,8 @@ h4 .glyphicon, h5 .glyphicon, h6 .glyphicon {
 .section-title .fa-stack .fa {color: #ffffff;}
 /*.color .section-title .fa-stack .fa {color: #f15a29;}
 .section-title .rhex {background-color: #f15a29;}*/
-.color .section-title .fa-stack .fa {color: #f15a29;}
-.section-title .rhex {background-color: #f15a29;}
+.color .section-title .fa-stack .fa {color:  #9D2449;}
+.section-title .rhex {background-color:  #9D2449;}
 .color .section-title .rhex {background-color: #ffffff;}
 .color .section-title .crcle {background-color: #ffffff;}
 .color .section-title .wohex {background-color: #ffffff;}
@@ -390,7 +390,7 @@ h4 .glyphicon, h5 .glyphicon, h6 .glyphicon {
  * -------------------------------------------------------------------------- */
 
 .rhex {
-    background-color: #f15a29;
+    background-color:  #9D2449;
     margin-top: 14px;
     width: 50px;
     height: 28px;
@@ -425,7 +425,7 @@ h4 .glyphicon, h5 .glyphicon, h6 .glyphicon {
  * -------------------------------------------------------------------------- */
 
 .crcle {
-    background-color: #f15a29;
+    background-color:  #9D2449;
     margin-top: 3px;
     width: 50px;
     height: 50px;
@@ -437,7 +437,7 @@ h4 .glyphicon, h5 .glyphicon, h6 .glyphicon {
  * -------------------------------------------------------------------------- */
 
 .wohex {
-    background-color: #f15a29;
+    background-color:  #9D2449;
     margin-top: 3px;
     width: 50px;
     height: 50px;
@@ -461,7 +461,7 @@ a:focus {
     text-decoration: none;
 }
 
-a {color: #ea032d;}
+a {color:  #9D2449;}
 a:hover,
 a:active,
 a:focus {color: #000000;}
@@ -893,7 +893,7 @@ textarea {
 
 /* SUPERFISH THEME SKIN */
 
-.sf-menu {margin-right: -1em; font-size: 14px; font-weight: 300; text-transform: uppercase;}
+.sf-menu {margin-right: -1em; font-size: 14px; font-weight: 300; text-transform: uppercase; margin-top: 11px;}
 .sf-menu.nav > li > a:hover, /* bs3 reset */
 .sf-menu.nav > li > a:focus /* bs3 reset */ {background-color: transparent;}
 .sf-menu.nav > li > a, /*bs3 reset */ .sf-menu a {padding: 10px 15px;}
@@ -1646,14 +1646,14 @@ textarea {
 
 .schedule-wrapper {
     margin-top: 30px;
-    border: solid 1px #435469;
+    border: solid 1px #4E232E;
     border-top: none;
     border-bottom-width: 10px;
     border-radius: 30px 30px 10px 10px;
     overflow: hidden;
 }
 .schedule-tabs.lv1 {
-    background-color: #435469;
+    background-color: #4E232E;
     color: #ffffff;
 }
 .schedule-tabs.lv2 {
@@ -1694,10 +1694,10 @@ textarea {
     margin-left: -7px;
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
-    border-top: 7px solid #435469;
+    border-top: 7px solid #4E232E;
 }
 .schedule-wrapper .schedule-tabs.lv2 .nav > li > a {
-    color: #293239;
+    color: #4E232E;
 }
 .schedule-wrapper .schedule-tabs.lv1 .nav > li.active > a {}
 .schedule-wrapper .schedule-tabs.lv2 .nav > li.active > a {
@@ -1759,8 +1759,8 @@ textarea {
 }
 .row.faq .nav li.active a,
 .row.faq .nav li a:hover {
-    background-color: #f15a29;
-    border-color: #f15a29;
+    background-color: #9D2449;
+    border-color: #9D2449;
     color: #ffffff;
 }
 .row.faq .nav li a .fa {
