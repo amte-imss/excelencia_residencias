@@ -144,8 +144,8 @@ $config["form_registro_investigacion"] = array(
 $config["login"] = array(
     array(
         'field' => 'usuario',
-        'label' => 'Matrícula o correo electrónico',
-        'rules' => 'required',
+        'label' => 'Matrícula',
+        'rules' => 'trim|required',
     /* 'errors' => array(
       'required' => 'El campo %s es obligatorio, favor de ingresarlo.',
       ), */
@@ -363,11 +363,11 @@ $config['form_registro_usuario_internos'] = array(
         'label' => 'Captcha',
         'rules' => 'required|check_captcha'
     ),
-    array(
+    /*array(
         'field' => 'reg_captcha',
         'label' => 'Captcha',
         'rules' => 'required|check_captcha'
-    ),
+    ),*/
 //    array(
 //        'field' => 'pais_institucion',
 //        'label' => '',
@@ -378,7 +378,7 @@ $config['form_registro_usuario_internos'] = array(
 //        'label' => '',
 //        'rules' => 'required'
 //    ),
-    array(
+    /*array(
         'field' => 'telefono_oficina',
         'label' => '',
         'rules' => 'max[50]|alpha_numeric_accent_space_dot'
@@ -392,7 +392,7 @@ $config['form_registro_usuario_internos'] = array(
         'field' => 'pais_origen',
         'label' => '',
         'rules' => 'required'
-    )
+    )*/
 );
 $config['form_registro_usuario_externos'] = array(
     array(

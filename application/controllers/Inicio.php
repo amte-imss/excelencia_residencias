@@ -119,13 +119,15 @@ class Inicio extends MY_Controller {
     }
 
     private function redireccion_inicio(&$foro_educacion) {
-        $redirect = array(LNiveles_acceso::Investigador => '/registro_investigacion/index',
+        pr($foro_educacion); //exit();
+        $redirect = array(LNiveles_acceso::Investigador => '/registro/solicitud',
             LNiveles_acceso::Revisor => '/revision/trabajos_investigacion_evaluacion',
             'default' => 'inicio/inicio',
         );
         ///Redirección de investigador
         if (isset($foro_educacion['usuario']['niveles_acceso'][0]['clave_rol'])) {
             $rol = $foro_educacion['usuario']['niveles_acceso'][0]['clave_rol'];
+            pr($redirect[$rol]); 
             if (isset($redirect[$rol])) {
                 redirect(site_url($redirect[$rol])); //Redirección de moderador
             } else {
