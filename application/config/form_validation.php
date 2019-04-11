@@ -1090,6 +1090,39 @@ $config['form_actualizar_interno'] = array(
     )
 );
 
+$config['form_guarda_curso_participado'] = array(
+    array(
+        'field' => 'solicitud_cur',
+        'label' => 'Solicitud',
+        'rules' => 'trim|required'
+    ),
+    array(
+        'field' => 'pncp_curso',
+        'label' => 'Obtuvo PNPC',
+        'rules' => 'trim|required' //|callback_valid_pass
+    ),
+    array(
+        'field' => 'archivo_curso',
+        'label' => 'Archivo',
+        'rules' => 'trim|required' //|callback_valid_pass
+    ),
+    array(
+        'field' => 'anios_docente',
+        'label' => 'Años',
+        'rules' => 'trim|required|is_numeric' //|callback_valid_pass
+    ),
+    array(
+        'field' => 'categoria_docente',
+        'label' => '',
+        'rules' => 'trim|required' //|callback_valid_pass
+    ),
+    array(
+        'field' => 'curso',
+        'label' => '',
+        'rules' => 'trim|required' //|callback_valid_pass
+    ),
+);
+
 // VALIDACIONES
 /*
              * isset

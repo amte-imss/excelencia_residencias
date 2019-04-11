@@ -19,6 +19,14 @@ $config['upload_config'] = array(
         'detect_mime' => true,
         'file_name' => 'tmp_comprobante',
     ),
+    'cursos_participacion' => array(
+        'upload_path' => '.' . $config['upload_us'],
+        'allowed_types' => 'pdf',
+        'remove_spaces' => TRUE,
+        'max_size' => 1024 * 15,
+        'detect_mime' => true,
+        'file_name' => 'tmp_comprobante',
+    ),
     'perfil' => array(
         'upload_path' => '.' . $config['upload_perfil'],
         'allowed_types' => 'gif|jpg|png',

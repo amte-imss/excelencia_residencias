@@ -1,4 +1,5 @@
 <?php echo js('trabajo_investigacion/registro.js'); ?>
+<?php echo js('trabajo_investigacion/control_curso.js'); ?>
 <?php // pr($language_text);  ?>
 <style type="text/css">
 	#div_carrera_categoria{
@@ -129,14 +130,15 @@
 						<?php if(isset($solicitud_excelencia) && !empty($solicitud_excelencia)){ ?>
 
 
-							<?php echo form_open_multipart('registro/solicitud', array('id' => 'form_registro_solicitud_curso', 'class'=>'form-horizontal', 'data-toggle'=>"validator", 'role'=>"form", 'accept-charset'=>"utf-8")); ?>
-							<div style="clear:both;"></div>
+							<?php // echo form_open_multipart('registro/solicitud', array('id' => 'form_registro_solicitud_curso', 'class'=>'form-horizontal', 'data-toggle'=>"validator", 'role'=>"form", 'accept-charset'=>"utf-8")); ?>
+							<?php echo form_open('', array('id' => 'form_registro_solicitud_curso', 'class'=>'form-horizontal', 'data-toggle'=>"validator", 'role'=>"form", 'accept-charset'=>"utf-8")); ?>
+                                                        <div style="clear:both;"></div>
 							<hr class="col-sm-11" style="border:1px solid;">
-
+                                                            
 							<div class="col-sm-offset-1 col-sm-10 panel">
 								<div class="panel-heading"><h2><?php echo $language_text['registro_excelencia']['cursos_participado'];?></h2></div>
 								<div class="table-responsive">
-									
+                                                                    <input type="hidden" id="solicitud_cur" name="solicitud_cur" value="<?php echo $solicitud_excelencia['id_solicitud']; ?>">
 									<div id="" class="form-group">
 										<label for="curso" class="col-sm-3 control-label">Nombre del curso</label>
 										<div class="col-sm-9">
@@ -194,7 +196,6 @@
 											<input type="file" name="archivo_curso" value="" />
 										</div>
 									</div>
-
 									<div id="" class="form-group">
 										<label for="pncp_curso" class="col-sm-3 control-label">Obtuvo PNPC</label>
 										<div class="col-sm-9">
@@ -297,11 +298,11 @@
 												</div>
 										</div> -->
 								</div>
+							<?php echo form_close(); ?>
 								<div id="curso_msg" class="form-group"></div>
 								<div id="curso_capa" class="form-group"></div>
 							</div>
 
-							<?php echo form_close(); ?>
 
 							<div style="clear:both;"></div>
 							<hr class="col-sm-11" style="border:1px solid;">
@@ -315,7 +316,7 @@
 									<div class="form-group">
 										<label for="trabajo_archivo" class="col-sm-5 control-label"><?php echo (++$key).") ". $value['nombre'];?></label>
 										<div class="text-right col-sm-4">
-											<input type="file" id="archivo_<?php echo $value['id_tipo_documento']; ?>" name="archivo_<?php echo $value['id_tipo_documento']; ?>" accept="application/pdf"> <!-- application/pdf, application/mswor -->
+											<input type="file" id="archivo[<?php echo $value['id_tipo_documento']; ?>]" name="archivo[<?php echo $value['id_tipo_documento']; ?>]" accept="application/pdf"> <!-- application/pdf, application/mswor -->
 										</div>
 										<div class="text-right col-sm-3">
 											<button class="btn btn-theme animated flipInY visible" id="btn_envio_doctos" name="btn_envio_doctos" type="button" onclick="javascript:carga_archivos('form_registro_solicitud_documentacion','#div_respuesta', '<?php echo $value['id_tipo_documento']; ?>');">Cargar archivos</button>
@@ -353,7 +354,9 @@ $( document ).ready(function() {
 	$('#btn_agregar_curso').click(function() {
 		agregar_curso();
 	});
-
+        <?php if( isset($solicitud_excelencia['id_solicitud']) ){?>
+        get_listado_cursos(<?php echo $solicitud_excelencia['id_solicitud']; ?>);
+        <?php } ?>
 	$( "#btn_envio_general" ).click(function() {
 		mostrar_loader();
 		$("form#form_registro_solicitud_general").submit();
@@ -389,25 +392,7 @@ $( document ).ready(function() {
 	});
 });
 
-function agregar_curso(){
-	var curso = $('#curso').val();
-	var cat_doc = $('#categoria_docente').val();
-	$('#curso_msg').html('');
 
-	if(curso != '' && cat_doc != ''){
-		html = '<div class="form-group" id="curso_'+$('#curso option:selected').val()+'" style="border: 1px solid #aaaaaa;padding: 2px;border-radius: 5px;">'
-			+'<label for="curso" class="col-sm-6 control-label">'+$('#curso option:selected').text()+'<input type="hidden" name="curso[]" class="curso_class" value="'+$('#curso option:selected').val()+'" /></label>'
-			+'<label for="curso" class="col-sm-5 control-label">'+$('#categoria_docente option:selected').text()+'<input type="hidden" name="categoria_docente[]" value="'+$('#categoria_docente option:selected').val()+'" /></label>'
-			+'<div class="col-sm-1"><input type="button" value="X" class="btn animated flipInY visible" onclick="javascript: eliminar_curso('+$('#curso option:selected').val()+');" style="color:red;" /></div>'
-		+'</div>';
-		$('#curso_capa').append(html);
-		$('#curso').val('');
-		$('#categoria_docente').val('');
-	} else {
-		$('#curso_msg').html('<div class="alert alert-danger" role="alert">Debe seleccionar el curso y la categoría para poder agregar registros.</div>');
-	}
-
-}
 
 function eliminar_curso(elemento){
 	if (($("#curso_"+elemento).length > 0)){

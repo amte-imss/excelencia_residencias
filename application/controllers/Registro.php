@@ -91,7 +91,8 @@ class Registro extends MY_Controller {
         $output['pnpc_anio'] = $this->registro_excelencia->pnpc_anio();
         $output['categoria_docente'] = $this->registro_excelencia->categoria_docente();
         $output['curso'] = dropdown_options($this->registro_excelencia->curso(), "id_especialidad", "especialidades");
-        
+        $pncp_curso = [["id_pnc_curso" => true, "nombre" => 'Sí'], ["id_pnc_curso" => false, "nombre" => 'No']];
+        $output['pncp_curso'] = dropdown_options($pncp_curso, "id_pnc_curso", "nombre");
 
         $this->load->model('Usuario_model', 'usuario');
         $output['solicitud'] = $this->usuario->get_usuarios(array('where'=>array("usuarios.username"=>$id_informacion_usuario)));
@@ -172,6 +173,84 @@ class Registro extends MY_Controller {
             //}
             return $resultado;
         }
+    }
+    
+    public function guarda_cursos() {
+        if ($this->input->post()) {
+            $data_sesion = $this->get_datos_sesion();
+            $post = $this->input->post(null, true);
+//            pr($data_sesion['matricula']);
+//            pr($post);
+            $this->config->load('form_validation'); //Cargar archivo
+            $validations = $this->config->item('form_guarda_curso_participado'); //Obtener validaciones de archivo general
+            //$this->set_textos_campos_validacion($validations, $lan_txt['registro_trabajo']);
+            $post['archivo_curso'] = $_FILES['archivo_curso']['name'];
+//            pr($post);
+            $this->form_validation->set_data($post); //Añadir validaciones
+            $this->form_validation->set_rules($validations); //Añadir validaciones
+            if ($this->form_validation->run() == TRUE) {
+                $carga_file = $this->save_file('cursos_participacion', $data_sesion['matricula'], 'cp', 'archivo_curso');
+                if ($carga_file['tp_msg'] == En_tpmsg::SUCCESS) {
+                    $file = $carga_file['upload_path'] . $carga_file['file_name']; //Ruta del archivo 
+                    $extension = $carga_file['file_ext'];
+                    $datos_archivo = ['ruta' => $file,
+                        'id_tipo_documento' => 9,
+                        'extension_archivo' => $extension
+                    ];
+                    $result_insert = $this->registro_excelencia->insert_registro_general('excelencia.documento_curso', $datos_archivo, 'id_documento_curso');
+                    if ($result_insert['tp_msg'] == En_tpmsg::SUCCESS) {
+                        $datos_curso = ['id_tipo_docente' => $post['categoria_docente'],
+                            'id_especialidad' => $post['curso'],
+                            'id_solicitud' => $post['solicitud_cur'],
+                            'obtuvo_pnpc' => boolval($post['pncp_curso']),
+                            'anios' => $post['anios_docente'],
+                            'id_documento_curso' => $result_insert['data']['id_documento_curso'],
+                        ];
+                        $result_insert = $this->registro_excelencia->insert_registro_general('excelencia.curso', $datos_curso, 'id_curso');
+                        if ($result_insert['tp_msg'] == En_tpmsg::SUCCESS) {
+                            $result['tp_msg'] = En_tpmsg::SUCCESS;
+                            $result['html'] = 'Se guardo el registro exitosamente';
+                            header('Content-Type: application/json;charset=utf-8');
+                            echo json_encode($result);
+                        } else {
+                            echo 'No fue posible guardar el curso. Por favor intentelo mas tarde';
+                            exit();
+                        }
+                    } else {
+                        echo 'No fue posible guardar el archivo. Por favor intentelo mas tarde';
+                        exit();
+                    }
+                } else {
+                    echo $carga_file['mensaje'];
+                    exit();
+                }
+            } else {
+//                $result['tp_msg'] = En_tpmsg::DANGER; 
+                echo validation_errors();
+                exit();
+            }
+        }
+    }
+
+    /**
+     * Obtiene el listado de cursos 
+     * @param type $solicitud
+     */
+    public function get_cursos_participacion($solicitud) {
+        $result = '';
+        if (!is_null($solicitud) && is_numeric($solicitud)) {
+            $where = ['c.id_solicitud' => $solicitud];
+            $solicitud_excelencia = $this->registro_excelencia->curso_participantes($where);
+            $output['categoria_docente'] = $this->registro_excelencia->categoria_docente();
+            if (!empty($solicitud_excelencia)) {
+//                pr($solicitud_excelencia );
+                foreach ($solicitud_excelencia as $value) {
+                    $output['curso'] = $value;
+                    $result .= $this->load->view('registro_excelencia/tabla_cursos.php', $output, true);
+                }
+            }
+        }
+        echo $result;
     }
 
 }
