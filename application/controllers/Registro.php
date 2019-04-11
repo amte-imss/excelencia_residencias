@@ -199,7 +199,7 @@ class Registro extends MY_Controller {
             $config['upload_path'] = $ruta;
             $config['allowed_types'] = 'pdf';
             $config['remove_spaces'] = TRUE;
-            $config['max_size'] = 1024 * 2;
+            $config['max_size'] = 1024 * 20;
             $config['overwrite'] = TRUE;
             //$config['file_name'] = $folio;
             $this->load->library('upload', $config);
