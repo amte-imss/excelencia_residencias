@@ -44,7 +44,7 @@ class Registro_excelencia_model extends CI_Model {
     
             $this->db->where(
               array(
-                's.estado'=>1
+                's.estado'=>'1'
               )
             );
     

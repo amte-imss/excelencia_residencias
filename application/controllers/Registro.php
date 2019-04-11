@@ -53,13 +53,13 @@ class Registro extends MY_Controller {
         $lan_txt = $this->obtener_grupos_texto(array('registro_excelencia', 'template_general', 'registro_usuario'), $idioma);
 
         if(!is_null($registro)){
-            $output['solicitud_excelencia'] = $this->registro_excelencia->get_solicitud(array('where'=>array("solicitud.id_solicitud"=>$registro)));
+            $output['solicitud_excelencia'] = $this->registro_excelencia->get_solicitud(array('where'=>array("s.id_solicitud"=>$registro)))[0];
         }
 
         if($this->input->post() && !empty($output['solicitud_excelencia'])){
             //pr($this->input->post());
             $trabajo = $this->input->post(null, true);
-            pr($trabajo);
+            //pr($trabajo);
             $this->config->load('form_validation'); //Cargar archivo
             $validations = $this->config->item('form_registro_excelencia'); //Obtener validaciones de archivo general
             //$this->set_textos_campos_validacion($validations, $lan_txt['registro_trabajo']);
@@ -74,11 +74,12 @@ class Registro extends MY_Controller {
             if ($this->form_validation->run() == TRUE) {
                 $trabajo['matricula'] = $id_informacion_usuario;
                 $solicitud_excelencia = $this->registro_excelencia->insertar_solicitud($trabajo);
-                $registro = $solicitud_excelencia['id_solicitud'];
+                //$registro = $solicitud_excelencia['id_solicitud'];
+                redirect('/registro/solicitud/'.$solicitud_excelencia['id_solicitud'], 'refresh');
                 //$archivos = $this->archivos($_FILES, array('id_informacion_usuario'=>$id_informacion_usuario));
                 //pr($archivos);
             }
-        }
+        }//pr($output);
         
         $output['tipo_documentos'] = $this->registro_excelencia->tipo_documentos(array('estado'=>'1'));
         $output['tipo_categoria'] = $this->registro_excelencia->tipo_categoria();

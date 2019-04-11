@@ -77,8 +77,8 @@
 								<div class="form-group">
 									<label for="carrera" class="col-sm-3 control-label"><?php echo $language_text['registro_excelencia']['carrera_tiene'];?>*</label>
 									<div class="col-sm-9">
-										<input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();"<?php //if(isset($trabajo)){ if($trabajo['carrera_tiene']=='true') echo 'checked';}?>><?php echo $language_text['template_general']['si_op'];?><br>
-										<input type="radio" name="carrera" value="0" onclick="javascript:habilitar_categoria();" <?php //if(isset($trabajo)){ if($trabajo['carrera_tiene']=='false') echo 'checked';} else { echo 'checked'; }?>><?php echo $language_text['template_general']['no_op'];?><br>
+										<input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();"<?php if(isset($solicitud_excelencia)){ if($solicitud_excelencia['carrera_tiene']=='1') echo 'checked';}?>><?php echo $language_text['template_general']['si_op'];?><br>
+										<input type="radio" name="carrera" value="0" onclick="javascript:habilitar_categoria();" <?php if(isset($solicitud_excelencia)){ if($solicitud_excelencia['carrera_tiene']=='0') echo 'checked';} else { echo 'checked'; }?>><?php echo $language_text['template_general']['no_op'];?><br>
 									</div><div style="clear:both;"></div>
 									<?php echo form_error_format('carrera');?>
 								</div>
@@ -90,8 +90,8 @@
 											<?php
 											echo '<option value="">'.$language_text['template_general']['sin_op'].'</option>';
 											foreach ($tipo_categoria as $key => $value) {
-												if(isset($trabajo)){
-													if($trabajo['tipo_categoria'] == $key){
+												if(isset($solicitud_excelencia)){
+													if($solicitud_excelencia['carrera_categoria'] == $key){
 														echo '<option value="'.$key.'" selected>'.$value.'</option>';
 													} else {
 														echo '<option value="'.$key.'">'.$value.'</option>';
@@ -109,15 +109,17 @@
 								<div class="form-group">
 									<label for="pnpc" class="col-sm-3 control-label"><?php echo $language_text['registro_excelencia']['pnpc_tiene'];?>*</label>
 									<div class="col-sm-9">
-											<input type="radio" name="pnpc" value="1" <?php //if(isset($trabajo)){ if($trabajo['pnpc_tiene']=='true') echo 'checked';}?>><?php echo $language_text['template_general']['si_op'];?><br>
-											<input type="radio" name="pnpc" value="0" <?php //if(isset($trabajo)){ if($trabajo['pnpc_tiene']=='false') echo 'checked';} else { echo 'checked'; }?>><?php echo $language_text['template_general']['no_op'];?><br>
+											<input type="radio" name="pnpc" value="1" <?php if(isset($solicitud_excelencia)){ if($solicitud_excelencia['pnpc_tiene']=='1') echo 'checked';}?>><?php echo $language_text['template_general']['si_op'];?><br>
+											<input type="radio" name="pnpc" value="0" <?php if(isset($solicitud_excelencia)){ if($solicitud_excelencia['pnpc_tiene']=='0') echo 'checked';} else { echo 'checked'; }?>><?php echo $language_text['template_general']['no_op'];?><br>
 									</div><div style="clear:both;"></div>
 									<?php echo form_error_format('pnpc');?>
 								</div>
-
-								<div class="panel-footer text-right">
-									<button class="btn btn-theme animated flipInY visible" id="btn_envio_general" name="btn_envio_general" type="button"><?php echo $language_text['registro_excelencia']['guardar_solicitud'];?></button>
-								</div>
+								
+								<?php if(isset($solicitud_excelencia) && empty($solicitud_excelencia)){ ?>
+									<div class="panel-footer text-right">
+										<button class="btn btn-theme animated flipInY visible" id="btn_envio_general" name="btn_envio_general" type="button"><?php echo $language_text['registro_excelencia']['guardar_solicitud'];?></button>
+									</div>
+								<?php } ?>
 						</div>
 						
 						<?php echo form_close(); ?>
@@ -311,14 +313,17 @@
 														
 								<?php foreach ($tipo_documentos as $key => $value) { ?>
 									<div class="form-group">
-										<label for="trabajo_archivo" class="col-sm-7 control-label"><?php echo (++$key).") ". $value['nombre'];?></label>
-										<input type="file" id="archivo[<?php echo $value['id_tipo_documento']; ?>]" name="archivo[<?php echo $value['id_tipo_documento']; ?>]" accept="application/pdf, application/msword">
+										<label for="trabajo_archivo" class="col-sm-5 control-label"><?php echo (++$key).") ". $value['nombre'];?></label>
+										<div class="text-right col-sm-4">
+											<input type="file" id="archivo[<?php echo $value['id_tipo_documento']; ?>]" name="archivo[<?php echo $value['id_tipo_documento']; ?>]" accept="application/pdf"> <!-- application/pdf, application/mswor -->
+										</div>
+										<div class="text-right col-sm-3">
+											<button class="btn btn-theme animated flipInY visible" id="btn_envio_doctos" name="btn_envio_doctos" type="button" onclick="javascript:carga_archivos('form_registro_solicitud_documentacion','#div_respuesta', '<?php echo $value['id_tipo_documento']; ?>');">Cargar archivos</button>
+										</div>
 									</div>
 						
 								<?php } ?>
-								<div class="panel-footer text-right">
-									<button class="btn btn-theme animated flipInY visible" id="btn_envio_doctos" name="btn_envio_doctos" type="button">Cargar archivos</button>
-								</div>
+								<div id="div_respuesta"></div>
 								<?php echo form_close(); ?>
 							</div>
 						</div><!--col-->
@@ -344,15 +349,10 @@
 </div>
 <script>
 $( document ).ready(function() {
+	habilitar_categoria();
 	$('#btn_agregar_curso').click(function() {
 		agregar_curso();
 	});
-
-	/*$( "#btn_envio" ).submit(function( event ) {
-		alert('alo');
-		console.log($("#carrera"));
-		event.preventDefault();
-	});*/
 
 	$( "#btn_envio_general" ).click(function() {
 		mostrar_loader();
@@ -423,6 +423,54 @@ function habilitar_categoria(){
 			$('#div_carrera_categoria').hide();
 		}
 	}
+}
+
+function carga_archivos(formulario, div_respuesta, id_tipo_documento){
+	var formData = new FormData($('#' + formulario)[0]);
+	$.ajax({
+	//url: site_url + '/actividad_docente/datos_actividad',
+			url: site_url + '/registro/archivos',
+			data: formData,
+			type: 'POST',
+			mimeType: "multipart/form-data",
+			contentType: false,
+			cache: true,
+			processData: false,
+	//                dataType: 'JSON',
+			beforeSend: function (xhr) {
+	//            $('#tabla_actividades_docente').html(create_loader());
+					mostrar_loader();
+			}
+	})
+					.done(function (data) {
+							try {//Cacha el error
+									$(div_respuesta).empty();
+									var resp = $.parseJSON(data);
+									if (typeof resp.html !== 'undefined') {
+											if (resp.tp_msg === 'success') {
+													$(div_respuesta).html('');
+													reinicia_monitor();
+													actaliza_data_table(url_actualiza_tabla);
+											} else {
+													$(div_respuesta).html(resp.html);
+											}
+											if (typeof resp.mensaje !== 'undefined') {//Muestra mensaje al usuario si este existe
+													get_mensaje_general(resp.mensaje, resp.tp_msg, 5000);
+											}
+									}
+							} catch (e) {
+									$(div_respuesta).html(data);
+							}
+
+					})
+					.fail(function (jqXHR, response) {
+	//                        $(div_respuesta).html(response);
+							get_mensaje_general('Ocurrió un error durante el proceso, inténtelo más tarde.', 'warning', 5000);
+					})
+					.always(function () {
+							ocultar_loader();
+					});
+//echo form_open('', array('id' => 'form_actividad_' . $formulario));
 }
 
 </script>
