@@ -54,14 +54,18 @@ class Registro extends MY_Controller {
 
         if(!is_null($registro)){
             $output['solicitud_excelencia'] = $this->registro_excelencia->get_solicitud(array('where'=>array("s.id_solicitud"=>$registro)))[0];
+            $id_solicitud = $output['solicitud_excelencia']['id_solicitud'];
         } else {
-            $output['solicitud_excelencia'] = $this->registro_excelencia->get_solicitud(array('where'=>array("u.username"=>$id_informacion_usuario)))[0];
-            if(count($output)>0){
-                redirect('/registro/solicitud/'.$output['solicitud_excelencia']['id_solicitud'], 'refresh');
+            $output['solicitud_excelencia'] = $this->registro_excelencia->get_solicitud(array('where'=>array("u.username"=>$id_informacion_usuario)));
+            //pr($output);
+            if(isset($output['solicitud_excelencia'][0]) && count($output['solicitud_excelencia'][0])>0){
+                redirect('/registro/solicitud/'.$output['solicitud_excelencia'][0]['id_solicitud'], 'refresh');
+            } else {
+                $id_solicitud = null;
             }
         }
         //pr($output);
-        if($this->input->post() && !empty($output['solicitud_excelencia'])){
+        if($this->input->post()){ // && !empty($output['solicitud_excelencia'])
             //pr($this->input->post());
             $trabajo = $this->input->post(null, true);
             //pr($trabajo);
@@ -83,12 +87,22 @@ class Registro extends MY_Controller {
                 redirect('/registro/solicitud/'.$solicitud_excelencia['id_solicitud'], 'refresh');
                 //$archivos = $this->archivos($_FILES, array('id_informacion_usuario'=>$id_informacion_usuario));
                 //pr($archivos);
+            } else {
+                //pr($trabajo);
+                $output['solicitud_excelencia'] = $trabajo;
             }
-        }//pr($output);
+        } //pr($output);
+
+        if(!is_null($id_solicitud)){ //Validamos que exista identificador de solicitud para realizar la búsqueda de información
+            $documentos = $this->registro_excelencia->get_documento(array('where'=>'id_solicitud='.$id_solicitud));
+            foreach ($documentos as $key => $value) {
+                $output['documento'][$value['id_tipo_documento']] = $value;
+            }
+        }
         
-        $output['tipo_documentos'] = $this->registro_excelencia->tipo_documentos(array('estado'=>'1'));
+        $output['tipo_documentos'] = $this->registro_excelencia->tipo_documentos(array('estado'=>'1', 'id_tipo_documento<>'=>9));
         $output['tipo_categoria'] = $this->registro_excelencia->tipo_categoria();
-        $output['pnpc_anio'] = $this->registro_excelencia->pnpc_anio();
+        //$output['pnpc_anio'] = $this->registro_excelencia->pnpc_anio();
         $output['categoria_docente'] = $this->registro_excelencia->categoria_docente();
         $output['curso'] = dropdown_options($this->registro_excelencia->curso(), "id_especialidad", "especialidades");
         $pncp_curso = [["id_pnc_curso" => true, "nombre" => 'Sí'], ["id_pnc_curso" => false, "nombre" => 'No']];
@@ -108,12 +122,60 @@ class Registro extends MY_Controller {
         if($_FILES){
             //pr($_POST);
             $id_tipo_documento = $this->input->post('id_tipo_documento', TRUE);
+            $id_solicitud = $this->input->post('id_solicitud', TRUE);
             $datos_sesion = $this->get_datos_sesion();
             $id_informacion_usuario = $datos_sesion['username'];
             $archivos = $this->archivos($_FILES, array('id_informacion_usuario'=>$id_informacion_usuario, 'id_tipo_documento'=>$id_tipo_documento));
-            pr($archivos);
+            //pr($archivos);
+            if($archivos['resultado']==true){
+                $datos_archivo = array(
+                    'ruta' => trim($archivos['data']['ruta'], '.').$archivos['data']['file_name'],
+                    'extension_archivo' => 'pdf',
+                    'id_solicitud' => $id_solicitud,
+                    'id_tipo_documento' => $id_tipo_documento
+                );
+                $insercion_archivo = $this->registro_excelencia->insertar_documento($datos_archivo);
+                if($insercion_archivo['result']==true){
+                    echo $this->load->view('registro_excelencia/archivo_correcto', array('id_tipo_documento'=>$id_tipo_documento, 'ruta'=>base_url().trim($archivos['data']['ruta'], '.').$archivos['data']['file_name']), true);
+                } else {
+                    echo $this->load->view('registro_excelencia/archivo_incorrecto', array('id_tipo_documento'=>$id_tipo_documento, 'error'=>$insercion_archivo['msg']), true);
+                }
+            } else {
+                echo $this->load->view('registro_excelencia/archivo_incorrecto', array('id_tipo_documento'=>$id_tipo_documento, 'error'=>$archivos['error']), true);
+            }
         } else {
             return "No se ha enviado archivo a procesar.";
+        }
+    }
+
+    public function enviar_solicitud($id_solicitud){
+        $error = 0;
+        $msg = '';
+        $output['solicitud_excelencia'] = $this->registro_excelencia->get_solicitud(array('where'=>array("s.id_solicitud"=>$id_solicitud)))[0];
+        
+        $where = ['c.id_solicitud' => $id_solicitud];
+        $solicitud_excelencia = $this->registro_excelencia->curso_participantes($where);
+        //pr($solicitud_excelencia);
+        if(count($solicitud_excelencia)<=0){
+            $msg .= 'Debe registrar al menos un curso.<br>';
+            $error++;
+        }
+
+        $documentos = $this->registro_excelencia->get_documento(array('where'=>'id_solicitud='.$id_solicitud));
+        $tipo_documentos = $this->registro_excelencia->tipo_documentos(array('estado'=>'1', 'id_tipo_documento<>'=>9));
+        if(count($documentos)<count($tipo_documentos)){
+            $msg .= 'Debe de completar la documentación solicitada.<br>';
+            $error++;
+        }
+        //pr($documentos);
+        //pr($tipo_documentos);
+        //$this->registro_excelencia->get_documento();
+
+        if($error > 0){
+            echo '<div class="alert alert-danger" role="alert">'.$msg.'</div>';
+        } else {
+            $resultado = $this->registro_excelencia->update_solicitud(array('id_solicitud'=>$id_solicitud));
+            echo '<div class="alert alert-success" role="alert">'.$resultado['mensaje'].'</div><script>alert("'.$resultado['mensaje'].'"); document.location.href=document.location.href;</script>';
         }
     }
 
@@ -137,7 +199,7 @@ class Registro extends MY_Controller {
             $config['upload_path'] = $ruta;
             $config['allowed_types'] = 'pdf';
             $config['remove_spaces'] = TRUE;
-            $config['max_size'] = 1024 * 15;
+            $config['max_size'] = 1024 * 2;
             $config['overwrite'] = TRUE;
             //$config['file_name'] = $folio;
             $this->load->library('upload', $config);
@@ -165,6 +227,7 @@ class Registro extends MY_Controller {
                 {
                     $error = null;
                     $data = $this->upload->data();
+                    $data['ruta'] = $ruta;
                     $res = true;
                 }
                 $resultado['resultado'] = $res;
@@ -232,6 +295,10 @@ class Registro extends MY_Controller {
         }
     }
 
+    public function eliminar_curso($id_curso){
+
+    }
+
     /**
      * Obtiene el listado de cursos 
      * @param type $solicitud
@@ -244,10 +311,12 @@ class Registro extends MY_Controller {
             $output['categoria_docente'] = $this->registro_excelencia->categoria_docente();
             if (!empty($solicitud_excelencia)) {
 //                pr($solicitud_excelencia );
-                foreach ($solicitud_excelencia as $value) {
+                /*foreach ($solicitud_excelencia as $value) {
                     $output['curso'] = $value;
-                    $result .= $this->load->view('registro_excelencia/tabla_cursos.php', $output, true);
-                }
+                    
+                }*/
+                $output['cursos'] = $solicitud_excelencia;
+                $result = $this->load->view('registro_excelencia/tabla_cursos.php', $output, true);
             }
         }
         echo $result;

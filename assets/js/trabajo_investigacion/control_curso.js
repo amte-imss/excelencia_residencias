@@ -5,7 +5,7 @@ function agregar_curso() {
     var solicitud = $('#solicitud_cur').val();
     $('#curso_msg').html('');
 
-    if (curso != '') {
+    //if (curso != '') {
         var formulario = 'form_registro_solicitud_curso';
         var formData = new FormData($('#' + formulario)[0]);
         var div_respuesta = '#curso_msg';
@@ -30,7 +30,7 @@ function agregar_curso() {
                         var resp = $.parseJSON(data);
                         if (typeof resp.html !== 'undefined') {
                             if (resp.tp_msg === 'success') {
-                                $(div_respuesta).html('<div class="alert alert-success" role="alert">' + data.html + '</div>');
+                                $(div_respuesta).html('<div class="alert alert-success" role="alert">' + resp.html + '</div>');
                                 get_listado_cursos(solicitud);
                                 $('#curso').val('');
                                 $('#categoria_docente').val('');
@@ -58,9 +58,9 @@ function agregar_curso() {
                 .always(function () {
                     ocultar_loader();
                 });
-    } else {
+    /*} else {
         $('#curso_msg').html('<div class="alert alert-danger" role="alert">Debe seleccionar el curso y la categoría para poder agregar registros.</div>');
-    }
+    }*/
 }
 
 function agregar_curso_() {
@@ -83,10 +83,27 @@ function agregar_curso_() {
 
 }
 
+function eliminar_curso(elemento){
+    var div_result = "#curso_capa";
+    var path = site_url + "/registro/eliminar_curso/" + elemento;
+    $.ajax({
+        type: "POST",
+        url: path,
+        data: null,
+        dataType: "json"
+    })
+    .done(function (result) {
+        $('#curso_capa').html(result);
+    }).fail(function () {
+
+    });
+}
+
 function get_listado_cursos(solicitud) {
     var div_result = "#curso_capa";
     var path = site_url + "/registro/get_cursos_participacion/" + solicitud;
     data_ajax(path, null, div_result);
+    
 //    $.ajax({
 //        type: "GET",
 //        url: site_url + "/registro/get_cursos_participacion/" + solicitud,

@@ -152,7 +152,7 @@ $config["form_registro_excelencia"] = array(
         'label' => '¿Qué categoría tiene?',
         'rules' => 'trim',
     ),
-    array(
+    /*array(
         'field' => 'pnpc',
         'label' => '¿Tiene PNPC?',
         'rules' => 'trim|required',
@@ -161,7 +161,7 @@ $config["form_registro_excelencia"] = array(
         'field' => 'pnpc_anio',
         'label' => 'De qué año',
         'rules' => 'trim',
-    ),
+    ),*/
 );
 
 $config["login"] = array(

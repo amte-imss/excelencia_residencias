@@ -16,7 +16,7 @@ class Registro_excelencia_model extends CI_Model {
         $this->db->select(array('s.*', "u.id_usuario", "u.activo", "u.email", "h.curp", "h.rfc", "h.nombre", "h.apellido_paterno", "h.apellido_materno", "h.clave_delegacional"));
         $this->db->where(array(
             's.matricula' => $id_informacion_usuario,
-            's.estado' => '1'
+            //'s.estado' => '1'
         ));
         $this->db->join('sistema.usuarios u', 'u.username=s.matricula', 'left');
         $this->db->join('sistema.informacion_usuario h', 'h.matricula=u.username', 'left');
@@ -37,16 +37,16 @@ class Registro_excelencia_model extends CI_Model {
             $this->db->flush_cache();
             $this->db->reset_query();
 
-            $this->db->select(array('s.*', 'u.email', 'i.*'));
+            $this->db->select(array('s.*', 'u.email', 'i.*', 's.carrera_tiene as carrera'));
 
             $this->db->join('sistema.usuarios u', 'u.username=s.matricula', 'left');
             $this->db->join('sistema.informacion_usuario i', 'i.matricula=u.username', 'left');
 
-            $this->db->where(
+            /*$this->db->where(
                     array(
                         's.estado' => '1'
                     )
-            );
+            );*/
 
             if (isset($param['where'])) {
                 $this->db->where($param['where']);
@@ -71,15 +71,68 @@ class Registro_excelencia_model extends CI_Model {
         }
     }
 
+    public function update_solicitud($data){
+        $this->db->trans_begin(); //Inicia la transacción
+
+        $array_insert = array(
+            'estado' => 2
+        );
+        $this->db->where('id_solicitud', $data['id_solicitud']); //Id solicitud
+        $this->db->update('excelencia.solicitud', $array_insert); //Se inserta el nuevo registro del historico de datos IMSS                
+        if ($this->db->trans_status() === FALSE) {//Valida que se inserto el archvo success
+            $this->db->trans_rollback();
+            $respuesta = array('tp_msg' => En_tpmsg::DANGER, 'mensaje' => 'Ocurrió un error en el guardado de información.');
+        } else {
+            $this->db->trans_commit();
+            $respuesta = array('tp_msg' => En_tpmsg::SUCCESS, 'mensaje' => 'Se ha enviado su solicitud.');
+            $this->db->reset_query();
+        }
+        return $respuesta;
+    }
+
+    public function get_documento($param = []) {
+        try {
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            $this->db->select(array('d.*', 'td.nombre'));
+
+            $this->db->join('excelencia.tipo_documento td', 'td.id_tipo_documento=d.id_tipo_documento', 'left');
+            
+            if (isset($param['where'])) {
+                $this->db->where($param['where']);
+            }
+
+            if (isset($param['where_in'])) {
+                $this->db->where_in($param['where_in'][0], $param['where_in'][1]);
+            }
+
+            if (isset($param['order_by'])) {
+                $this->db->order_by($param['order_by']);
+            }
+
+            $res = $this->db->get('excelencia.documento d');
+            //pr($this->db->last_query());
+            $this->db->flush_cache();
+            $this->db->reset_query();
+            $reusltado = $res->result_array();
+            return $reusltado;
+        } catch (Exception $ex) {
+            return [];
+        }
+    }
+
     public function insertar_solicitud($data = []) {
         $this->db->flush_cache();
         $this->db->reset_query();
 
         $this->db->trans_begin();
-        pr($data);
+        if($data['tipo_categoria']==''){
+            $data['tipo_categoria'] = null;
+        }
         $historico = array(
             'matricula' => $data['matricula'],
-            'pnpc_tiene' => $data['pnpc'],
+            //'pnpc_tiene' => $data['pnpc'],
             'carrera_tiene' => $data['carrera'],
             'carrera_categoria' => $data['tipo_categoria'],
             'estado' => 1
@@ -100,6 +153,32 @@ class Registro_excelencia_model extends CI_Model {
             $resultado['msg'] = "Se ha cargado correctamente la información.";
             $resultado['result'] = TRUE;
             $resultado['id_solicitud'] = $id_solicitud;
+        }
+        return $resultado;
+    }
+
+    public function insertar_documento($data = []) {
+        $this->db->flush_cache();
+        $this->db->reset_query();
+
+        $this->db->trans_begin();
+        
+        $this->db->insert('excelencia.documento', $data);
+
+        $id_documento = $this->db->insert_id();
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            //$resultado['msg'] = $language_text['registro_usuario']['user_registro_problem'];
+            $resultado['msg'] = "Ha ocurrido un error en la inserción de los datos.";
+            $resultado['id_documento'] = null;
+        } else {
+            $this->db->trans_commit();
+            //$resultado['msg'] = $language_text['registro_usuario']['user_registro_succes'];
+            $resultado['msg'] = "Se ha cargado correctamente la información.";
+            $resultado['result'] = TRUE;
+            $resultado['id_documento'] = $id_documento;
         }
         return $resultado;
     }

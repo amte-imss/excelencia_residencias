@@ -3,6 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+$config['upload_excelencia'] = '/uploads/'; //Rutas uploads
 $config['upload_us'] = '/assets/us/uploads/'; //Rutas uploads
 $config['upload_perfil'] = '/assets/us/perfil/'; //Rutas uploads
 
@@ -20,10 +21,10 @@ $config['upload_config'] = array(
         'file_name' => 'tmp_comprobante',
     ),
     'cursos_participacion' => array(
-        'upload_path' => '.' . $config['upload_us'],
+        'upload_path' => '.' . $config['upload_excelencia'],
         'allowed_types' => 'pdf',
         'remove_spaces' => TRUE,
-        'max_size' => 1024 * 15,
+        'max_size' => 1024 * 2,
         'detect_mime' => true,
         'file_name' => 'tmp_comprobante',
     ),
@@ -36,7 +37,7 @@ $config['upload_config'] = array(
         'file_name' => 'tmp_perfil',
     ),
     'pdf' => array(
-        'upload_path' => '.' . $config['upload_us'],
+        'upload_path' => '.' . $config['upload_excelencia'],
         'allowed_types' => 'pdf',
         'remove_spaces' => TRUE,
         'max_size' => 1024 * 15,
