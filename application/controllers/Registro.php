@@ -54,8 +54,13 @@ class Registro extends MY_Controller {
 
         if(!is_null($registro)){
             $output['solicitud_excelencia'] = $this->registro_excelencia->get_solicitud(array('where'=>array("s.id_solicitud"=>$registro)))[0];
+        } else {
+            $output['solicitud_excelencia'] = $this->registro_excelencia->get_solicitud(array('where'=>array("u.username"=>$id_informacion_usuario)))[0];
+            if(count($output)>0){
+                redirect('/registro/solicitud/'.$output['solicitud_excelencia']['id_solicitud'], 'refresh');
+            }
         }
-
+        //pr($output);
         if($this->input->post() && !empty($output['solicitud_excelencia'])){
             //pr($this->input->post());
             $trabajo = $this->input->post(null, true);
@@ -98,6 +103,19 @@ class Registro extends MY_Controller {
         $this->template->getTemplate();
     }
 
+    public function cargar_archivo(){
+        if($_FILES){
+            //pr($_POST);
+            $id_tipo_documento = $this->input->post('id_tipo_documento', TRUE);
+            $datos_sesion = $this->get_datos_sesion();
+            $id_informacion_usuario = $datos_sesion['username'];
+            $archivos = $this->archivos($_FILES, array('id_informacion_usuario'=>$id_informacion_usuario, 'id_tipo_documento'=>$id_tipo_documento));
+            pr($archivos);
+        } else {
+            return "No se ha enviado archivo a procesar.";
+        }
+    }
+
     private function archivos(&$archivos, $params){
         // Armamos el folio
         /*$num_registros = $this->trabajo->numero_trabajos();
@@ -107,6 +125,9 @@ class Registro extends MY_Controller {
         // Guardamos el archivo
         $resultado = array();
         $files = $archivos;
+        //pr($params);
+        //pr($_FILES['archivo_'.$params['id_tipo_documento']]);
+        //pr($files);
         $ruta = './uploads/' . $params['id_informacion_usuario'] . '/';
         if (crea_directorio($ruta)) {
             $anio = date('Y');
@@ -120,20 +141,20 @@ class Registro extends MY_Controller {
             //$config['file_name'] = $folio;
             $this->load->library('upload', $config);
 
-            for($i=0; $i< count($_FILES['archivo']['name']); $i++)
-            foreach ($_FILES['archivo']['name'] as $key => $value)
-            {
-                $folio = $anio . "-" . $key;
+            //for($i=0; $i< count($_FILES['archivo']['name']); $i++)
+            //foreach ($_FILES['archivo_'.$params['id_tipo_documento']]['name'] as $key => $value)
+            //{
+                $folio = $anio . "-" . $params['id_tipo_documento'];
                 //$_FILES['archivo']['name']= $files['archivo']['name'][$key];
-                $_FILES['archivo']['name']= $folio.".pdf";
-                $_FILES['archivo']['type']= $files['archivo']['type'][$key];
-                $_FILES['archivo']['tmp_name']= $files['archivo']['tmp_name'][$key];
-                $_FILES['archivo']['error']= $files['archivo']['error'][$key];
-                $_FILES['archivo']['size']= $files['archivo']['size'][$key];    
+                $_FILES['archivo_'.$params['id_tipo_documento']]['name']= $folio.".pdf";
+                /*$_FILES['archivo_'.$params['id_tipo_documento']]['type']= $files['archivo']['type'][$key];
+                $_FILES['archivo_'.$params['id_tipo_documento']]['tmp_name']= $files['archivo']['tmp_name'][$key];
+                $_FILES['archivo_'.$params['id_tipo_documento']]['error']= $files['archivo']['error'][$key];
+                $_FILES['archivo_'.$params['id_tipo_documento']]['size']= $files['archivo']['size'][$key];    */
 
                 //pr($_FILES);
                 $this->upload->initialize($config);
-                if ( ! $this->upload->do_upload('archivo'))
+                if ( ! $this->upload->do_upload('archivo_'.$params['id_tipo_documento']))
                 {
                     $data = null;
                     $error = $this->upload->display_errors();
@@ -145,10 +166,10 @@ class Registro extends MY_Controller {
                     $data = $this->upload->data();
                     $res = true;
                 }
-                $resultado['archivos'][$key]['resultado'] = $res;
-                $resultado['archivos'][$key]['data'] = $data;
-                $resultado['archivos'][$key]['error'] = $error;
-            }
+                $resultado['resultado'] = $res;
+                $resultado['data'] = $data;
+                $resultado['error'] = $error;
+            //}
             return $resultado;
         }
     }

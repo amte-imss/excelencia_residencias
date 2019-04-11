@@ -315,7 +315,7 @@
 									<div class="form-group">
 										<label for="trabajo_archivo" class="col-sm-5 control-label"><?php echo (++$key).") ". $value['nombre'];?></label>
 										<div class="text-right col-sm-4">
-											<input type="file" id="archivo[<?php echo $value['id_tipo_documento']; ?>]" name="archivo[<?php echo $value['id_tipo_documento']; ?>]" accept="application/pdf"> <!-- application/pdf, application/mswor -->
+											<input type="file" id="archivo_<?php echo $value['id_tipo_documento']; ?>" name="archivo_<?php echo $value['id_tipo_documento']; ?>" accept="application/pdf"> <!-- application/pdf, application/mswor -->
 										</div>
 										<div class="text-right col-sm-3">
 											<button class="btn btn-theme animated flipInY visible" id="btn_envio_doctos" name="btn_envio_doctos" type="button" onclick="javascript:carga_archivos('form_registro_solicitud_documentacion','#div_respuesta', '<?php echo $value['id_tipo_documento']; ?>');">Cargar archivos</button>
@@ -426,51 +426,57 @@ function habilitar_categoria(){
 }
 
 function carga_archivos(formulario, div_respuesta, id_tipo_documento){
-	var formData = new FormData($('#' + formulario)[0]);
-	$.ajax({
-	//url: site_url + '/actividad_docente/datos_actividad',
-			url: site_url + '/registro/archivos',
-			data: formData,
-			type: 'POST',
-			mimeType: "multipart/form-data",
-			contentType: false,
-			cache: true,
-			processData: false,
-	//                dataType: 'JSON',
-			beforeSend: function (xhr) {
-	//            $('#tabla_actividades_docente').html(create_loader());
-					mostrar_loader();
-			}
-	})
-					.done(function (data) {
-							try {//Cacha el error
-									$(div_respuesta).empty();
-									var resp = $.parseJSON(data);
-									if (typeof resp.html !== 'undefined') {
-											if (resp.tp_msg === 'success') {
-													$(div_respuesta).html('');
-													reinicia_monitor();
-													actaliza_data_table(url_actualiza_tabla);
-											} else {
-													$(div_respuesta).html(resp.html);
-											}
-											if (typeof resp.mensaje !== 'undefined') {//Muestra mensaje al usuario si este existe
-													get_mensaje_general(resp.mensaje, resp.tp_msg, 5000);
-											}
-									}
-							} catch (e) {
-									$(div_respuesta).html(data);
-							}
+	//alert($("#archivo_"+id_tipo_documento).val());
+	if($("#archivo_"+id_tipo_documento).val()!=''){
+		var formData = new FormData($('#' + formulario)[0]);
+		formData.append('id_tipo_documento', id_tipo_documento);
+		$.ajax({
+		//url: site_url + '/actividad_docente/datos_actividad',
+				url: site_url + '/registro/cargar_archivo',
+				data: formData,
+				type: 'POST',
+				mimeType: "multipart/form-data",
+				contentType: false,
+				cache: true,
+				processData: false,
+		//                dataType: 'JSON',
+				beforeSend: function (xhr) {
+		//            $('#tabla_actividades_docente').html(create_loader());
+						mostrar_loader();
+				}
+		})
+						.done(function (data) {
+								try {//Cacha el error
+										$(div_respuesta).empty();
+										var resp = $.parseJSON(data);
+										if (typeof resp.html !== 'undefined') {
+												if (resp.tp_msg === 'success') {
+														$(div_respuesta).html('');
+														reinicia_monitor();
+														actaliza_data_table(url_actualiza_tabla);
+												} else {
+														$(div_respuesta).html(resp.html);
+												}
+												if (typeof resp.mensaje !== 'undefined') {//Muestra mensaje al usuario si este existe
+														get_mensaje_general(resp.mensaje, resp.tp_msg, 5000);
+												}
+										}
+								} catch (e) {
+										$(div_respuesta).html(data);
+								}
 
-					})
-					.fail(function (jqXHR, response) {
-	//                        $(div_respuesta).html(response);
-							get_mensaje_general('Ocurrió un error durante el proceso, inténtelo más tarde.', 'warning', 5000);
-					})
-					.always(function () {
-							ocultar_loader();
-					});
-//echo form_open('', array('id' => 'form_actividad_' . $formulario));
+						})
+						.fail(function (jqXHR, response) {
+		//                        $(div_respuesta).html(response);
+								get_mensaje_general('Ocurrió un error durante el proceso, inténtelo más tarde.', 'warning', 5000);
+						})
+						.always(function () {
+								ocultar_loader();
+						});
+	//echo form_open('', array('id' => 'form_actividad_' . $formulario));
+	} else {
+		alert('Debe seleccionar el archivo a cargar');
+	}
 }
 
 </script>
