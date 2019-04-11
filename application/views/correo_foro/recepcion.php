@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>XV Foro Nacional y I internacional de Educación en Salud</title>
+  <title>Premio a la excelencia docente 2019</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body style="margin: 0; padding: 0;" style="background">
@@ -16,7 +16,7 @@
             <!-- <td bgcolor="#ffffff" style="font-size: 0; line-height: 0; border-color: #ffffff;" height="10px" width="300px">
             </td> -->
             <td align="rigth" bgcolor="#ffffff" style="font-size: 0; line-height: 0; border-color: #70bbd9;" height="10">
-              <img src="<?=asset_url();?>/img/correos/logo_foro_naranja.png" alt="" width="700" height="146" style="display: block;" />
+              <img src="<?=asset_url();?>/img/correos/header.png" alt="" width="600" height="57" style="display: block;" />
             </td>
           </tr>
           <tr>
@@ -24,20 +24,14 @@
               <table cellpadding="0" cellspacing="0" width="100%" style="">
                 <tr>
                   <td>
-                    <?php echo $investigador;?>
+                   <br> <?php echo $profesor;?>
                   </td>
 
                 </tr>
 
                 <tr>
                   <td>
-                    <?php echo $folio;?>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>
-                    Estimado Investigador(a)
+                    Estimado Profesor (a)
                   </td>
                 </tr>
                 <tr>
@@ -47,23 +41,27 @@
                   </td>
                 </tr>
                 <tr>
-                  <td style="text-align:justify;">
-                    Tenemos a bien informarle que su trabajo de investigación <?php echo $titulo;?> con folio <?php echo $folio;?> ha sido recibido y será sometido a consideración por parte del comité evaluador del <b>XV Edición Nacional y primera Internacional del Foro de Educación en Salud</b>.
+                <td style="text-align:justify;">
+                    Por medio de la presente La Unidad de Educación, Investigación y Políticas de Salud, a través de la Coordinación de Educación en Salud, 
+                    tiene el agrado de confirmar que su registro como participante para el <b> PREMIO A LA EXCELENCIA DOCENTE 
+                    2019 </b>se recibió satisfactoriamente, así como la información correspondiente a dicho registro.
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <br>Con base en las fechas de la convocatoria, a partir del 20 de Agosto haremos de su conocimiento el dictamen del proceso de evaluación 2018.
+                    <br>Ante todo, nos gustaría agradecer el interés mostrado por su participación en la presente convocatoria, del mismo modo por su tiempo,
+                    preparación y dedicación en la docencia.
                   </td>
                 </tr>
                 <tr>
                   <td style="text-align:justify;">
-                  <br>  Las autoras y autores seleccionados, tanto para presentación en cartel, como para presentación oral, expondrán sus trabajos en las áreas, fechas y horarios designados, mismo que será publicado antes del evento.
+                    <br> Nos despedimos de usted deseándole éxito en este concurso y lo invitamos a continuar con su crecimiento profesional, que enorgullece al
+                    instituto. 
                   </td>
                 </tr>
                 <tr>
                   <td style="text-align:justify;">
-                  <br>Agradecemos su participación e interés en esta experiencia donde intercambiaremos y compartiremos sus logros con la comunidad de profesionales en el área de educación en salud.
+                  <br>
                   </td>
                 </tr>
                 <tr>
@@ -77,7 +75,7 @@
           <tr>
             <td align="center" bgcolor="#ffffff" style="line-height: 0;">
               <b><p>Atentamente</p></b><br>
-              <b><p>Comité organizador</p></b>
+              <b><p>Coordinación de Educación en Salud</p></b>
             </td>
           </tr>
           <tr>
