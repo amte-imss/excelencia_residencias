@@ -102,7 +102,7 @@ class Inicio extends MY_Controller {
         } else {//De inicio aquí es donde entra
             $this->load->model('Catalogo_model', 'catalogo');
 
-            $this->template->setTitle('XV Foro Nacional y I Foro Internacional de Educación en Salud');
+            $this->template->setTitle('Premio a la Excelencia Docente');
             //$this->template->setNav($this->load->view('tc_template/menu.tpl.php', null, TRUE));
             $main_content = $this->load->view('sesion/login_modal.tpl.php', $data, true);
             $this->template->setMainContent($main_content);
@@ -154,7 +154,7 @@ class Inicio extends MY_Controller {
             $data['registro_internos'] = $this->load->view("sesion/registro_internos.php", $data, TRUE);
             $main_content = $this->load->view("sesion/registro_modal.tpl.php", $data, TRUE);
 
-            $this->template->setTitle('XV Foro Nacional y I Foro Internacional de Educación en Salud');
+            $this->template->setTitle('Premio a la Excelencia Docente');
             $this->template->setMainContent($main_content);
             $this->template->getTemplate(true, 'tc_template/index_login.tpl.php');
         }

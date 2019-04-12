@@ -37,7 +37,7 @@ if(isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado']==2)
     		<div class="row">
 						<div class="col-sm-offset-1 col-sm-10 panel">
 						<?php echo form_open('registro/solicitud', array('id' => 'form_registro_solicitud_general', 'class'=>'form-horizontal')); ?>
-								<div class="panel-heading"><h2>Información general</h2></div>
+								<div class="panel-heading"><h2><?php echo $language_text['registro_excelencia']['reg_titulo_general'];?></h2></div>
 								<div class="panel-body">
 									<div class="form-group">
 										<label class="col-sm-3 control-label"><?php echo $language_text['registro_excelencia']['reg_matricula'];?></label>
@@ -162,7 +162,7 @@ if(isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado']==2)
 									</div>
 
 									<div id="" class="form-group">
-										<label for="categoria_docente" class="col-sm-3 control-label">Categoría del docente</label>
+										<label for="categoria_docente" class="col-sm-3 control-label"><?php echo $language_text['registro_excelencia']['reg_exc_curso_categoria'];?></label>
 										<div class="col-sm-9">
 										<select id="categoria_docente" name="categoria_docente" class="form-control" style="min-width: 200px;">
 											<?php
@@ -184,20 +184,20 @@ if(isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado']==2)
 									</div>
 
 									<div id="" class="form-group">
-										<label for="anios_docente" class="col-sm-3 control-label">Años</label>
+										<label for="anios_docente" class="col-sm-3 control-label"><?php echo $language_text['registro_excelencia']['reg_exc_curso_anios'];?></label>
 										<div class="col-sm-9">
 											<input type="text" name="anios_docente" id="anios_docente" value="" />
 										</div>
 									</div>
 
 									<div id="" class="form-group">
-										<label for="archivo_curso" class="col-sm-3 control-label">Archivo</label>
+										<label for="archivo_curso" class="col-sm-3 control-label"><?php echo $language_text['registro_excelencia']['reg_exc_curso_archivo'];?></label>
 										<div class="col-sm-9">
 											<input type="file" name="archivo_curso" id="archivo_curso" value=""  accept="application/pdf" />
 										</div>
 									</div>
 									<div id="" class="form-group">
-										<label for="pncp_curso" class="col-sm-3 control-label">Obtuvo PNPC</label>
+										<label for="pncp_curso" class="col-sm-3 control-label"><?php echo $language_text['registro_excelencia']['reg_exc_curso_pnpc'];?></label>
 										<div class="col-sm-9">
 											<select id="pncp_curso" name="pncp_curso" class="form-control" style="min-width: 200px;">
 														<?php
@@ -219,7 +219,7 @@ if(isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado']==2)
 									</div>
 
 									<div class="col-sm-12 text-right">
-										<input type="button" value="Agregar" class="btn btn-theme animated flipInY visible" id="btn_agregar_curso" />
+										<input type="button" value="<?php echo $language_text['registro_excelencia']['reg_btn_agregar'];?>" class="btn btn-theme animated flipInY visible" id="btn_agregar_curso" />
 									</div>
 
 								</div>
@@ -233,7 +233,7 @@ if(isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado']==2)
 							<hr class="col-sm-11" style="border:1px solid;">
 
 							<div class="col-sm-offset-1 col-sm-10 panel">
-								<div class="panel-heading"><h2>Documentación</h2></div>
+								<div class="panel-heading"><h2><?php echo $language_text['registro_excelencia']['reg_titulo_documentacion'];?></h2></div>
 
 								<?php echo form_open_multipart('registro/solicitud', array('id' => 'form_registro_solicitud_documentacion', 'class'=>'form-horizontal', 'data-toggle'=>"validator", 'role'=>"form", 'accept-charset'=>"utf-8")); ?>
 														
@@ -243,14 +243,14 @@ if(isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado']==2)
 										<div id="capa_archivo_<?php echo $value['id_tipo_documento']; ?>">
 											<?php if(isset($documento) && isset($documento[$value['id_tipo_documento']]) ){ ?>
 												<div class="col-sm-7">
-														<label class="control-label">Se ha cargado correctamente el archivo. Puede descargar el archivo desde la siguiente <a href="<?php echo base_url().$documento[$value['id_tipo_documento']]['ruta']; ?>" target="_blank">liga de descarga</a>.</label>
+														<label class="control-label"><?php echo str_replace('||X||',base_url().$documento[$value['id_tipo_documento']]['ruta'],$language_text['registro_excelencia']['reg_liga_msg_descarga']);?></label>
 												</div>
 											<?php } else { ?>
 												<div class="text-right col-sm-4">
 													<input type="file" id="archivo_<?php echo $value['id_tipo_documento']; ?>" name="archivo_<?php echo $value['id_tipo_documento']; ?>" accept="application/pdf"> <!-- application/pdf, application/mswor -->
 												</div>
 												<div class="text-right col-sm-3">
-													<button class="btn btn-theme animated flipInY visible" id="btn_envio_doctos" name="btn_envio_doctos" type="button" onclick="javascript:carga_archivos('form_registro_solicitud_documentacion','#capa_archivo_<?php echo $value['id_tipo_documento']; ?>', '<?php echo $value['id_tipo_documento']; ?>');">Cargar archivos</button>
+													<button class="btn btn-theme animated flipInY visible" id="btn_envio_doctos" name="btn_envio_doctos" type="button" onclick="javascript:carga_archivos('form_registro_solicitud_documentacion','#capa_archivo_<?php echo $value['id_tipo_documento']; ?>', '<?php echo $value['id_tipo_documento']; ?>');"><?php echo $language_text['registro_excelencia']['reg_btn_cargar_archivos'];?></button>
 												</div>
 											<?php } ?>
 										</div>
@@ -432,6 +432,39 @@ function enviar_solicitud(div_respuesta){
 		.always(function () {
 				ocultar_loader();
 		});
+}
+
+function eliminar_curso(elemento, div_respuesta){
+		var path = site_url + "/registro/eliminar_curso/" + elemento;
+		var r = confirm("¿Desea eliminar el curso?");
+		if (r == true) {
+			$.ajax({
+					type: "POST",
+					url: path,
+					data: null,
+					dataType: "json"
+			})
+			.done(function (resultado) {
+					//$('#curso_msg').html(result);
+					try {//Captha el error
+							console.log(resultado);
+							$(div_respuesta).empty();
+							if (typeof resultado.result !== 'undefined') {
+									if(resultado.result==true){
+											get_listado_cursos(<?php if(isset($solicitud_excelencia['id_solicitud'])){ echo $solicitud_excelencia['id_solicitud']; } ?>);
+											$(div_respuesta).html('<div class="alert alert-success" role="alert">' + resultado.msg + '</div>');
+											setTimeout("$('#curso_msg').html('')", 5000);
+									} else {
+											$(div_respuesta).html('<div class="alert alert-danger" role="alert">' + resultado.msg + '</div>');
+									}
+							}
+					} catch (e) {
+							$(div_respuesta).html('<div class="alert alert-danger" role="alert">' + resultado + '</div>');
+					}
+			}).fail(function () {
+
+			});
+		}    
 }
 
 </script>

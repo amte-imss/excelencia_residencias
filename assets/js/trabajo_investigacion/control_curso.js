@@ -72,7 +72,7 @@ function agregar_curso_() {
         html = '<div class="form-group" id="curso_' + $('#curso option:selected').val() + '" style="border: 1px solid #aaaaaa;padding: 2px;border-radius: 5px;">'
                 + '<label for="curso" class="col-sm-6 control-label">' + $('#curso option:selected').text() + '<input type="hidden" name="curso[]" class="curso_class" value="' + $('#curso option:selected').val() + '" /></label>'
                 + '<label for="curso" class="col-sm-5 control-label">' + $('#categoria_docente option:selected').text() + '<input type="hidden" name="categoria_docente[]" value="' + $('#categoria_docente option:selected').val() + '" /></label>'
-                + '<div class="col-sm-1"><input type="button" value="X" class="btn animated flipInY visible" onclick="javascript: eliminar_curso(' + $('#curso option:selected').val() + ');" style="color:red;" /></div>'
+                + '<div class="col-sm-1"><input type="button" value="X" class="btn animated flipInY visible" onclick="javascript: eliminar_curso(' + $('#curso option:selected').val() + ',\'#curso_msg\');" style="color:red;" /></div>'
                 + '</div>';
         $('#curso_capa').append(html);
         $('#curso').val('');
@@ -81,22 +81,6 @@ function agregar_curso_() {
         $('#curso_msg').html('<div class="alert alert-danger" role="alert">Debe seleccionar el curso y la categoría para poder agregar registros.</div>');
     }
 
-}
-
-function eliminar_curso(elemento){
-    var div_result = "#curso_capa";
-    var path = site_url + "/registro/eliminar_curso/" + elemento;
-    $.ajax({
-        type: "POST",
-        url: path,
-        data: null,
-        dataType: "json"
-    })
-    .done(function (result) {
-        $('#curso_capa').html(result);
-    }).fail(function () {
-
-    });
 }
 
 function get_listado_cursos(solicitud) {

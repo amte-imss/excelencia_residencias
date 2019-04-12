@@ -295,8 +295,35 @@ class Registro extends MY_Controller {
         }
     }
 
-    public function eliminar_curso($id_curso){
+    public function eliminar_curso($id_curso=null){
+        $output = [];
+        $output['result'] = false;
+        $output['msg'] = 'Ocurrió un error durante la eliminación.';
+        if(!is_null($id_curso)){            
+            $datos_sesion = $this->get_datos_sesion(); //Se obtienen datos de sesión para validar que solo el usuario pueda hacer modificaciones
+            $id_informacion_usuario = $datos_sesion['username'];
 
+            $idioma = $this->obtener_idioma(); //Carga de textos a utilizar
+            $lan_txt = $this->obtener_grupos_texto(array('registro_excelencia', 'template_general', 'registro_usuario'), $idioma);
+
+            ///Validación de pertenencia con usuario con sesión
+            $datos_curso = $this->registro_excelencia->get_curso_solicitud(array('where'=>array('matricula'=>$id_informacion_usuario, 'id_curso'=>$id_curso)));
+            //pr($datos_curso);
+            if(count($datos_curso)>0){ //Se valida que devuelve información, de ser así se elimina
+                //Se elimina documento de la bd
+                $this->registro_excelencia->delete_curso_documento($datos_curso[0]);
+                //Se elimina documento fisicamente                
+                foreach ($datos_curso as $key => $docto) {
+                    if (file_exists($docto['ruta'])) {//Valida que exista el archivo
+                        unlink($docto['ruta']); //elmina el fichero anterior, despues de guardar la información anterior
+                    }
+                }
+                $output['result'] = true;
+                $output['msg'] = 'Eliminación realizada.';
+            }
+        }
+        header('Content-Type: application/json; charset=utf-8;');
+        echo json_encode($output);
     }
 
     /**
@@ -315,7 +342,12 @@ class Registro extends MY_Controller {
                     $output['curso'] = $value;
                     
                 }*/
+                $idioma = $this->obtener_idioma();
+                $lan_txt = $this->obtener_grupos_texto(array('registro_excelencia', 'template_general', 'registro_usuario'), $idioma);
+                $output['language_text'] = $lan_txt;
                 $output['cursos'] = $solicitud_excelencia;
+                $output['solicitud'] = $this->registro_excelencia->get_solicitud(array('where'=>array("s.id_solicitud"=>$solicitud)))[0];
+                //pr($output);
                 $result = $this->load->view('registro_excelencia/tabla_cursos.php', $output, true);
             }
         }

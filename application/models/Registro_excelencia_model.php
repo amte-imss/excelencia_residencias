@@ -122,6 +122,43 @@ class Registro_excelencia_model extends CI_Model {
         }
     }
 
+    public function get_curso_solicitud($param = []) {
+        try {
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            //$this->db->select(array('d.*', 'td.nombre'));
+
+            $this->db->join('excelencia.solicitud s', 's.id_solicitud=c.id_solicitud', 'left');
+            $this->db->join('excelencia.documento_curso d', 'd.id_documento_curso=c.id_documento_curso', 'left');
+            
+            if (isset($param['select'])) {
+                $this->db->select($param['select']);
+            }
+
+            if (isset($param['where'])) {
+                $this->db->where($param['where']);
+            }
+
+            if (isset($param['where_in'])) {
+                $this->db->where_in($param['where_in'][0], $param['where_in'][1]);
+            }
+
+            if (isset($param['order_by'])) {
+                $this->db->order_by($param['order_by']);
+            }
+
+            $res = $this->db->get('excelencia.curso c');
+            //pr($this->db->last_query());
+            $this->db->flush_cache();
+            $this->db->reset_query();
+            $reusltado = $res->result_array();
+            return $reusltado;
+        } catch (Exception $ex) {
+            return [];
+        }
+    }
+
     public function insertar_solicitud($data = []) {
         $this->db->flush_cache();
         $this->db->reset_query();
@@ -291,6 +328,25 @@ class Registro_excelencia_model extends CI_Model {
             $result['data'] = $datos;
         }
         return $result;
+    }
+
+    public function delete_curso_documento($params){
+        $this->db->trans_begin();
+
+        $this->db->where('id_curso', $params['id_curso']);
+        $this->db->delete('excelencia.curso');
+
+        $this->db->where('id_documento_curso', $params['id_documento_curso']);
+        $this->db->delete('excelencia.documento_curso');
+        
+        if ($this->db->trans_status() === FALSE) {//ocurrio un error
+            $this->db->trans_rollback();
+            $respuesta = array('tp_msg' => En_tpmsg::DANGER, 'mensaje' => '');
+        } else {
+            $this->db->trans_commit();
+            $respuesta = array('tp_msg' => En_tpmsg::SUCCESS, 'mensaje' => '');
+        }
+        return $respuesta;
     }
 
 }
