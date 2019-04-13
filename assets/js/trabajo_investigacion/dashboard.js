@@ -44,7 +44,7 @@ function registros() {
 
                 $.ajax({
                     type: "GET",
-                    url: site_url + "/inicio/informacion/lista",
+                    url: site_url + "/inicio/informacion",
                     dataType: "json"
                 })
                         .done(function (result) {
@@ -53,7 +53,7 @@ function registros() {
                             var nombre_metodologia_tmp;
                             var contadores = {total_delegacion: 0, total_umae: 0, total_externos: 0, total_internos: 0};
                             var res = $.grep(result.data, function (registro) {
-                                try {
+                              /*  try {
                                     estado_tmp = JSON.parse(registro.estado);
                                     registro.estado = estado_tmp[lang_tmp];
                                 } catch (e) {
@@ -84,9 +84,9 @@ function registros() {
                                         registro.es_imss = language_text.dashboard.es_imss_no;
                                     }
                                 } catch (e) {
-                                }
+                                }*/
 
-                                console.log(filter);
+                              /*  console.log(filter);
 
                                 return (!filter.folio || (registro.folio !== null && registro.folio.toLowerCase().indexOf(filter.folio.toString().toLowerCase()) > -1))
                                         && (!filter.titulo || (registro.titulo !== null && registro.titulo.toLowerCase().indexOf(filter.titulo.toString().toLowerCase()) > -1))
@@ -95,10 +95,11 @@ function registros() {
                                         && (!filter.estado || (registro.estado !== null && registro.estado.toString().indexOf(filter.estado.toString()) > -1))
                                         && (!filter.nombre_investigacor || (registro.nombre_investigacor !== null && registro.nombre_investigacor.toString().indexOf(filter.nombre_investigacor.toString()) > -1))
                                         && (!filter.es_imss || (registro.es_imss !== null && registro.es_imss.toString().indexOf(filter.es_imss.toString()) > -1))
-                                        ;
+                                        ;*/
+                                        return true;
                             });
 //                            d.resolve(result['data']);
-                            tablero_contador(contadores);
+                           // tablero_contador(contadores);
                             d.resolve(res);
 //                            calcula_ancho_grid('jsReporteHechos', 'jsgrid-header-cell');
                         });
@@ -108,24 +109,25 @@ function registros() {
             }
         },
         fields: [
-            {name: "nombre_investigador", title: name_fields.nombre_investigador, type: "text", inserting: false, editing: false},
-            {name: "folio", title: name_fields.folio, type: "text", inserting: false, editing: false},
-            {name: "titulo", title: name_fields.titulo, type: "text", inserting: false, editing: false},
-            {name: "nombre_metodologia", title: name_fields.nombre_metodologia, type: "text", inserting: false, editing: false},
+            {name: "matricula", title: name_fields.matricula, type: "text", inserting: false, editing: false},
+            {name: "nombre", title: name_fields.nombre, type: "text", inserting: false, editing: false},
+            {name: "apellido_paterno", title: name_fields.apellido_paterno, type: "text", inserting: false, editing: false},
+            {name: "apellido_materno", title: name_fields.apellido_materno, type: "text", inserting: false, editing: false},
+            {name: "unidad", title: name_fields.unidad, type: "text", inserting: false, editing: false},
+            {name: "umae", title: name_fields.umae, type: "text", inserting: false, editing: false},
+            {name: "delegacion", title: name_fields.delegacion, type: "text", inserting: false, editing: false},
             {name: "fecha", title: name_fields.fecha, type: "text", inserting: false, editing: false},
-            {name: "clave_estado", title: name_fields.clave_estado, type: "text", inserting: false, editing: false},
-            {name: "es_imss", title: name_fields.es_imss, type: "text", inserting: false, editing: false},
-            {type: "control", editButton: false, deleteButton: false, width: 40,
+            {type: "detalle", editButton: false, deleteButton: false, width: 40,
                 searchModeButtonTooltip: language_text.jsgrid_elementos.cambio_busqueda, // tooltip of switching filtering/inserting button in inserting mode
                 editButtonTooltip: language_text.jsgrid_elementos.editar, // tooltip of edit item button
                 searchButtonTooltip: language_text.jsgrid_elementos.limpiar_filtros_busqueda, // tooltip of search button
                 clearFilterButtonTooltip: language_text.jsgrid_elementos.actualizar_js, // tooltip of clear filter button
                 updateButtonTooltip: language_text.jsgrid_elementoscancelar_js, // tooltip of update item button
                 cancelEditButtonTooltip: language_text.jsgrid_elementos.buscar_js, // tooltip of cancel editing button
-                itemTemplate: function (value, item) {
+               /* itemTemplate: function (value, item) {
                     var result = get_detalle(item);
                     return result;
-                }
+                }*/
             }
         ]
     });
@@ -134,13 +136,13 @@ function registros() {
 
 function obtener_cabeceras() {
     var arr_header = {
-        nombre_investigador: language_text.dashboard.nombre_investigador,
-        es_imss: language_text.dashboard.es_imss,
-        folio: language_text.listado_trabajo.folio,
-        titulo: language_text.listado_trabajo.titulo_ttabla,
-        nombre_metodologia: language_text.listado_trabajo.tipo_metodologia_tabla,
-        fecha: language_text.listado_trabajo.fecha_registro,
-        estado: language_text.listado_trabajo.estado_trabajo
+        matricula:language_text.dashboard.matricula,
+        nombre: language_text.dashboard.nombre,
+        apellido_paterno: language_text.dashboard.apellido_paterno,
+        apellido_materno: language_text.listado_trabajo.apellido_materno,
+        unidad: language_text.listado_trabajo.unidad,
+        delegacion: language_text.listado_trabajo.delegacion,
+        fecha: language_text.listado_trabajo.fecha
     }
 
     return arr_header;
@@ -171,7 +173,7 @@ function tablero_contador(contadores) {
 
 function get_detalle(item) {
     //console.log(item);
-    var ruta = site_url + "/registro_investigacion/ver/" + item.folio;
+    var ruta = site_url + "/registro/solicitud/" + item.id_solicitud;
     var liga = '<a href="' + ruta + '" class="btn btn-theme animated flipInY visible pull-right" title="'+ language_text.listado_trabajo.accion_ver_detalle_inv +'">' +
             '<i class="fa fa-eye" aria-hidden="true"></i>' +
             '</a>';

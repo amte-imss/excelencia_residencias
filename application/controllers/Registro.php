@@ -36,10 +36,10 @@ class Registro extends MY_Controller {
             $output['convocatoria_activa'] = true;
         }
         $output['listado'] = $this->registro_excelencia->listado_solicitud($id_informacion_usuario);
-
+       // echo $output;
         $this->template->setTitle('Premio a la Excelencia Docente');
         //$this->template->setNav($this->load->view('tc_template/menu.tpl.php', null, TRUE));
-        $main_content = $this->load->view('registro_excelencia/index.tpl.php', $output, true);
+        $main_content = $this->load->view('dashboard/index.tpl.php', $output, true);
         $this->template->setMainContent($main_content);
         $this->template->getTemplate(true, 'tc_template/index_login.tpl.php');
     }
@@ -96,6 +96,12 @@ class Registro extends MY_Controller {
         $main_content = $this->load->view('registro_excelencia/registro.tpl.php', $output, true);
         $this->template->setMainContent($main_content);
         $this->template->getTemplate();
+    }
+
+    public function guardar_curso_participado(){
+        if($this->input->post(null, true)){
+            
+        }
     }
 
     private function archivos(&$archivos, $params){

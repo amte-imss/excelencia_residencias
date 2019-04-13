@@ -168,7 +168,6 @@ class Inicio extends MY_Controller {
         $output = [];
         $datos_sesion = $this->get_datos_sesion();
         $id_informacion_usuario = $datos_sesion['id_informacion_usuario'];
-
         $lang = $this->obtener_idioma();
         $output['language_text'] = $this->language_text; //obtiene textos del lenguaje
 //        $output['listado'] = $this->trabajo->listado_trabajos_autor($id_informacion_usuario, $lang);
@@ -183,19 +182,21 @@ class Inicio extends MY_Controller {
      * @author LEAS
      * @fecha 08/05/2018
      */
-    function informacion($tipo = 'lista') {
-        $this->load->model('Trabajo_model', 'trabajo');
+    function informacion() {
+        $this->load->model('Registro_excelencia_model', 'excelencia_mod');
         $lang = $this->obtener_idioma();
-        $listado = $this->trabajo->listado_trabajos_autor_general();
+        $listado = $this->excelencia_mod->get_solicitud();
         foreach ($listado as $key => $value) {
-            $json = json_decode($value['estado'], true);
-            $value['estado'] = $json['investigador'][$lang];
+            //$json = json_decode($value['estado'], true);
+           // $value['estado'] = $json['investigador'][$lang];
             $listado[$key] = $value;
         }
-//        pr($output['data']);
+       
         $output['data'] = $listado;
+         //pr($output['data']);
         header('Content-Type: application/json; charset=utf-8;');
         echo json_encode($output);
+
     }
 
 //    public function inicio() {
