@@ -152,7 +152,7 @@ $config["form_registro_excelencia"] = array(
         'label' => '¿Qué categoría tiene?',
         'rules' => 'trim',
     ),
-    array(
+    /*array(
         'field' => 'pnpc',
         'label' => '¿Tiene PNPC?',
         'rules' => 'trim|required',
@@ -161,7 +161,7 @@ $config["form_registro_excelencia"] = array(
         'field' => 'pnpc_anio',
         'label' => 'De qué año',
         'rules' => 'trim',
-    ),
+    ),*/
 );
 
 $config["login"] = array(
@@ -1088,6 +1088,39 @@ $config['form_actualizar_interno'] = array(
         'label' => '',
         'rules' => 'required'
     )
+);
+
+$config['form_guarda_curso_participado'] = array(
+    array(
+        'field' => 'solicitud_cur',
+        'label' => 'Solicitud',
+        'rules' => 'trim|required'
+    ),
+    array(
+        'field' => 'pncp_curso',
+        'label' => 'Obtuvo PNPC',
+        'rules' => 'trim|required' //|callback_valid_pass
+    ),
+    array(
+        'field' => 'archivo_curso',
+        'label' => 'Archivo',
+        'rules' => 'trim|required' //|callback_valid_pass
+    ),
+    array(
+        'field' => 'anios_docente',
+        'label' => 'Años',
+        'rules' => 'trim|required|is_numeric' //|callback_valid_pass
+    ),
+    array(
+        'field' => 'categoria_docente',
+        'label' => '',
+        'rules' => 'trim|required' //|callback_valid_pass
+    ),
+    array(
+        'field' => 'curso',
+        'label' => '',
+        'rules' => 'trim|required' //|callback_valid_pass
+    ),
 );
 
 // VALIDACIONES

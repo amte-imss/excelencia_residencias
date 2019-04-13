@@ -10,12 +10,12 @@
 
         <title>
             <?php echo (!is_null($title)) ? "{$title}&nbsp;|" : "" ?>
-            <?php echo (!is_null($main_title)) ? $main_title : "XV Foro Nacional y I Foro Internacional de Educación en Salud" ?>
+            <?php echo (!is_null($main_title)) ? $main_title : "PREMIO A LA EXCELENCIA DOCENTE :: IMSS" ?>
         </title>
 
         <!-- Favicons -->
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
-        <link rel="shortcut icon" href="assets/ico/favicon.ico">
+        <!--link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png"-->
+        <link rel="shortcut icon" href="<?php echo asset_url(); ?>ico/favicon.ico">
 
         <!-- CSS Global -->
         <link href="<?php echo asset_url(); ?>plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">

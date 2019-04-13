@@ -129,7 +129,7 @@ class MY_Controller extends CI_Controller {
      */
     protected function save_file($configuracion, $carpeta, $nombre_file, $key_name_file = 'userfile') {
         if ($_FILES && $this->input->post()) {
-            $string_value = get_elementos_lenguaje(array(En_catalogo_textos::GUARDAR_ACTUALIZAR));
+            $string_value = get_elementos_lenguaje(array('guarda_actualiza'));
 //            $data = $this->input->post(null, true);
             $config = $this->colocar_configuracion($configuracion, $carpeta, $nombre_file); ///Obtener configuración para carga de archivo
 //            pr($config);
@@ -140,11 +140,12 @@ class MY_Controller extends CI_Controller {
                 return array('tp_msg' => En_tpmsg::DANGER, 'mensaje' => $this->upload->display_errors());
             } else {
                 $data_file_complete = $this->upload->data();
-                return array('tp_msg' => En_tpmsg::SUCCESS,
+                $return =  array('tp_msg' => En_tpmsg::SUCCESS,
+//                    'mensaje' => $string_value['guardo_file'],
                     'mensaje' => $string_value['guardo_file'],
                     'upload_path' => $config['upload_path'],
-                    'raw_name' => $data_file_complete['raw_name'], //Nombre real del archivo
                 );
+                return array_merge($return, $data_file_complete );
             }
         }
     }
