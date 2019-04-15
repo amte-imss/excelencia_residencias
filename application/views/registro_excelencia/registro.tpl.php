@@ -78,8 +78,8 @@ if(isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado']==2)
 								<div class="form-group">
 									<label for="carrera" class="col-sm-3 control-label"><?php echo $language_text['registro_excelencia']['carrera_tiene'];?>*</label>
 									<div class="col-sm-9">
-										<input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();"<?php if(isset($solicitud_excelencia['carrera'])){ if($solicitud_excelencia['carrera']=='1') echo 'checked';}?> <?php if(isset($solicitud_excelencia['id_solicitud'])) { echo 'disabled'; } ?>><?php echo $language_text['template_general']['si_op'];?><br>
-										<input type="radio" name="carrera" value="0" onclick="javascript:habilitar_categoria();" <?php if(isset($solicitud_excelencia['carrera'])){ if($solicitud_excelencia['carrera']=='0') echo 'checked';}?> <?php if(isset($solicitud_excelencia['id_solicitud'])) { echo 'disabled'; } ?>><?php echo $language_text['template_general']['no_op'];?><br>
+										<input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();"<?php if(isset($solicitud_excelencia['carrera_tiene'])){ if($solicitud_excelencia['carrera_tiene']=='1') echo 'checked';}?> <?php if(isset($solicitud_excelencia['id_solicitud'])) { echo 'disabled'; } ?>><?php echo $language_text['template_general']['si_op'];?><br>
+										<input type="radio" name="carrera" value="0" onclick="javascript:habilitar_categoria();" <?php if(isset($solicitud_excelencia['carrera_tiene'])){ if($solicitud_excelencia['carrera_tiene']=='0') echo 'checked';}?> <?php if(isset($solicitud_excelencia['id_solicitud'])) { echo 'disabled'; } ?>><?php echo $language_text['template_general']['no_op'];?><br>
 									</div><div style="clear:both;"></div>
 									<?php echo form_error_format('carrera');?>
 								</div>

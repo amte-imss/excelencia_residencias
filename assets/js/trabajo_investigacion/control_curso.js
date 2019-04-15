@@ -36,7 +36,7 @@ function agregar_curso() {
                                 $('#categoria_docente').val('');
                                 $('#anios_docente').val('');
                                 $('#archivo_curso').val('');
-                                $('#pncp_curso').val('');
+                                //$('#pncp_curso').val('');
                                 setTimeout("$('#curso_msg').html('')", 5000);
                             } else {
                                 $(div_respuesta).html(resp.html);

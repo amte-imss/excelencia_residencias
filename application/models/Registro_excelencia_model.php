@@ -36,7 +36,11 @@ class Registro_excelencia_model extends CI_Model {
         try{
             $this->db->flush_cache();
             $this->db->reset_query();
-            $this->db->select(array('s.*','u.email','i.*', 'h.*', 'del.nombre as delegacion', 'dep.nombre as departamento', 'unidad.nombre as unidad','unidad.es_umae'));
+            if(isset($param['select'])) {
+                $this->db->select($param['select']);
+            } else {
+                $this->db->select(array('s.*','u.email','i.*', 'h.*', 'del.nombre as delegacion', 'dep.nombre as departamento', 'unidad.nombre as unidad','unidad.es_umae', "to_char(s.fecha, 'yyyy-dd-mm hh:MI:ss') as fecha_format"));
+            }
             $this->db->join('sistema.usuarios u','u.username=s.matricula','left');
             $this->db->join('sistema.informacion_usuario i','i.matricula=u.username','left');
             $this->db->join('sistema.historico_informacion_usuario h','h.id_informacion_usuario=i.id_informacion_usuario','left');
@@ -60,13 +64,17 @@ class Registro_excelencia_model extends CI_Model {
             if(isset($param['order_by'])) {
               $this->db->order_by($param['order_by']);
             }
+            
+            if(isset($param['group_by'])) {
+                $this->db->group_by($param['group_by']);
+            }
     
             $res = $this->db->get('excelencia.solicitud s');
             //pr($this->db->last_query());
             $this->db->flush_cache();
             $this->db->reset_query();
-            $reusltado = $res->result_array();
-            $resultado_mapeo = $this->mapear_formato($reusltado);
+            $resultado_mapeo = $res->result_array();
+            //$resultado_mapeo = $this->mapear_formato($reusltado);
          
             return $resultado_mapeo;
            
@@ -76,7 +84,7 @@ class Registro_excelencia_model extends CI_Model {
         }
     }
     
-    public function mapear_formato($data){
+    /*public function mapear_formato($data){
         
         foreach($data as $key => $value){
             $data[$key]['es_umae'] =  $data[$key]['es_umae'] == true? 'SI':'NO';
@@ -86,6 +94,94 @@ class Registro_excelencia_model extends CI_Model {
         }
         return $data;
 
+    }*/
+    
+    public function update_solicitud($data){
+        $this->db->trans_begin(); //Inicia la transacción
+
+        $array_insert = array(
+            'estado' => 2
+        );
+        $this->db->where('id_solicitud', $data['id_solicitud']); //Id solicitud
+        $this->db->update('excelencia.solicitud', $array_insert); //Se inserta el nuevo registro del historico de datos IMSS                
+        if ($this->db->trans_status() === FALSE) {//Valida que se inserto el archvo success
+            $this->db->trans_rollback();
+            $respuesta = array('tp_msg' => En_tpmsg::DANGER, 'mensaje' => 'Ocurrió un error en el guardado de información.');
+        } else {
+            $this->db->trans_commit();
+            $respuesta = array('tp_msg' => En_tpmsg::SUCCESS, 'mensaje' => 'Se ha enviado su solicitud.');
+            $this->db->reset_query();
+        }
+        return $respuesta;
+    }
+
+    public function get_documento($param = []) {
+        try {
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            $this->db->select(array('d.*', 'td.nombre'));
+
+            $this->db->join('excelencia.tipo_documento td', 'td.id_tipo_documento=d.id_tipo_documento', 'left');
+            
+            if (isset($param['where'])) {
+                $this->db->where($param['where']);
+            }
+
+            if (isset($param['where_in'])) {
+                $this->db->where_in($param['where_in'][0], $param['where_in'][1]);
+            }
+
+            if (isset($param['order_by'])) {
+                $this->db->order_by($param['order_by']);
+            }
+
+            $res = $this->db->get('excelencia.documento d');
+            //pr($this->db->last_query());
+            $this->db->flush_cache();
+            $this->db->reset_query();
+            $reusltado = $res->result_array();
+            return $reusltado;
+        } catch (Exception $ex) {
+            return [];
+        }
+    }
+
+    public function get_curso_solicitud($param = []) {
+        try {
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            //$this->db->select(array('d.*', 'td.nombre'));
+
+            $this->db->join('excelencia.solicitud s', 's.id_solicitud=c.id_solicitud', 'left');
+            $this->db->join('excelencia.documento_curso d', 'd.id_documento_curso=c.id_documento_curso', 'left');
+            
+            if (isset($param['select'])) {
+                $this->db->select($param['select']);
+            }
+
+            if (isset($param['where'])) {
+                $this->db->where($param['where']);
+            }
+
+            if (isset($param['where_in'])) {
+                $this->db->where_in($param['where_in'][0], $param['where_in'][1]);
+            }
+
+            if (isset($param['order_by'])) {
+                $this->db->order_by($param['order_by']);
+            }
+
+            $res = $this->db->get('excelencia.curso c');
+            //pr($this->db->last_query());
+            $this->db->flush_cache();
+            $this->db->reset_query();
+            $reusltado = $res->result_array();
+            return $reusltado;
+        } catch (Exception $ex) {
+            return [];
+        }
     }
 
     
@@ -95,10 +191,14 @@ class Registro_excelencia_model extends CI_Model {
         $this->db->reset_query();
 
         $this->db->trans_begin();
-        pr($data);
+        //pr($data);
+        if($data['tipo_categoria']==''){
+            $data['tipo_categoria'] = null;
+        }
+        
         $historico = array(
             'matricula' => $data['matricula'],
-            'pnpc_tiene' => $data['pnpc'],
+            //'pnpc_tiene' => $data['pnpc'],
             'carrera_tiene' => $data['carrera'],
             'carrera_categoria' => $data['tipo_categoria'],
             'estado' => 1
@@ -119,6 +219,32 @@ class Registro_excelencia_model extends CI_Model {
             $resultado['msg'] = "Se ha cargado correctamente la información.";
             $resultado['result'] = TRUE;
             $resultado['id_solicitud'] = $id_solicitud;
+        }
+        return $resultado;
+    }
+    
+    public function insertar_documento($data = []) {
+        $this->db->flush_cache();
+        $this->db->reset_query();
+
+        $this->db->trans_begin();
+        
+        $this->db->insert('excelencia.documento', $data);
+
+        $id_documento = $this->db->insert_id();
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            //$resultado['msg'] = $language_text['registro_usuario']['user_registro_problem'];
+            $resultado['msg'] = "Ha ocurrido un error en la inserción de los datos.";
+            $resultado['id_documento'] = null;
+        } else {
+            $this->db->trans_commit();
+            //$resultado['msg'] = $language_text['registro_usuario']['user_registro_succes'];
+            $resultado['msg'] = "Se ha cargado correctamente la información.";
+            $resultado['result'] = TRUE;
+            $resultado['id_documento'] = $id_documento;
         }
         return $resultado;
     }
@@ -234,7 +360,69 @@ class Registro_excelencia_model extends CI_Model {
     }
   
 
+    public function curso_participantes($filtros = null) {
+        $this->db->flush_cache();
+        $this->db->reset_query();
 
+        if (!is_null($filtros)) {
+            $this->db->where($filtros);
+        }
+
+        $this->db->join('excelencia.especialidades es', 'es.id_especialidad = c.id_especialidad');
+        $this->db->join('excelencia.documento_curso dc', 'dc.id_documento_curso = c.id_documento_curso ');
+        $this->db->join('excelencia.tipo_documento td', 'td.id_tipo_documento = dc.id_tipo_documento');
+        $this->db->order_by('es.especialidades');
+
+        $res = $this->db->get('excelencia.curso c');
+
+        $this->db->flush_cache();
+        $this->db->reset_query();
+
+        return $res->result_array();
+    }    
+    
+    
+    public function insert_registro_general($entidad, $datos, $identificador = null) {
+        $this->db->flush_cache(); //Limpia cache
+        $this->db->reset_query(); //Reset result query
+        $result = ['tp_msg' => En_tpmsg::DANGER, 'msg' => ''];
+        $this->db->trans_begin();
+        $this->db->insert($entidad, $datos);
+        if (!is_null($identificador)) {
+            $datos[$identificador] = $this->db->insert_id();
+        }
+//        pr($identificador);
+//        pr($datos);
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+        } else {
+//            $this->db->trans_rollback();
+//        $result = ['tp_msg' => En_tpmsg::DANGER, 'msg' => ''];
+            $this->db->trans_commit();
+            $result = ['tp_msg' => En_tpmsg::SUCCESS, 'msg' => ''];
+            $result['data'] = $datos;
+        }
+        return $result;
+    }
+
+    public function delete_curso_documento($params){
+        $this->db->trans_begin();
+
+        $this->db->where('id_curso', $params['id_curso']);
+        $this->db->delete('excelencia.curso');
+
+        $this->db->where('id_documento_curso', $params['id_documento_curso']);
+        $this->db->delete('excelencia.documento_curso');
+        
+        if ($this->db->trans_status() === FALSE) {//ocurrio un error
+            $this->db->trans_rollback();
+            $respuesta = array('tp_msg' => En_tpmsg::DANGER, 'mensaje' => '');
+        } else {
+            $this->db->trans_commit();
+            $respuesta = array('tp_msg' => En_tpmsg::SUCCESS, 'mensaje' => '');
+        }
+        return $respuesta;
+    }
     
 
 }

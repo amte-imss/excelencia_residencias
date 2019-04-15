@@ -32,7 +32,7 @@
                         <i class="fa fa-group fa-2x"></i>
                     </span>
                     <div class="media-body">
-                        <h4 class="media-heading"><?php echo $language_text['dashboard']['total_registros_excelencia']; ?></h4>
+                        <h4 class="media-heading"><?php echo $language_text['dashboard']['total_internos']; ?></h4>
                         <span id="internos"><?php echo $total_registros; ?> </span>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                     </span>
                     <div class="media-body">
                         <h4 class="media-heading"><?php echo $language_text['dashboard']['total_delegacion']; ?></h4>
-                        <span id="delegacion">0</span>
+                        <span id="delegacion"><?php echo $total_registros_delegacion; ?></span>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                     </span>
                     <div class="media-body">
                         <h4 class="media-heading"><?php echo $language_text['dashboard']['total_umae']; ?></h4>
-                        <span id="umae">0</span>
+                        <span id="umae"><?php echo $total_registros_umae; ?></span>
                     </div>
                 </div>
             </div>

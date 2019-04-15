@@ -95,7 +95,7 @@ function registros() {
                                         && (!filter.unidad || (registro.unidad !== null && registro.unidad.toLowerCase().indexOf(filter.unidad.toString().toLowerCase()) > -1))
                                         && (!filter.es_umae || (registro.es_umae !== null && registro.es_umae.toString().indexOf(filter.es_umae.toString()) > -1))
                                         && (!filter.delegacion || (registro.delegacion !== null && registro.delegacion.toLowerCase().indexOf(filter.delegacion.toString().toLowerCase()) > -1))
-                                        && (!filter.fecha || (registro.fecha !== null && registro.fecha.toString().indexOf(filter.fecha.toString()) > -1))
+                                        && (!filter.fecha_format || (registro.fecha_format !== null && registro.fecha_format.toString().indexOf(filter.fecha_format.toString()) > -1))
                                         ;
                                         return true;
                             });
@@ -117,7 +117,7 @@ function registros() {
             {name: "unidad", title: name_fields.unidad, type: "text", inserting: false, editing: false},
             {name: "es_umae", title: name_fields.es_umae, type: "text", inserting: false, editing: false},
             {name: "delegacion", title: name_fields.delegacion, type: "text", inserting: false, editing: false},
-            {name: "fecha", title: name_fields.fecha, type: "text", inserting: false, editing: false},
+            {name: "fecha_format", title: name_fields.fecha_format, type: "text", inserting: false, editing: false},
             {type: "control", editButton: false, deleteButton: false, width: 40,
                 searchModeButtonTooltip: language_text.jsgrid_elementos.cambio_busqueda, // tooltip of switching filtering/inserting button in inserting mode
                // editButtonTooltip: language_text.jsgrid_elementos.editar, // tooltip of edit item button
@@ -144,7 +144,7 @@ function obtener_cabeceras() {
         unidad: 'Unidad',
         es_umae: 'Es UMAE',
         delegacion: 'Delegación',
-        fecha:'Fecha de registro',
+        fecha_format:'Fecha de registro',
         control: 'Detalle'
     }
 
@@ -154,6 +154,7 @@ function obtener_cabeceras() {
 function cabeceras_no_exportar() {
     var arr_header = {
         acciones: 'Acciones',
+        control: 'Detalle'
     }
     return arr_header;
 }

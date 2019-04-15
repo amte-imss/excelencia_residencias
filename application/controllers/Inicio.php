@@ -167,7 +167,8 @@ class Inicio extends MY_Controller {
     public function inicio() {
         $this->load->model('Registro_excelencia_model', 'excelencia_mod');
         $lang = $this->obtener_idioma();
-        $listado = $this->excelencia_mod->get_solicitud();
+        $listado = $this->excelencia_mod->get_solicitud(array('select'=>'count(*) as total, es_umae', 'group_by'=>'es_umae'));
+        //$listado = $this->excelencia_mod->get_solicitud();
         $output = [];
         $datos_sesion = $this->get_datos_sesion();
         $id_informacion_usuario = $datos_sesion['id_informacion_usuario'];
@@ -176,7 +177,19 @@ class Inicio extends MY_Controller {
 //        $output['listado'] = $this->trabajo->listado_trabajos_autor($id_informacion_usuario, $lang);
         $output['lang'] = $this->obtener_idioma();
         
-        $output['total_registros'] = count($listado);
+        $output['total_registros'] = 0;
+        $output['total_registros_delegacion'] = 0;
+        $output['total_registros_umae'] = 0;
+        if(isset($listado[0]) and count($listado)>0){
+            foreach ($listado as $key_total => $total) {
+                if($total['es_umae']==true){
+                    $output['total_registros_umae'] = $total['total'];
+                } else {
+                    $output['total_registros_delegacion'] = $total['total'];
+                }
+                $output['total_registros'] += $total['total'];
+            }
+        }
 //        pr($this->language_text);
         $main_content = $this->load->view('dashboard/index.tpl.php', $output, true);
         $this->template->setMainContent($main_content);
@@ -190,7 +203,7 @@ class Inicio extends MY_Controller {
     function informacion() {
         $this->load->model('Registro_excelencia_model', 'excelencia_mod');
         $lang = $this->obtener_idioma();
-        $listado = $this->excelencia_mod->get_solicitud();
+    $listado = $this->excelencia_mod->get_solicitud(/*array('select'=>"s.matricula, i.nombre, i.apellido_paterno, i.apellido_materno, to_char(s.fecha, 'yyyy-dd-mm hh:MI:ss') as fecha, del.*")*/);
         foreach ($listado as $key => $value) {
             //$json = json_decode($value['estado'], true);
            // $value['estado'] = $json['investigador'][$lang];
