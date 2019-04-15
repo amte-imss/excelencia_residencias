@@ -66,7 +66,7 @@ class Registro_excelencia_model extends CI_Model {
             $this->db->flush_cache();
             $this->db->reset_query();
             $reusltado = $res->result_array();
-            $resultado_mapeo = $this->map_umae($reusltado);
+            $resultado_mapeo = $this->mapear_formato($reusltado);
          
             return $resultado_mapeo;
            
@@ -76,14 +76,19 @@ class Registro_excelencia_model extends CI_Model {
         }
     }
     
-    public function map_umae($data){
+    public function mapear_formato($data){
+        
         foreach($data as $key => $value){
             $data[$key]['es_umae'] =  $data[$key]['es_umae'] == true? 'SI':'NO';
-           
+            $date = date_create($data[$key]['fecha']);
+            $data[$key]['fecha'] = date_format($date, 'Y-m-d H:i:s');
+
         }
         return $data;
 
     }
+
+    
 
     public function insertar_solicitud($data = []){
         $this->db->flush_cache();
