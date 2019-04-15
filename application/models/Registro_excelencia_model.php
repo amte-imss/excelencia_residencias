@@ -66,11 +66,23 @@ class Registro_excelencia_model extends CI_Model {
             $this->db->flush_cache();
             $this->db->reset_query();
             $reusltado = $res->result_array();
-            return $reusltado;
+            $resultado_mapeo = $this->map_umae($reusltado);
+         
+            return $resultado_mapeo;
+           
     
         } catch(Exception $ex){
             return [];
         }
+    }
+    
+    public function map_umae($data){
+        foreach($data as $key => $value){
+            $data[$key]['es_umae'] =  $data[$key]['es_umae'] == true? 'SI':'NO';
+           
+        }
+        return $data;
+
     }
 
     public function insertar_solicitud($data = []){
@@ -207,6 +219,15 @@ class Registro_excelencia_model extends CI_Model {
 
         return $res->result_array();
     }
+
+    public function get_total_registros(){
+        $this->db->flush_cache();
+        $this->db->reset_query();
+        $data['total_registros'] = 100;
+        return $data;
+
+    }
+  
 
 
     

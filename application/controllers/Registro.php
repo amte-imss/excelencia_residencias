@@ -110,9 +110,7 @@ class Registro extends MY_Controller {
 
         $this->load->model('Usuario_model', 'usuario');
         $output['solicitud'] = $this->usuario->get_usuarios(array('where'=>array("usuarios.username"=>$id_informacion_usuario)));
-
         $output['language_text'] = $lan_txt;
-
         $main_content = $this->load->view('registro_excelencia/registro.tpl.php', $output, true);
         $this->template->setMainContent($main_content);
         $this->template->getTemplate();
@@ -359,5 +357,9 @@ class Registro extends MY_Controller {
         }
         echo $result;
     }
+
+    
+
+ 
 
 }

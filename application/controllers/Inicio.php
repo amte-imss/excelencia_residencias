@@ -161,10 +161,13 @@ class Inicio extends MY_Controller {
     }
 
     /**
-     * @author LEAS
+     * @author 
      * @fecha 08/05/2018
      */
     public function inicio() {
+        $this->load->model('Registro_excelencia_model', 'excelencia_mod');
+        $lang = $this->obtener_idioma();
+        $listado = $this->excelencia_mod->get_solicitud();
         $output = [];
         $datos_sesion = $this->get_datos_sesion();
         $id_informacion_usuario = $datos_sesion['id_informacion_usuario'];
@@ -172,6 +175,8 @@ class Inicio extends MY_Controller {
         $output['language_text'] = $this->language_text; //obtiene textos del lenguaje
 //        $output['listado'] = $this->trabajo->listado_trabajos_autor($id_informacion_usuario, $lang);
         $output['lang'] = $this->obtener_idioma();
+        
+        $output['total_registros'] = count($listado);
 //        pr($this->language_text);
         $main_content = $this->load->view('dashboard/index.tpl.php', $output, true);
         $this->template->setMainContent($main_content);
@@ -179,7 +184,7 @@ class Inicio extends MY_Controller {
     }
 
     /**
-     * @author LEAS
+     * @author 
      * @fecha 08/05/2018
      */
     function informacion() {
@@ -193,6 +198,7 @@ class Inicio extends MY_Controller {
         }
        
         $output['data'] = $listado;
+
          //pr($output['data']);
         header('Content-Type: application/json; charset=utf-8;');
         echo json_encode($output);

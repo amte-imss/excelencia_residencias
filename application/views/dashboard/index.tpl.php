@@ -14,17 +14,18 @@
     <h1 class="page-head-line"><?php echo $language_text['dashboard']['titulo']; ?></h1>
     <div class="panel-body">
         <div class="row">
-            <div class="col-xs-12 col-sm-6 col-md-3">
-                <div class="media">
+        <br>
+              <!--  <div class="col-xs-12 col-sm-6 col-md-1">
+            <div class="media">
                     <span class="pull-left">
                         <i class="fa fa-group fa-2x"></i>
                     </span>
                     <div class="media-body">
-                        <h4 class="media-heading"><?php echo $language_text['dashboard']['total_externos']; ?></h4>
+                        <h4 class="media-heading"><?php //echo $language_text['dashboard']['total_externos']; ?></h4>
                         <span id="externos">0</span>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <div class="col-xs-12 col-sm-6 col-md-3">
                 <div class="media">
                     <span class="pull-left">
@@ -32,7 +33,7 @@
                     </span>
                     <div class="media-body">
                         <h4 class="media-heading"><?php echo $language_text['dashboard']['total_internos']; ?></h4>
-                        <span id="internos">0</span>
+                        <span id="internos"><?php echo $total_registros; ?> </span>
                     </div>
                 </div>
             </div>

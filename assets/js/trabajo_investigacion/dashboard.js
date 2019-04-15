@@ -16,9 +16,9 @@ function registros() {
         paging: true,
         autoload: true,
         pageSize: 10,
-        rowClick: function (args) {
+       // rowClick: function (args) {
             //console.log(args);
-        },
+        //},
         pageButtonCount: 5,
         pagerFormat: "Páginas: {pageIndex} de {pageCount}    {first} {prev} {pages} {next} {last}   Total: {itemCount}",
         pagePrevText: language_text.jsgrid_elementos.anterior_pag_js,
@@ -86,16 +86,17 @@ function registros() {
                                 } catch (e) {
                                 }*/
 
-                              /*  console.log(filter);
+                                console.log(filter);
 
-                                return (!filter.folio || (registro.folio !== null && registro.folio.toLowerCase().indexOf(filter.folio.toString().toLowerCase()) > -1))
-                                        && (!filter.titulo || (registro.titulo !== null && registro.titulo.toLowerCase().indexOf(filter.titulo.toString().toLowerCase()) > -1))
-                                        && (!filter.nombre_metodologia || (registro.nombre_metodologia !== null && registro.nombre_metodologia.toLowerCase().indexOf(filter.nombre_metodologia.toString().toLowerCase()) > -1))
-                                        && (!filter.fecha_registro || (registro.fecha_registro !== null && registro.fecha_registro.toLowerCase().indexOf(filter.fecha_registro.toString().toLowerCase()) > -1))
-                                        && (!filter.estado || (registro.estado !== null && registro.estado.toString().indexOf(filter.estado.toString()) > -1))
-                                        && (!filter.nombre_investigacor || (registro.nombre_investigacor !== null && registro.nombre_investigacor.toString().indexOf(filter.nombre_investigacor.toString()) > -1))
-                                        && (!filter.es_imss || (registro.es_imss !== null && registro.es_imss.toString().indexOf(filter.es_imss.toString()) > -1))
-                                        ;*/
+                                return (!filter.matricula || (registro.matricula !== null && registro.matricula.toLowerCase().indexOf(filter.matricula.toString().toLowerCase()) > -1))
+                                        && (!filter.nombre || (registro.nombre !== null && registro.nombre.toLowerCase().indexOf(filter.nombre.toString().toLowerCase()) > -1))
+                                        && (!filter.apellido_paterno || (registro.apellido_paterno !== null && registro.apellido_paterno.toLowerCase().indexOf(filter.apellido_paterno.toString().toLowerCase()) > -1))
+                                        && (!filter.apellido_materno || (registro.apellido_materno !== null && registro.apellido_materno.toLowerCase().indexOf(filter.apellido_materno.toString().toLowerCase()) > -1))
+                                        && (!filter.unidad || (registro.unidad !== null && registro.unidad.toLowerCase().indexOf(filter.unidad.toString().toLowerCase()) > -1))
+                                        && (!filter.es_umae || (registro.es_umae !== null && registro.es_umae.toString().indexOf(filter.es_umae.toString()) > -1))
+                                        && (!filter.delegacion || (registro.delegacion !== null && registro.delegacion.toLowerCase().indexOf(filter.delegacion.toString().toLowerCase()) > -1))
+                                        && (!filter.fecha || (registro.fecha !== null && registro.fecha.toString().indexOf(filter.fecha.toString()) > -1))
+                                        ;
                                         return true;
                             });
 //                            d.resolve(result['data']);
@@ -114,16 +115,16 @@ function registros() {
             {name: "apellido_paterno", title: name_fields.apellido_paterno, type: "text", inserting: false, editing: false},
             {name: "apellido_materno", title: name_fields.apellido_materno, type: "text", inserting: false, editing: false},
             {name: "unidad", title: name_fields.unidad, type: "text", inserting: false, editing: false},
-            {name: "umae", title: name_fields.umae, type: "text", inserting: false, editing: false},
+            {name: "es_umae", title: name_fields.es_umae, type: "text", inserting: false, editing: false},
             {name: "delegacion", title: name_fields.delegacion, type: "text", inserting: false, editing: false},
             {name: "fecha", title: name_fields.fecha, type: "text", inserting: false, editing: false},
-            {type: "detalle", editButton: false, deleteButton: false, width: 40,
+            {type: "control", editButton: false, deleteButton: false, width: 40,
                 searchModeButtonTooltip: language_text.jsgrid_elementos.cambio_busqueda, // tooltip of switching filtering/inserting button in inserting mode
-                editButtonTooltip: language_text.jsgrid_elementos.editar, // tooltip of edit item button
+               // editButtonTooltip: language_text.jsgrid_elementos.editar, // tooltip of edit item button
                 searchButtonTooltip: language_text.jsgrid_elementos.limpiar_filtros_busqueda, // tooltip of search button
                 clearFilterButtonTooltip: language_text.jsgrid_elementos.actualizar_js, // tooltip of clear filter button
-                updateButtonTooltip: language_text.jsgrid_elementoscancelar_js, // tooltip of update item button
-                cancelEditButtonTooltip: language_text.jsgrid_elementos.buscar_js, // tooltip of cancel editing button
+               // updateButtonTooltip: language_text.jsgrid_elementoscancelar_js, // tooltip of update item button
+                //cancelEditButtonTooltip: language_text.jsgrid_elementos.buscar_js, // tooltip of cancel editing button
                /* itemTemplate: function (value, item) {
                     var result = get_detalle(item);
                     return result;
@@ -136,13 +137,15 @@ function registros() {
 
 function obtener_cabeceras() {
     var arr_header = {
-        matricula:language_text.dashboard.matricula,
-        nombre: language_text.dashboard.nombre,
-        apellido_paterno: language_text.dashboard.apellido_paterno,
-        apellido_materno: language_text.listado_trabajo.apellido_materno,
-        unidad: language_text.listado_trabajo.unidad,
-        delegacion: language_text.listado_trabajo.delegacion,
-        fecha: language_text.listado_trabajo.fecha
+        matricula: 'Matrícula', 
+        nombre: 'Nombre',
+        apellido_paterno: 'Apellido Paterno',
+        apellido_materno: 'Apellido Materno',
+        unidad: 'Unidad',
+        es_umae: 'Es UMAE',
+        delegacion: 'Delegación',
+        fecha:'Fecha de registro',
+        control: 'Detalle'
     }
 
     return arr_header;
