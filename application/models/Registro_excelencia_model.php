@@ -16,13 +16,14 @@ class Registro_excelencia_model extends CI_Model {
         $this->db->select(array('s.*', "u.id_usuario", "u.activo", "u.email", "h.curp", "h.rfc", "h.nombre", "h.apellido_paterno", "h.apellido_materno", "h.clave_delegacional"));
         $this->db->where(array(
             's.matricula' => $id_informacion_usuario,
-            's.estado' => '1'
+            //'s.estado' => '1'
         ));
+        $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud = s.id_solicitud');
         $this->db->join('sistema.usuarios u', 'u.username=s.matricula', 'left');
         $this->db->join('sistema.informacion_usuario h', 'h.matricula=u.username', 'left');
         $this->db->join('catalogo.delegaciones d', 'd.clave_delegacional=h.clave_delegacional', 'inner');
-        /*$this->db->join('foro.estado_trabajo et', 'hr.clave_estado = et.clave_estado');
-        $this->db->join('foro.convocatoria c', 'ti.id_convocatoria = c.id_convocatoria');
+        //$this->db->join('excelencia.estado_solicitud es', 'hr.clave_estado = et.clave_estado');
+        /*$this->db->join('foro.convocatoria c', 'ti.id_convocatoria = c.id_convocatoria');
         $this->db->order_by('ti.folio', 'desc');*/
         $res = $this->db->get('excelencia.solicitud s');
        // $this->bd->last_query();
@@ -41,17 +42,13 @@ class Registro_excelencia_model extends CI_Model {
             } else {
                 $this->db->select(array('s.*','u.email','i.*', 'h.*', 'del.nombre as delegacion', 'dep.nombre as departamento', 'unidad.nombre as unidad','unidad.es_umae', "to_char(s.fecha, 'yyyy-dd-mm hh:MI:ss') as fecha_format"));
             }
+            $this->db->join('excelencia.historico_solicitud hs','hs.id_solicitud=s.id_solicitud and actual=true','left', false);
             $this->db->join('sistema.usuarios u','u.username=s.matricula','left');
             $this->db->join('sistema.informacion_usuario i','i.matricula=u.username','left');
             $this->db->join('sistema.historico_informacion_usuario h','h.id_informacion_usuario=i.id_informacion_usuario','left');
             $this->db->join('catalogo.delegaciones del','i.clave_delegacional=del.clave_delegacional','left');
             $this->db->join('catalogo.departamento dep','dep.clave_departamental=h.clave_departamental','left');
             $this->db->join('catalogo.unidad unidad','unidad.clave_unidad=dep.clave_unidad','left');
-           /* $this->db->where(
-              array(
-                's.estado'=>'1'
-              )
-            );*/
     
             if(isset($param['where'])) {
               $this->db->where($param['where']);
@@ -100,15 +97,22 @@ class Registro_excelencia_model extends CI_Model {
         $this->db->trans_begin(); //Inicia la transacción
 
         $array_insert = array(
-            'estado' => 2
+            'actual' => false
         );
         $this->db->where('id_solicitud', $data['id_solicitud']); //Id solicitud
-        $this->db->update('excelencia.solicitud', $array_insert); //Se inserta el nuevo registro del historico de datos IMSS                
-        if ($this->db->trans_status() === FALSE) {//Valida que se inserto el archvo success
+        $this->db->update('excelencia.solicitud', $array_insert); //Se actualizan anteriores estados
+
+        $insert = array(
+            'id_solicitud' => $data['id_solicitud'],
+            'cve_estado_solicitud' => En_estado_solicitud::SIN_COMITE,
+            'actual' => true
+        );
+        $this->db->insert('excelencia.historico_solicitud', $insert); //Se inserta el nuevo registro del historico de datos IMSS
+        
+        if ($this->db->trans_status() === FALSE) {//Valida que se actualizó el archvo success
             $this->db->trans_rollback();
             $respuesta = array('tp_msg' => En_tpmsg::DANGER, 'mensaje' => 'Ocurrió un error en el guardado de información.');
         } else {
-            $this->db->trans_commit();
             $respuesta = array('tp_msg' => En_tpmsg::SUCCESS, 'mensaje' => 'Se ha enviado su solicitud.');
             $this->db->reset_query();
         }
@@ -200,12 +204,18 @@ class Registro_excelencia_model extends CI_Model {
             'matricula' => $data['matricula'],
             //'pnpc_tiene' => $data['pnpc'],
             'carrera_tiene' => $data['carrera'],
-            'carrera_categoria' => $data['tipo_categoria'],
-            'estado' => 1
+            'carrera_categoria' => $data['tipo_categoria']
         );
         $this->db->insert('excelencia.solicitud', $historico);
 
         $id_solicitud = $this->db->insert_id();
+
+        $insert = array(
+            'id_solicitud' => $id_solicitud,
+            'cve_estado_solicitud' => En_estado_solicitud::REGISTRO,
+            'actual' => true
+        );
+        $this->db->insert('excelencia.historico_solicitud', $insert); //Se inserta el nuevo registro del historico de datos IMSS
 
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
