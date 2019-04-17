@@ -17,4 +17,10 @@ alter table excelencia.curso add column id_documento_curso int8 null;
 alter table excelencia.curso add FOREIGN KEY (id_documento_curso) REFERENCES excelencia.documento_curso(id_documento_curso);
 
 
-insert into excelencia.tipo_documento (id_tipo_documento, nombre, estado) values (9,'Constancia de curso','1')
+insert into excelencia.tipo_documento (id_tipo_documento, nombre, estado) values (9,'Constancia de curso','1');
+
+/* Modificaciones para actualizar edicion de formulario */
+insert into idiomas.traduccion (clave_traduccion, clave_tipo, clave_grupo, lang) values
+('reg_btn_editar', 'lbl', 'registro_excelencia', '{"es":"Editar","en":"Edit"}'),
+('reg_btn_cancel', 'lbl', 'registro_excelencia', '{"es":"Cancelar","en":"Cancel"}')
+;
