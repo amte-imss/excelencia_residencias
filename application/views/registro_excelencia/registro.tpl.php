@@ -5,7 +5,8 @@
         display: none;
     }
 </style>
-<?php $deshabilitar = '';
+<?php
+$deshabilitar = '';
 $ocultar = '';
 if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] == 2) {
     $deshabilitar = 'disabled="disabled"';
@@ -26,10 +27,10 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-    <?php
-    echo '</div>';
-}
-?>
+                        <?php
+                        echo '</div>';
+                    }
+                    ?>
                 </div>
             </div><!--row-->
             <div class="row">
@@ -40,7 +41,7 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
             <br>
             <div class="row">
                 <div class="col-sm-offset-1 col-sm-10 panel">
-<?php echo form_open('registro/solicitud', array('id' => 'form_registro_solicitud_general', 'class' => 'form-horizontal')); ?>
+                    <?php echo form_open('registro/solicitud', array('id' => 'form_registro_solicitud_general', 'class' => 'form-horizontal')); ?>
                     <div class="panel-heading"><h2><?php echo $language_text['registro_excelencia']['reg_titulo_general']; ?></h2></div>
                     <div class="panel-body">
                         <div class="form-group">
@@ -82,70 +83,82 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
                     <div class="form-group">
                         <label for="carrera" class="col-sm-3 control-label"><?php echo $language_text['registro_excelencia']['carrera_tiene']; ?>*</label>
                         <div class="col-sm-9">
-                            <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();"<?php if (isset($solicitud_excelencia['carrera_tiene'])) {
-    if ($solicitud_excelencia['carrera_tiene'] == '1') echo 'checked';
-} ?> <?php if (isset($solicitud_excelencia['id_solicitud'])) {
-    echo 'disabled';
-} ?>><?php echo $language_text['template_general']['si_op']; ?><br>
-                            <input type="radio" name="carrera" value="0" onclick="javascript:habilitar_categoria();" <?php if (isset($solicitud_excelencia['carrera_tiene'])) {
-    if ($solicitud_excelencia['carrera_tiene'] == '0') echo 'checked';
-} ?> <?php if (isset($solicitud_excelencia['id_solicitud'])) {
-                                    echo 'disabled';
-                                } ?>><?php echo $language_text['template_general']['no_op']; ?><br>
+                            <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();"<?php
+                            if (isset($solicitud_excelencia['carrera_tiene'])) {
+                                if ($solicitud_excelencia['carrera_tiene'] == '1')
+                                    echo 'checked';
+                            }
+                            ?> <?php
+                            if (isset($solicitud_excelencia['id_solicitud'])) {
+                                echo 'disabled';
+                            }
+                            ?>><?php echo $language_text['template_general']['si_op']; ?><br>
+                            <input type="radio" name="carrera" value="0" onclick="javascript:habilitar_categoria();" <?php
+                            if (isset($solicitud_excelencia['carrera_tiene'])) {
+                                if ($solicitud_excelencia['carrera_tiene'] == '0')
+                                    echo 'checked';
+                            }
+                            ?> <?php
+                            if (isset($solicitud_excelencia['id_solicitud'])) {
+                                echo 'disabled';
+                            }
+                            ?>><?php echo $language_text['template_general']['no_op']; ?><br>
                         </div><div style="clear:both;"></div>
-                                <?php echo form_error_format('carrera'); ?>
+                        <?php echo form_error_format('carrera'); ?>
                     </div>
 
                     <div id="div_carrera_categoria" class="form-group">
                         <label for="tipo_categoria" class="col-sm-3 control-label"><?php echo $language_text['registro_excelencia']['tipo_categoria']; ?>*:</label>
                         <div class="col-sm-9">
-                            <select id="tipo_categoria" name="tipo_categoria" class="form-control" <?php if (isset($solicitud_excelencia['id_solicitud'])) {
-                                    echo 'disabled';
-                                } ?>>
-                            <?php
-                            echo '<option value="">' . $language_text['template_general']['sin_op'] . '</option>';
-                            foreach ($tipo_categoria as $key => $value) {
-                                if (isset($solicitud_excelencia)) {
-                                    if ($solicitud_excelencia['carrera_categoria'] == $key) {
-                                        echo '<option value="' . $key . '" selected>' . $value . '</option>';
-                                    } else {
-                                        echo '<option value="' . $key . '">' . $value . '</option>';
-                                    }
-                                } else {
-                                    echo '<option value="' . $key . '">' . $value . '</option>';
-                                }
+                            <select id="tipo_categoria" name="tipo_categoria" class="form-control" <?php
+                            if (isset($solicitud_excelencia['id_solicitud'])) {
+                                echo 'disabled';
                             }
-                            ?>
+                            ?>>
+                                        <?php
+                                        echo '<option value="">' . $language_text['template_general']['sin_op'] . '</option>';
+                                        foreach ($tipo_categoria as $key => $value) {
+                                            if (isset($solicitud_excelencia)) {
+                                                if ($solicitud_excelencia['carrera_categoria'] == $key) {
+                                                    echo '<option value="' . $key . '" selected>' . $value . '</option>';
+                                                } else {
+                                                    echo '<option value="' . $key . '">' . $value . '</option>';
+                                                }
+                                            } else {
+                                                echo '<option value="' . $key . '">' . $value . '</option>';
+                                            }
+                                        }
+                                        ?>
                             </select>
-<?php echo form_error_format('tipo_categoria'); ?>
+                            <?php echo form_error_format('tipo_categoria'); ?>
                         </div>
                     </div>
 
                     <!--div class="form-group">
-                            <label for="pnpc" class="col-sm-3 control-label"><?php //echo $language_text['registro_excelencia']['pnpc_tiene']; ?>*</label>
+                            <label for="pnpc" class="col-sm-3 control-label"><?php //echo $language_text['registro_excelencia']['pnpc_tiene'];   ?>*</label>
                             <div class="col-sm-9">
-                                            <input type="radio" name="pnpc" value="1" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='1') echo 'checked';} ?>><?php //echo $language_text['template_general']['si_op']; ?><br>
-                                            <input type="radio" name="pnpc" value="0" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='0') echo 'checked';} ?>><?php //echo $language_text['template_general']['no_op']; ?><br>
+                                            <input type="radio" name="pnpc" value="1" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='1') echo 'checked';}  ?>><?php //echo $language_text['template_general']['si_op'];  ?><br>
+                                            <input type="radio" name="pnpc" value="0" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='0') echo 'checked';}   ?>><?php //echo $language_text['template_general']['no_op'];   ?><br>
                             </div><div style="clear:both;"></div>
-                <?php //echo form_error_format('pnpc');?>
+                    <?php //echo form_error_format('pnpc'); ?>
                     </div -->
 
-                <?php if (!isset($solicitud_excelencia['id_solicitud'])) { ?>
+                    <?php if (!isset($solicitud_excelencia['id_solicitud'])) { ?>
                         <div class="panel-footer text-right">
                             <button class="btn btn-theme animated flipInY visible" id="btn_envio_general" name="btn_envio_general" type="button"><?php echo $language_text['registro_excelencia']['guardar_solicitud']; ?></button>
                         </div>
-<?php } ?>
+                    <?php } ?>
                 </div>
 
-<?php echo form_close(); ?>
+                <?php echo form_close(); ?>
 
 
 
-<?php if (isset($solicitud_excelencia['id_solicitud']) && !empty($solicitud_excelencia['id_solicitud'])) { ?>
+                <?php if (isset($solicitud_excelencia['id_solicitud']) && !empty($solicitud_excelencia['id_solicitud'])) { ?>
 
 
-                                        <?php // echo form_open_multipart('registro/solicitud', array('id' => 'form_registro_solicitud_curso', 'class'=>'form-horizontal', 'data-toggle'=>"validator", 'role'=>"form", 'accept-charset'=>"utf-8")); ?>
-                                        <?php echo form_open('', array('id' => 'form_registro_solicitud_curso', 'class' => 'form-horizontal', 'data-toggle' => "validator", 'role' => "form", 'accept-charset' => "utf-8")); ?>
+                    <?php // echo form_open_multipart('registro/solicitud', array('id' => 'form_registro_solicitud_curso', 'class'=>'form-horizontal', 'data-toggle'=>"validator", 'role'=>"form", 'accept-charset'=>"utf-8")); ?>
+                    <?php echo form_open('', array('id' => 'form_registro_solicitud_curso', 'class' => 'form-horizontal', 'data-toggle' => "validator", 'role' => "form", 'accept-charset' => "utf-8")); ?>
                     <div style="clear:both;"></div>
                     <hr class="col-sm-11" style="border:1px solid;">
 
@@ -157,20 +170,20 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
                                 <label for="curso" class="col-sm-3 control-label"><?php echo $language_text['registro_excelencia']['reg_exc_curso_nombre']; ?></label>
                                 <div class="col-sm-9">
                                     <select id="curso" name="curso" class="form-control">
-    <?php
-    echo '<option value="">' . $language_text['template_general']['sin_op'] . '</option>';
-    foreach ($curso as $key => $value) {
-        if (isset($trabajo)) {
-            if ($trabajo['curso'] == $key) {
-                echo '<option value="' . $key . '" selected>' . $value . '</option>';
-            } else {
-                echo '<option value="' . $key . '">' . $value . '</option>';
-            }
-        } else {
-            echo '<option value="' . $key . '">' . $value . '</option>';
-        }
-    }
-    ?>
+                                        <?php
+                                        echo '<option value="">' . $language_text['template_general']['sin_op'] . '</option>';
+                                        foreach ($curso as $key => $value) {
+                                            if (isset($trabajo)) {
+                                                if ($trabajo['curso'] == $key) {
+                                                    echo '<option value="' . $key . '" selected>' . $value . '</option>';
+                                                } else {
+                                                    echo '<option value="' . $key . '">' . $value . '</option>';
+                                                }
+                                            } else {
+                                                echo '<option value="' . $key . '">' . $value . '</option>';
+                                            }
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
@@ -179,20 +192,20 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
                                 <label for="categoria_docente" class="col-sm-3 control-label"><?php echo $language_text['registro_excelencia']['reg_exc_curso_categoria']; ?></label>
                                 <div class="col-sm-9">
                                     <select id="categoria_docente" name="categoria_docente" class="form-control" style="min-width: 200px;">
-    <?php
-    echo '<option value="">' . $language_text['template_general']['sin_op'] . '</option>';
-    foreach ($categoria_docente as $key => $value) {
-        if (isset($trabajo)) {
-            if ($trabajo['categoria_docente'] == $key) {
-                echo '<option value="' . $key . '" selected>' . $value . '</option>';
-            } else {
-                echo '<option value="' . $key . '">' . $value . '</option>';
-            }
-        } else {
-            echo '<option value="' . $key . '">' . $value . '</option>';
-        }
-    }
-    ?>
+                                        <?php
+                                        echo '<option value="">' . $language_text['template_general']['sin_op'] . '</option>';
+                                        foreach ($categoria_docente as $key => $value) {
+                                            if (isset($trabajo)) {
+                                                if ($trabajo['categoria_docente'] == $key) {
+                                                    echo '<option value="' . $key . '" selected>' . $value . '</option>';
+                                                } else {
+                                                    echo '<option value="' . $key . '">' . $value . '</option>';
+                                                }
+                                            } else {
+                                                echo '<option value="' . $key . '">' . $value . '</option>';
+                                            }
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
@@ -214,20 +227,20 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
                                 <label for="pncp_curso" class="col-sm-3 control-label"><?php echo $language_text['registro_excelencia']['reg_exc_curso_pnpc']; ?></label>
                                 <div class="col-sm-9">
                                     <select id="pncp_curso" name="pncp_curso" class="form-control" style="min-width: 200px;">
-    <?php
-    echo '<option value="">' . $language_text['template_general']['sin_op'] . '</option>';
-    foreach ($pncp_curso as $key => $value) {
-        if (isset($trabajo)) {
-            if ($trabajo['categoria_docente'] == $key) {
-                echo '<option value="' . $key . '" selected>' . $value . '</option>';
-            } else {
-                echo '<option value="' . $key . '">' . $value . '</option>';
-            }
-        } else {
-            echo '<option value="' . $key . '">' . $value . '</option>';
-        }
-    }
-    ?>
+                                        <?php
+                                        echo '<option value="">' . $language_text['template_general']['sin_op'] . '</option>';
+                                        foreach ($pncp_curso as $key => $value) {
+                                            if (isset($trabajo)) {
+                                                if ($trabajo['categoria_docente'] == $key) {
+                                                    echo '<option value="' . $key . '" selected>' . $value . '</option>';
+                                                } else {
+                                                    echo '<option value="' . $key . '">' . $value . '</option>';
+                                                }
+                                            } else {
+                                                echo '<option value="' . $key . '">' . $value . '</option>';
+                                            }
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
@@ -251,30 +264,30 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
                     <div class="col-sm-offset-1 col-sm-10 panel">
                         <div class="panel-heading"><h2><?php echo $language_text['registro_excelencia']['reg_titulo_documentacion']; ?></h2></div>
 
-    <?php echo form_open_multipart('registro/solicitud', array('id' => 'form_registro_solicitud_documentacion', 'class' => 'form-horizontal', 'data-toggle' => "validator", 'role' => "form", 'accept-charset' => "utf-8")); ?>
+                        <?php echo form_open_multipart('registro/solicitud', array('id' => 'form_registro_solicitud_documentacion', 'class' => 'form-horizontal', 'data-toggle' => "validator", 'role' => "form", 'accept-charset' => "utf-8")); ?>
 
-                                <?php foreach ($tipo_documentos as $key => $value) { ?>
+                        <?php foreach ($tipo_documentos as $key => $value) { ?>
                             <div class="form-group" style="background-color: #EEE;">
                                 <label for="trabajo_archivo" class="col-sm-5 control-label"><?php echo ( ++$key) . ") " . $value['nombre']; ?></label>
                                 <div id="capa_archivo_<?php echo $value['id_tipo_documento']; ?>">
-                            <?php if (isset($documento) && isset($documento[$value['id_tipo_documento']])) { ?>
+                                    <?php if (isset($documento) && isset($documento[$value['id_tipo_documento']])) { ?>
                                         <div class="col-sm-7">
                                             <label class="control-label"><?php echo str_replace('||X||', base_url() . $documento[$value['id_tipo_documento']]['ruta'], $language_text['registro_excelencia']['reg_liga_msg_descarga']); ?></label>
                                         </div>
-        <?php } else { ?>
+                                    <?php } else { ?>
                                         <div class="text-right col-sm-4">
                                             <input type="file" id="archivo_<?php echo $value['id_tipo_documento']; ?>" name="archivo_<?php echo $value['id_tipo_documento']; ?>" accept="application/pdf"> <!-- application/pdf, application/mswor -->
                                         </div>
                                         <div class="text-right col-sm-3">
                                             <button class="btn btn-theme animated flipInY visible" id="btn_envio_doctos" name="btn_envio_doctos" type="button" onclick="javascript:carga_archivos('form_registro_solicitud_documentacion', '#capa_archivo_<?php echo $value['id_tipo_documento']; ?>', '<?php echo $value['id_tipo_documento']; ?>');"><?php echo $language_text['registro_excelencia']['reg_btn_cargar_archivos']; ?></button>
                                         </div>
-        <?php } ?>
+                                    <?php } ?>
                                 </div>
                             </div>
 
-    <?php } ?>
+                        <?php } ?>
                         <div id="div_respuesta"></div>
-    <?php echo form_close(); ?>
+                        <?php echo form_close(); ?>
                     </div>
                 </div><!--col-->
             </div> <!--row-->
@@ -282,17 +295,19 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
             <div class="row">
                 <div class="col-sm-offset-2 col-sm-8" id="msg"></div>
             </div><!--row-->
-            <div class="row">
-                <br><br>
-                <div class="col-sm-offset-2 col-sm-8" style="<?php echo $ocultar; ?>">
-                    <center>
-                        <button class="btn btn-theme animated flipInY visible" id="btn_envio" name="btn_envio" type="button"><?php echo $language_text['registro_excelencia']['registrar_solicitud']; ?></button>
-                        <!--a href="<?php echo site_url('registro_investigacion'); ?>" class="btn btn-theme animated flipInY visible"><?php echo $language_text['template_general']['cancelar']; ?></a-->
-                    </center>
-                </div>
-            </div><!--row-->
+            <?php if (isset($estado['config']['btn_envio']) && $estado['config']['btn_envio'] == true) { ?>
+                <div class="row">
+                    <br><br>
+                    <div class="col-sm-offset-2 col-sm-8" style="<?php echo $ocultar; ?>">
+                        <center>
+                            <button class="btn btn-theme animated flipInY visible" id="btn_envio" name="btn_envio" type="button"><?php echo $language_text['registro_excelencia']['registrar_solicitud']; ?></button>
+                            <!--a href="<?php // echo site_url('registro_investigacion');  ?>" class="btn btn-theme animated flipInY visible"><?php // echo $language_text['template_general']['cancelar'];  ?></a-->
+                        </center>
+                    </div>
+                </div><!--row-->
+            <?php } ?>
 
-<?php } ?>
+        <?php } ?>
 
     </div>
 </div>
@@ -371,9 +386,11 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
         if ($("#archivo_" + id_tipo_documento).val() != '') {
             var formData = new FormData($('#' + formulario)[0]);
             formData.append('id_tipo_documento', id_tipo_documento);
-            formData.append('id_solicitud', '<?php if (isset($solicitud_excelencia['id_solicitud'])) {
+            formData.append('id_solicitud', '<?php
+if (isset($solicitud_excelencia['id_solicitud'])) {
     echo $solicitud_excelencia['id_solicitud'];
-} ?>');
+}
+?>');
             $.ajax({
                 //url: site_url + '/actividad_docente/datos_actividad',
                 url: site_url + '/registro/cargar_archivo',
@@ -426,9 +443,11 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
         $(div_respuesta).html('');
         $.ajax({
             //url: site_url + '/actividad_docente/datos_actividad',
-            url: site_url + '/registro/enviar_solicitud/<?php if (isset($solicitud_excelencia['id_solicitud'])) {
+            url: site_url + '/registro/enviar_solicitud/<?php
+if (isset($solicitud_excelencia['id_solicitud'])) {
     echo $solicitud_excelencia['id_solicitud'];
-} ?>',
+}
+?>',
             data: null,
             type: 'POST',
             //mimeType: "multipart/form-data",
@@ -474,9 +493,11 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
                             $(div_respuesta).empty();
                             if (typeof resultado.result !== 'undefined') {
                                 if (resultado.result == true) {
-                                    get_listado_cursos(<?php if (isset($solicitud_excelencia['id_solicitud'])) {
+                                    get_listado_cursos(<?php
+if (isset($solicitud_excelencia['id_solicitud'])) {
     echo $solicitud_excelencia['id_solicitud'];
-} ?>);
+}
+?>);
                                     $(div_respuesta).html('<div class="alert alert-success" role="alert">' + resultado.msg + '</div>');
                                     setTimeout("$('#curso_msg').html('')", 5000);
                                 } else {

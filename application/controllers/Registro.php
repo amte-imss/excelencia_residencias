@@ -113,6 +113,7 @@ class Registro extends MY_Controller {
         $this->load->model('Usuario_model', 'usuario');
         $output['solicitud'] = $this->usuario->get_usuarios(array('where' => array("usuarios.username" => $id_informacion_usuario)));
         $output['language_text'] = $lan_txt;
+        $output['estado'] = $this->get_estados_solicitud($output['solicitud_excelencia']['cve_estado_solicitud']);
         $main_content = $this->load->view('registro_excelencia/registro.tpl.php', $output, true);
         $this->template->setMainContent($main_content);
         $this->template->getTemplate();
@@ -466,7 +467,6 @@ class Registro extends MY_Controller {
                 $output['language_text'] = $lan_txt;
                 $output['cursos'] = $solicitud_excelencia;
                 $output['solicitud'] = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $solicitud)))[0];
-                $output['btn_editar_curso'] = [En_estado_solicitud::REGISTRO => true, En_estado_solicitud::SIN_COMITE => true]; //Estados donde aparece el boton de editar
                 $output['estado'] = $this->get_estados_solicitud($output['solicitud']['cve_estado_solicitud']);
                 $result = $this->load->view('registro_excelencia/tabla_cursos.php', $output, true);
             }
