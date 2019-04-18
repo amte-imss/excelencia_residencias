@@ -40,7 +40,7 @@ class Registro_excelencia_model extends CI_Model {
             if (isset($param['select'])) {
                 $this->db->select($param['select']);
             } else {
-                $this->db->select(array('s.*', 'hs.cve_estado_solicitud', 'u.email', 'i.*', 'h.*', 'del.nombre as delegacion', 'dep.nombre as departamento', 'unidad.nombre as unidad', 'unidad.es_umae', "to_char(s.fecha, 'yyyy-dd-mm hh:MI:ss') as fecha_format"));
+                $this->db->select(array('s.*','u.email','i.*', 'h.*', 'hs.cve_estado_solicitud', 'hs.fecha as fecha_hs', 'del.nombre as delegacion', 'dep.nombre as departamento', 'unidad.nombre as unidad','unidad.es_umae', "to_char(s.fecha, 'yyyy-dd-mm hh:MI:ss') as fecha_format"));
             }
             $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and actual=true', 'left', false);
             $this->db->join('sistema.usuarios u', 'u.username=s.matricula', 'left');
@@ -94,11 +94,11 @@ class Registro_excelencia_model extends CI_Model {
     public function update_solicitud($data) {
         $this->db->trans_begin(); //Inicia la transacción
 
-        $array_insert = array(
+        $array_update = array(
             'actual' => false
         );
         $this->db->where('id_solicitud', $data['id_solicitud']); //Id solicitud
-        $this->db->update('excelencia.solicitud', $array_insert); //Se actualizan anteriores estados
+        $this->db->update('excelencia.historico_solicitud', $array_update); //Se actualizan anteriores estados
 
         $insert = array(
             'id_solicitud' => $data['id_solicitud'],
@@ -106,13 +106,12 @@ class Registro_excelencia_model extends CI_Model {
             'actual' => true
         );
         $this->db->insert('excelencia.historico_solicitud', $insert); //Se inserta el nuevo registro del historico de datos IMSS
-
         if ($this->db->trans_status() === FALSE) {//Valida que se actualizó el archvo success
             $this->db->trans_rollback();
             $respuesta = array('tp_msg' => En_tpmsg::DANGER, 'mensaje' => 'Ocurrió un error en el guardado de información.');
         } else {
+            $this->db->trans_commit();
             $respuesta = array('tp_msg' => En_tpmsg::SUCCESS, 'mensaje' => 'Se ha enviado su solicitud.');
-            $this->db->reset_query();
         }
         return $respuesta;
     }
@@ -185,6 +184,8 @@ class Registro_excelencia_model extends CI_Model {
             return [];
         }
     }
+    
+    
 
     public function insertar_solicitud($data = []) {
         $this->db->flush_cache();
@@ -263,6 +264,22 @@ class Registro_excelencia_model extends CI_Model {
             $this->db->where($filtros);
 
         $res = $this->db->get('excelencia.tipo_documento');
+
+        $this->db->flush_cache();
+        $this->db->reset_query();
+
+        return $res->result_array();
+    }
+    
+    public function get_estado_solicitud($param = null) {
+        $this->db->flush_cache();
+        $this->db->reset_query();
+
+        if(isset($param['where'])) {
+          $this->db->where($param['where']);
+        }
+
+        $res = $this->db->get('excelencia.estado_solicitud');
 
         $this->db->flush_cache();
         $this->db->reset_query();

@@ -40,12 +40,10 @@ class Inicio extends MY_Controller {
             $post["captcha"] = $this->session->userdata('captchaWord');
             $this->session->set_flashdata('inicio_registro', null);
         } else {
-
             $post = $this->input->post(null, true);
         }
         ////        $data_post = $this->input->post();
         if ($post) {
-
             $this->config->load('form_validation'); //Cargar archivo con validaciones
             $validations = $this->config->item('login'); //Obtener validaciones de archivo general
             $this->form_validation->set_data($post);
@@ -85,6 +83,10 @@ class Inicio extends MY_Controller {
                         break;
                     case 3:
                         $data['errores'] = $data['language_text']['mensajes']['msg_usuario_no_existe'];
+                        //$this->session->set_flashdata('flash_usuario', $mensajes[$valido]);
+                        break;
+                    case 4:
+                        $data['errores'] = $data['language_text']['mensajes']['msg_convocatoria_deshabilitada'];
                         //$this->session->set_flashdata('flash_usuario', $mensajes[$valido]);
                         break;
                     default :

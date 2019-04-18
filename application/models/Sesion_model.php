@@ -14,7 +14,7 @@ class Sesion_model extends CI_Model {
         $this->db->reset_query();
         $this->db->start_cache();
 
-        $this->db->select(array('username', 'email', 'password', 'token', ''));
+        $this->db->select(array('username', 'email', 'password', 'token', '(select count(*) from sistema.usuario_rol ur where ur.id_usuario=u.id_usuario and clave_rol=\''.LNiveles_acceso::Super.'\') as admin'));
         $this->db->from('sistema.usuarios u');
         $this->db->where('u.username', $usr);
         $this->db->or_where('u.email', $usr);//Valida que sea el correo también un nombre de usuario
@@ -25,17 +25,30 @@ class Sesion_model extends CI_Model {
             $usuario = $this->db->get();
             $result = $usuario->result_array();
             // pr($passwd);
-            // pr($result);
+            // pr($result); exit();
             $this->load->library('seguridad');
             $cadena = $result[0]['token'] . $passwd . $result[0]['token'];
             $clave = $this->seguridad->encrypt_sha512($cadena);
-            // pr($clave);
             // pr($result[0]['password']);
             $this->db->flush_cache();
             $this->db->reset_query();
             if ($clave == $result[0]['password']) {
-                return 1; //Existe
+                if($result[0]['admin']==1){ //En caso de ser superadmin no se valida convocatoria
+                    return 1; //Existe
+                } else { // de lo contrario validamos que este activa convocatoria
+                    $this->db->reset_query();
+                    $this->db->where('c.activo=true');
+                    $conv = $this->db->get('excelencia.convocatoria c');
+                    $convocatoria = $conv->result_array();
+                    //pr($convocatoria); exit();
+                    if(count($convocatoria)>0){
+                        return 1; //En caso de que exista convocatoria activa
+                    } else {
+                        return 4;
+                    }
+                }
             }
+            exit();
             return 2; //contraseña incorrrecta
         } else {
             return 3; //Usuario no existe
