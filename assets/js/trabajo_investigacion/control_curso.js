@@ -195,3 +195,56 @@ function cambio_botones_formulario(param) {
 
 }
 
+function editar_archivos(formulario, div_respuesta, id_documento) {
+        //alert($("#archivo_"+id_tipo_documento).val());
+        if ($("#archivo_" + id_tipo_documento).val() != '') {
+            var formData = new FormData($('#' + formulario)[0]);
+            formData.append('id_tipo_documento', id_tipo_documento);
+            formData.append('id_solicitud', solicitud);
+            $.ajax({
+                //url: site_url + '/actividad_docente/datos_actividad',
+                url: site_url + '/registro/cargar_archivo',
+                data: formData,
+                type: 'POST',
+                mimeType: "multipart/form-data",
+                contentType: false,
+                cache: true,
+                processData: false,
+                //                dataType: 'JSON',
+                beforeSend: function (xhr) {
+                    //            $('#tabla_actividades_docente').html(create_loader());
+                    mostrar_loader();
+                }
+            })
+                    .done(function (data) {
+                        try {//Cacha el error
+                            $(div_respuesta).empty();
+                            //var resp = $.parseJSON(data);
+                            //if (typeof resp.html !== 'undefined') {
+                            //if (resp.tp_msg === 'success') {
+                            $(div_respuesta).html(data);
+                            //reinicia_monitor();
+                            //actaliza_data_table(url_actualiza_tabla);
+                            /*} else {
+                             $(div_respuesta).html(resp.html);
+                             }
+                             if (typeof resp.mensaje !== 'undefined') {//Muestra mensaje al usuario si este existe
+                             get_mensaje_general(resp.mensaje, resp.tp_msg, 5000);
+                             }
+                             }*/
+                        } catch (e) {
+                            $(div_respuesta).html(data);
+                        }
+
+                    })
+                    .fail(function (jqXHR, response) {
+                        //$(div_respuesta).html(response);
+                        get_mensaje_general('Ocurrió un error durante el proceso, inténtelo más tarde.', 'warning', 5000);
+                    })
+                    .always(function () {
+                        ocultar_loader();
+                    });
+        } else {
+            alert('Debe seleccionar el archivo a cargar');
+        }
+    }

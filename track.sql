@@ -39,7 +39,8 @@ alter table excelencia.estado_solicitud add column transicion json null;
 
 /*Actualiacion, se agrego eliminar curso*/
 update excelencia.estado_solicitud set 
-config='{"btn_agregar_curso":"true","btn_editar_curso":"true","btn_envio_datos":"true","btn_envio":"true","btn_elimina_curso":"true"}', transicion='{"SIN_COMITE":""}' 
+config='{"btn_agregar_curso":"true","btn_editar_curso":"true","btn_envio_datos":"true","btn_envio":"true","btn_elimina_curso":"true","modificar_archivos":"true" }', 
+transicion='{"SIN_COMITE":""}' 
 where cve_estado_solicitud in('REGISTRO');
 
 

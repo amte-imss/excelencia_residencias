@@ -135,10 +135,10 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
                     </div>
 
                     <!--div class="form-group">
-                            <label for="pnpc" class="col-sm-3 control-label"><?php //echo $language_text['registro_excelencia']['pnpc_tiene'];   ?>*</label>
+                            <label for="pnpc" class="col-sm-3 control-label"><?php //echo $language_text['registro_excelencia']['pnpc_tiene'];          ?>*</label>
                             <div class="col-sm-9">
-                                            <input type="radio" name="pnpc" value="1" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='1') echo 'checked';}  ?>><?php //echo $language_text['template_general']['si_op'];  ?><br>
-                                            <input type="radio" name="pnpc" value="0" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='0') echo 'checked';}   ?>><?php //echo $language_text['template_general']['no_op'];   ?><br>
+                                            <input type="radio" name="pnpc" value="1" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='1') echo 'checked';}         ?>><?php //echo $language_text['template_general']['si_op'];         ?><br>
+                                            <input type="radio" name="pnpc" value="0" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='0') echo 'checked';}          ?>><?php //echo $language_text['template_general']['no_op'];          ?><br>
                             </div><div style="clear:both;"></div>
                     <?php //echo form_error_format('pnpc'); ?>
                     </div -->
@@ -268,23 +268,48 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
 
                         <?php foreach ($tipo_documentos as $key => $value) { ?>
                             <div class="form-group" style="background-color: #EEE;">
-                                <label for="trabajo_archivo" class="col-sm-5 control-label"><?php echo ( ++$key) . ") " . $value['nombre']; ?></label>
-                                <div id="capa_archivo_<?php echo $value['id_tipo_documento']; ?>">
+                                <div class="col-sm-4">
+                                    <label for="trabajo_archivo" class="control-label"><?php echo ( ++$key) . ") " . $value['nombre']; ?></label>
+                                </div >
+                                <div id="capa_archivo_<?php echo $value['id_tipo_documento']; ?>" class="text-right col-sm-8">
                                     <?php if (isset($documento) && isset($documento[$value['id_tipo_documento']])) { ?>
-                                        <div class="col-sm-7">
+                                        <?php
+                                        $tam = 12;
+                                        $agrega_edicion = FALSE;
+                                        if (isset($estado['config']['modificar_archivos']) && $estado['config']['modificar_archivos'] == 'true') {
+                                            $tam = 5;
+                                            $agrega_edicion = true;
+                                        }
+                                        ?>
+                                        <div class="col-sm-<?php echo $tam; ?>">
                                             <label class="control-label"><?php echo str_replace('||X||', base_url() . $documento[$value['id_tipo_documento']]['ruta'], $language_text['registro_excelencia']['reg_liga_msg_descarga']); ?></label>
                                         </div>
+
+                                        <?php if ($agrega_edicion) { ?>
+                                            <div class="col-sm-7 ">
+                                                <input type="file" 
+                                                       id="archivo_<?php echo $value['id_tipo_documento']; ?>" 
+                                                       name="archivo_<?php echo $value['id_tipo_documento']; ?>" 
+                                                       accept="application/pdf"
+                                                       > <!-- application/pdf, application/mswor -->
+                                                <button class="text-left btn btn-theme animated flipInY visible" id="btn_envio_doctos" 
+                                                        name="btn_envio_doctos" type="button" 
+                                                        onclick="javascript:editar_archivos('form_registro_solicitud_documentacion', '#capa_archivo_<?php echo $value['id_tipo_documento']; ?>', '<?php echo $documento[$value['id_tipo_documento']]['id_documento']; ?>');">
+                                                            <?php echo "Actualizar archivo"; //$language_text['registro_excelencia']['reg_btn_cargar_archivos'];  ?>
+                                                </button>
+                                            </div >
+                                        <?php } ?>
                                     <?php } else { ?>
-                                        <div class="text-right col-sm-4">
+                                        <div class="text-right col-sm-6">
                                             <input type="file" id="archivo_<?php echo $value['id_tipo_documento']; ?>" name="archivo_<?php echo $value['id_tipo_documento']; ?>" accept="application/pdf"> <!-- application/pdf, application/mswor -->
                                         </div>
-                                        <div class="text-right col-sm-3">
+                                        <div class="text-right col-sm-6">
                                             <button class="btn btn-theme animated flipInY visible" id="btn_envio_doctos" name="btn_envio_doctos" type="button" onclick="javascript:carga_archivos('form_registro_solicitud_documentacion', '#capa_archivo_<?php echo $value['id_tipo_documento']; ?>', '<?php echo $value['id_tipo_documento']; ?>');"><?php echo $language_text['registro_excelencia']['reg_btn_cargar_archivos']; ?></button>
                                         </div>
                                     <?php } ?>
                                 </div>
                             </div>
-
+                            <div id="msgloadfile_<?php echo $documento[$value['id_tipo_documento']]['id_documento']; ?>" class="alert alert-danger" role="alert"></div>
                         <?php } ?>
                         <div id="div_respuesta"></div>
                         <?php echo form_close(); ?>
@@ -295,13 +320,13 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
             <div class="row">
                 <div class="col-sm-offset-2 col-sm-8" id="msg"></div>
             </div><!--row-->
-            <?php if (isset($estado['config']['btn_envio']) && $estado['config']['btn_envio'] == true) { ?>
+            <?php if (isset($estado['config']['btn_envio']) && $estado['config']['btn_envio'] == 'true') { ?>
                 <div class="row">
                     <br><br>
                     <div class="col-sm-offset-2 col-sm-8" style="<?php echo $ocultar; ?>">
                         <center>
                             <button class="btn btn-theme animated flipInY visible" id="btn_envio" name="btn_envio" type="button"><?php echo $language_text['registro_excelencia']['registrar_solicitud']; ?></button>
-                            <!--a href="<?php // echo site_url('registro_investigacion');  ?>" class="btn btn-theme animated flipInY visible"><?php // echo $language_text['template_general']['cancelar'];  ?></a-->
+                            <!--a href="<?php // echo site_url('registro_investigacion');         ?>" class="btn btn-theme animated flipInY visible"><?php // echo $language_text['template_general']['cancelar'];         ?></a-->
                         </center>
                     </div>
                 </div><!--row-->

@@ -32,10 +32,10 @@
                 <td><?php echo ($curso['obtuvo_pnpc']) ? 'Si' : 'No'; ?></td>
                             <!--<td><input type="button" value="X" class="btn animated flipInY visible" tooltip="<?php // echo $language_text['registro_excelencia']['reg_exc_curso_eliminar'];         ?>" onclick="eliminar_curso('<?php // echo $curso['id_curso'];         ?>', '#curso_msg');" style="color:red;" /><i class="far fa-edit" color:red></i></td>--> 
                 <td>
-                    <?php if (isset($estado['config']['btn_elimina_curso']) && $estado['config']['btn_elimina_curso'] == true) { ?>
+                    <?php if (isset($estado['config']['btn_elimina_curso']) && $estado['config']['btn_elimina_curso'] == 'true') { ?>
                         <input type="button" value="X" class="fa fa-edit btn animated flipInY visible" tooltip="<?php echo $language_text['registro_excelencia']['reg_exc_curso_eliminar']; ?>" onclick="eliminar_curso('<?php echo $curso['id_curso']; ?>', '#curso_msg');" style="color:red;" />
                     <?php } ?>
-                    <?php if (isset($estado['config']['btn_editar_curso']) && $estado['config']['btn_editar_curso'] == true) { ?>
+                    <?php if (isset($estado['config']['btn_editar_curso']) && $estado['config']['btn_editar_curso'] == 'true') { ?>
                         <button type="button" class="btn animated flipInY visible"  onclick="editar_curso('<?php echo $curso['id_curso']; ?>');"><i class="fa fa-edit" style="color:red;" ></i></button>
                         <?php } ?>
                 </td> 
