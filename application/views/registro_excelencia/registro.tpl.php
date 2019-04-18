@@ -151,7 +151,7 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
 
                     <div class="col-sm-offset-1 col-sm-10 panel">
                         <div class="panel-heading"><h2><?php echo $language_text['registro_excelencia']['cursos_participado']; ?></h2></div>
-                        <div id="div_formulario_registro" class="table-responsive" style="<?php echo $ocultar; ?>">
+                        <div id="div_formulario_registro" class="table-responsive" style="<?php echo $ocultar; ?>" onmousedown="elemento(event);">
                             <input type="hidden" id="solicitud_cur" name="solicitud_cur" value="<?php echo $solicitud_excelencia['id_solicitud']; ?>">
                             <div id="" class="form-group">
                                 <label for="curso" class="col-sm-3 control-label"><?php echo $language_text['registro_excelencia']['reg_exc_curso_nombre']; ?></label>
@@ -308,7 +308,7 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
             agregar_curso();
         });
         $('#btn_editar_curso').click(function () {
-            actualizar_curso();
+            agregar_curso();
         });
 <?php if (isset($solicitud_excelencia['id_solicitud'])) { ?>
             get_listado_cursos(<?php echo $solicitud_excelencia['id_solicitud']; ?>);

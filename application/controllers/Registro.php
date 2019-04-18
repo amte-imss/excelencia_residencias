@@ -9,6 +9,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * */
 class Registro extends MY_Controller {
 
+    private $estados_solicitud;
+
     function __construct() {
         $this->grupo_language_text = ['registro_excelencia', 'mensajes']; //Grupo de idiomas para el controlador actual
         parent::__construct();
@@ -270,7 +272,7 @@ class Registro extends MY_Controller {
                 //Editar registro
                 $this->editar_cursos($post);
             } else {
-                exit();
+//                exit();
                 $this->config->load('form_validation'); //Cargar archivo
                 $validations = $this->config->item('form_guarda_curso_participado'); //Obtener validaciones de archivo general
                 //$this->set_textos_campos_validacion($validations, $lan_txt['registro_trabajo']);
@@ -324,7 +326,92 @@ class Registro extends MY_Controller {
     }
 
     private function editar_cursos($post) {
-        pr('Estamos editando');
+//        pr('Estamos editando');
+        $cambio_archivo = FALSE;
+        $this->config->load('form_validation'); //Cargar archivo
+        $validations = $this->config->item('form_guarda_curso_participado'); //Obtener validaciones de archivo general
+//        pr($post);
+//        pr($_FILES);
+        $file = $this->get_archivo_curso($post['curso_row']);
+        if (isset($_FILES['archivo_curso']['name']) && !empty($_FILES['archivo_curso']['name'])) {
+            $cambio_archivo = TRUE;
+            $post['archivo_curso'] = $_FILES['archivo_curso']['name'];
+        } else {
+            $post['archivo_curso'] = 'ya_existe';
+        }
+        $this->form_validation->set_data($post); //Añadir validaciones
+        $this->form_validation->set_rules($validations); //Añadir validaciones
+        if ($this->form_validation->run() == TRUE) {
+            if ($cambio_archivo) {//Actualiza archivo
+                $data_sesion = $this->get_datos_sesion();
+                $carga_file = $this->save_file('cursos_participacion', $data_sesion['matricula'], 'cp', 'archivo_curso');
+                if ($carga_file['tp_msg'] == En_tpmsg::SUCCESS) {
+                    $file_url = $carga_file['upload_path'] . $carga_file['file_name']; //Ruta del archivo 
+                    $extension = $carga_file['file_ext'];
+                    $datos_archivo = ['ruta' => $file_url,
+                        'extension_archivo' => $extension,
+                    ];
+                    $where = ['id_documento_curso' => $file['id_documento_curso']];
+                    $actualizaFile = $this->registro_excelencia->update_registro_general('excelencia.documento_curso', $datos_archivo, $where);
+                    if ($actualizaFile['tp_msg'] == En_tpmsg::SUCCESS) {
+                        $datos_curso = ['id_tipo_docente' => $post['categoria_docente'],
+                            'id_especialidad' => $post['curso'],
+                            'obtuvo_pnpc' => boolval($post['pncp_curso']),
+                            'anios' => $post['anios_docente'],
+                        ];
+                        $where = ['id_curso' => $post['curso_row']];
+                        $actualizaCurso = $this->registro_excelencia->update_registro_general('excelencia.curso', $datos_curso, $where);
+                        if ($actualizaCurso['tp_msg'] == En_tpmsg::SUCCESS) {
+                            $this->delete_file($file['ruta']);
+                            $result['tp_msg'] = $actualizaCurso['tp_msg'];
+                            $result['html'] = 'Se actualizo el registro exitosamente';
+                            header('Content-Type: application/json;charset=utf-8');
+                            echo json_encode($result);
+                        } else {//La información del curso no se actualizo
+                            echo 'No fue posible actualizar el curso. Por favor intentelo mas tarde';
+                            exit();
+                        }
+                    } else {//No se actualizo el archivo en la base de datos
+                        $this->delete_file($file_url);
+                        echo 'No fue posible actualizar el curso. Por favor intentelo mas tarde';
+                        exit();
+                    }
+                } else {//No guardo fisicamente el archivo
+                    echo 'No fue posible actualizar el curso. Por favor intentelo mas tarde';
+                    exit();
+                }
+            } else {//No existio cambio de archivo 
+                $datos_curso = ['id_tipo_docente' => $post['categoria_docente'],
+                    'id_especialidad' => $post['curso'],
+                    'obtuvo_pnpc' => boolval($post['pncp_curso']),
+                    'anios' => $post['anios_docente'],
+                ];
+                $where = ['id_curso' => $post['curso_row']];
+                $actualizaCurso = $this->registro_excelencia->update_registro_general('excelencia.curso', $datos_curso, $where);
+                if ($actualizaCurso['tp_msg'] == En_tpmsg::SUCCESS) {
+                    $result['tp_msg'] = $actualizaCurso['tp_msg'];
+                    $result['html'] = 'Se actualizo el registro exitosamente';
+                    header('Content-Type: application/json;charset=utf-8');
+                    echo json_encode($result);
+                } else {//La información del curso no se actualizo
+                    echo 'No fue posible actualizar el curso. Por favor intentelo mas tarde';
+                    exit();
+                }
+            }
+        } else {
+            echo validation_errors();
+        }
+    }
+
+    private function get_archivo_curso($id_curso_row) {
+        $select = ["c.id_documento_curso", "dc.ruta",];
+        $join = ["excelencia.documento_curso dc" => ["typejoin" => 'inner', "condicion" => "dc.id_documento_curso = c.id_documento_curso"]];
+        $where = ["c.id_curso" => $id_curso_row];
+        $archivo_curso = $this->registro_excelencia->getConsutasGenerales('excelencia.curso c', $select, $where, $join);
+        if (!empty($archivo_curso)) {
+            return $archivo_curso[0];
+        }
+        return null;
     }
 
     public function eliminar_curso($id_curso = null) {
@@ -379,12 +466,35 @@ class Registro extends MY_Controller {
                 $output['language_text'] = $lan_txt;
                 $output['cursos'] = $solicitud_excelencia;
                 $output['solicitud'] = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $solicitud)))[0];
-                $output['estados'] = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $solicitud)))[0];
-                //pr($output);
+                $output['btn_editar_curso'] = [En_estado_solicitud::REGISTRO => true, En_estado_solicitud::SIN_COMITE => true]; //Estados donde aparece el boton de editar
+                $output['estado'] = $this->get_estados_solicitud($output['solicitud']['cve_estado_solicitud']);
                 $result = $this->load->view('registro_excelencia/tabla_cursos.php', $output, true);
             }
         }
         echo $result;
+    }
+
+    /**
+     * 
+     * @param type $estado clave de estado especifico
+     * @return type
+     */
+    protected function get_estados_solicitud($estado = null) {
+        if (is_null($this->estados_solicitud)) {
+            $select = ["cve_estado_solicitud", "nombre_estado", "config", "transicion"];
+            $where = ["activo" => true];
+            $estados = $this->registro_excelencia->getConsutasGenerales('excelencia.estado_solicitud', $select, $where);
+            foreach ($estados as $value) {
+                $value['config'] = json_decode($value['config'], true);
+                $value['transicion'] = json_decode($value['transicion'], true);
+                $this->estados_solicitud[$value['cve_estado_solicitud']] = $value;
+            }
+        }
+        if (!is_null($estado)) {
+            return $this->estados_solicitud[$estado];
+        } else {
+            return $this->estados_solicitud;
+        }
     }
 
 }

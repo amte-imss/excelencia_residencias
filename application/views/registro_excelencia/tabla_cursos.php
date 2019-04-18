@@ -19,9 +19,9 @@
             <th><?php echo $language_text['registro_excelencia']['reg_exc_curso_anios']; ?></th>
             <th><?php echo $language_text['registro_excelencia']['reg_exc_curso_archivo']; ?></th>
             <th><?php echo $language_text['registro_excelencia']['reg_exc_curso_pnpc']; ?></th>
-            <?php // if (isset($solicitud['estado']) && $solicitud['estado'] != 2) { ?>
+            <?php if (isset($btn_editar_curso[$estado['cve_estado_solicitud']])) { ?>
                 <th><?php echo $language_text['registro_excelencia']['reg_exc_acciones']; ?></th> 
-            <?php // } ?>
+            <?php } ?>
         </tr>
     <thead>
     <tbody>
@@ -32,13 +32,13 @@
                 <td><?php echo $curso['anios']; ?></td>
                 <td><a href="<?php echo base_url() . trim($curso['ruta'], '.'); ?>" target="_blank"><?php echo $language_text['registro_excelencia']['reg_liga_descarga']; ?></a></td>
                 <td><?php echo ($curso['obtuvo_pnpc']) ? 'Si' : 'No'; ?></td>
-                <?php // if (isset($solicitud['estado']) && $solicitud['estado'] != 2) { ?>
-                    <!--<td><input type="button" value="X" class="btn animated flipInY visible" tooltip="<?php // echo $language_text['registro_excelencia']['reg_exc_curso_eliminar']; ?>" onclick="eliminar_curso('<?php // echo $curso['id_curso']; ?>', '#curso_msg');" style="color:red;" /><i class="far fa-edit" color:red></i></td>--> 
+                <?php if (isset($btn_editar_curso[$estado['cve_estado_solicitud']])) { ?>
+                            <!--<td><input type="button" value="X" class="btn animated flipInY visible" tooltip="<?php // echo $language_text['registro_excelencia']['reg_exc_curso_eliminar'];   ?>" onclick="eliminar_curso('<?php // echo $curso['id_curso'];   ?>', '#curso_msg');" style="color:red;" /><i class="far fa-edit" color:red></i></td>--> 
                     <td>
                         <input type="button" value="X" class="fa fa-edit btn animated flipInY visible" tooltip="<?php echo $language_text['registro_excelencia']['reg_exc_curso_eliminar']; ?>" onclick="eliminar_curso('<?php echo $curso['id_curso']; ?>', '#curso_msg');" style="color:red;" />
                         <button type="button" class="btn animated flipInY visible"  onclick="editar_curso('<?php echo $curso['id_curso']; ?>');"><i class="fa fa-edit" style="color:red;" ></i></button>
                     </td> 
-                <?php // } ?>
+                <?php } ?>
             </tr>
         <?php } ?>
     </tbody>

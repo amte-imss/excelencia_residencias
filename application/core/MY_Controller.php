@@ -140,12 +140,12 @@ class MY_Controller extends CI_Controller {
                 return array('tp_msg' => En_tpmsg::DANGER, 'mensaje' => $this->upload->display_errors());
             } else {
                 $data_file_complete = $this->upload->data();
-                $return =  array('tp_msg' => En_tpmsg::SUCCESS,
+                $return = array('tp_msg' => En_tpmsg::SUCCESS,
 //                    'mensaje' => $string_value['guardo_file'],
                     'mensaje' => $string_value['guardo_file'],
                     'upload_path' => $config['upload_path'],
                 );
-                return array_merge($return, $data_file_complete );
+                return array_merge($return, $data_file_complete);
             }
         }
     }
@@ -158,11 +158,15 @@ class MY_Controller extends CI_Controller {
      * @param type $extencion exteción del archivo, si el nombre del archivo contene la extención, la variable debe de ser NULL
      * @return boolean True si el archivo no existe o si se elimino correctamente
      */
-    protected function delete_file($ruta, $nombre_file, $extencion = null) {
-        if (is_null($extencion)) {//La extención viene explicito con el nombre del archivo
-            $file_nombre_ = '.' . $ruta . $nombre_file;
-        } else {//Valida que la extencion exista para concatenar con el nombre del archivo
-            $file_nombre_ = '.' . $ruta . $nombre_file . '.' . $extencion;
+    protected function delete_file($ruta, $nombre_file = null, $extencion = null) {
+        if (!is_null($nombre_file)) {//La extención viene explicito con el nombre del archivo
+            if (is_null($extencion)) {//La extención viene explicito con el nombre del archivo
+                $file_nombre_ = '.' . $ruta . $nombre_file;
+            } else {//Valida que la extencion exista para concatenar con el nombre del archivo
+                $file_nombre_ = '.' . $ruta . $nombre_file . '.' . $extencion;
+            }
+        }else{
+            $file_nombre_ = $ruta;
         }
 //        pr($file_nombre_);
         if (file_exists($file_nombre_)) {//Valida que exista el archivo

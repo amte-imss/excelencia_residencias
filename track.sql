@@ -40,3 +40,8 @@ alter table excelencia.estado_solicitud add column transicion json null;
 update excelencia.estado_solicitud set config='{"btn_agregar_curso":"true","btn_editar_curso":"true","btn_envio_doctos":"true","btn_envio":"true"}', transicion='{"SIN_COMITE":""}' where cve_estado_solicitud='REGISTRO';
 
 
+/*Agrear modulos */
+--get_detalle_curso
+
+
+
