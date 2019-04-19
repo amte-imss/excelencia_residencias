@@ -138,7 +138,7 @@ class Registro_excelencia_model extends CI_Model {
             }
 
             $res = $this->db->get('excelencia.documento d');
-            //pr($this->db->last_query());
+//            pr($this->db->last_query());
             $this->db->flush_cache();
             $this->db->reset_query();
             $reusltado = $res->result_array();

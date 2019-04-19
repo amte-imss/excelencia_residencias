@@ -51,91 +51,91 @@ class Registro extends MY_Controller {
         $output = [];
         $datos_sesion = $this->get_datos_sesion();
         $id_informacion_usuario = $datos_sesion['username'];
-        
+
         $this->load->model('MY_Model', 'my'); //Verificar convocatoria
-        $convocatoria = $this->my->get_convocatoria(array('where'=>'activo='.true));
+//        $convocatoria = $this->my->get_convocatoria(array('where'=>'activo='.true));
 
         $idioma = $this->obtener_idioma();
         $lan_txt = $this->obtener_grupos_texto(array('registro_excelencia', 'template_general', 'registro_usuario'), $idioma);
         //pr($convocatoria);
-        if(isset($convocatoria[0]) && count($convocatoria)>0 && $convocatoria[0]['registro']==true){
-          if (!is_null($registro)) { //Se verifica que se haya enviado No. de solicitud y pertenencia al usuario
-                  $se = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $registro, "u.username" => $id_informacion_usuario)));
-                  if(count($se)<=0){ //En caso de que no existan valores en bd para usuario se redirecciona para insertar solicitud
-                      redirect('/registro/solicitud');
-                  }
-                  $output['solicitud_excelencia'] = $se[0];
-              $id_solicitud = $output['solicitud_excelencia']['id_solicitud'];
-          } else {
-              $output['solicitud_excelencia'] = $this->registro_excelencia->get_solicitud(array('where' => array("u.username" => $id_informacion_usuario)));
-              if (isset($output['solicitud_excelencia'][0]) && count($output['solicitud_excelencia'][0]) > 0) {
-                  redirect('/registro/solicitud/' . $output['solicitud_excelencia'][0]['id_solicitud'], 'refresh');
-              } else {
-                  $id_solicitud = null;
-              }
-          }
-          //pr($output);
-          if ($this->input->post()) { // && !empty($output['solicitud_excelencia'])
-              //pr($this->input->post());
-              $trabajo = $this->input->post(null, true);
-              //pr($trabajo);
-              $this->config->load('form_validation'); //Cargar archivo
-              $validations = $this->config->item('form_registro_excelencia'); //Obtener validaciones de archivo general
-              //$this->set_textos_campos_validacion($validations, $lan_txt['registro_trabajo']);
-              $this->form_validation->set_rules($validations); //Añadir validaciones
-              if (isset($trabajo['carrera']) && $trabajo['carrera'] == 1) {
-                  $this->form_validation->set_rules('tipo_categoria', '¿Qué categoría tiene?', 'required');
-              }
-              /* if(isset($trabajo['pnpc']) && $trabajo['pnpc']==1){
-                $this->form_validation->set_rules('pnpc_anio', '¿De qué año?', 'required');
-                } */
-  
-              if ($this->form_validation->run() == TRUE) {
-                  $trabajo['matricula'] = $id_informacion_usuario;
-                  $solicitud_excelencia = $this->registro_excelencia->insertar_solicitud($trabajo);
-                  //$registro = $solicitud_excelencia['id_solicitud'];
-                  redirect('/registro/solicitud/' . $solicitud_excelencia['id_solicitud'], 'refresh');
-                  //$archivos = $this->archivos($_FILES, array('id_informacion_usuario'=>$id_informacion_usuario));
-                  //pr($archivos);
-              } else {
-                  //pr($trabajo);
-                  $output['solicitud_excelencia'] = $trabajo;
-              }
-          } //pr($output);
-  
-          if (!is_null($id_solicitud)) { //Validamos que exista identificador de solicitud para realizar la búsqueda de información
-              $documentos = $this->registro_excelencia->get_documento(array('where' => 'id_solicitud=' . $id_solicitud));
-              $output['estado_solicitud'] = $this->get_estado_solicitud($output['solicitud_excelencia']['cve_estado_solicitud']);
-              foreach ($documentos as $key => $value) {
-                  $output['documento'][$value['id_tipo_documento']] = $value;
-              }
-          }
-  
-          $output['tipo_documentos'] = $this->registro_excelencia->tipo_documentos(array('estado' => '1', 'id_tipo_documento<>' => 9));
-          $output['tipo_categoria'] = $this->registro_excelencia->tipo_categoria();
-          //$output['pnpc_anio'] = $this->registro_excelencia->pnpc_anio();
-          $output['categoria_docente'] = $this->registro_excelencia->categoria_docente();
-          $output['curso'] = dropdown_options($this->registro_excelencia->curso(), "id_especialidad", "especialidades");
-          $pncp_curso = [["id_pnc_curso" => true, "nombre" => 'Sí'], ["id_pnc_curso" => false, "nombre" => 'No']];
-          $output['pncp_curso'] = dropdown_options($pncp_curso, "id_pnc_curso", "nombre");
-  
-          $this->load->model('Usuario_model', 'usuario');
-          $output['solicitud'] = $this->usuario->get_usuarios(array('where' => array("usuarios.username" => $id_informacion_usuario)));
-          $output['language_text'] = $lan_txt;
-          $output['estado'] = $this->get_estados_solicitud($output['solicitud_excelencia']['cve_estado_solicitud']);
-          $main_content = $this->load->view('registro_excelencia/registro.tpl.php', $output, true);
+        if (isset($convocatoria[0]) && count($convocatoria) > 0 && $convocatoria[0]['registro'] == true) {
+            if (!is_null($registro)) { //Se verifica que se haya enviado No. de solicitud y pertenencia al usuario
+                $se = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $registro, "u.username" => $id_informacion_usuario)));
+                if (count($se) <= 0) { //En caso de que no existan valores en bd para usuario se redirecciona para insertar solicitud
+                    redirect('/registro/solicitud');
+                }
+                $output['solicitud_excelencia'] = $se[0];
+                $id_solicitud = $output['solicitud_excelencia']['id_solicitud'];
+            } else {
+                $output['solicitud_excelencia'] = $this->registro_excelencia->get_solicitud(array('where' => array("u.username" => $id_informacion_usuario)));
+                if (isset($output['solicitud_excelencia'][0]) && count($output['solicitud_excelencia'][0]) > 0) {
+                    redirect('/registro/solicitud/' . $output['solicitud_excelencia'][0]['id_solicitud'], 'refresh');
+                } else {
+                    $id_solicitud = null;
+                }
+            }
+            //pr($output);
+            if ($this->input->post()) { // && !empty($output['solicitud_excelencia'])
+                //pr($this->input->post());
+                $trabajo = $this->input->post(null, true);
+                //pr($trabajo);
+                $this->config->load('form_validation'); //Cargar archivo
+                $validations = $this->config->item('form_registro_excelencia'); //Obtener validaciones de archivo general
+                //$this->set_textos_campos_validacion($validations, $lan_txt['registro_trabajo']);
+                $this->form_validation->set_rules($validations); //Añadir validaciones
+                if (isset($trabajo['carrera']) && $trabajo['carrera'] == 1) {
+                    $this->form_validation->set_rules('tipo_categoria', '¿Qué categoría tiene?', 'required');
+                }
+                /* if(isset($trabajo['pnpc']) && $trabajo['pnpc']==1){
+                  $this->form_validation->set_rules('pnpc_anio', '¿De qué año?', 'required');
+                  } */
+
+                if ($this->form_validation->run() == TRUE) {
+                    $trabajo['matricula'] = $id_informacion_usuario;
+                    $solicitud_excelencia = $this->registro_excelencia->insertar_solicitud($trabajo);
+                    //$registro = $solicitud_excelencia['id_solicitud'];
+                    redirect('/registro/solicitud/' . $solicitud_excelencia['id_solicitud'], 'refresh');
+                    //$archivos = $this->archivos($_FILES, array('id_informacion_usuario'=>$id_informacion_usuario));
+                    //pr($archivos);
+                } else {
+                    //pr($trabajo);
+                    $output['solicitud_excelencia'] = $trabajo;
+                }
+            } //pr($output);
+
+            if (!is_null($id_solicitud)) { //Validamos que exista identificador de solicitud para realizar la búsqueda de información
+                $documentos = $this->registro_excelencia->get_documento(array('where' => 'id_solicitud=' . $id_solicitud));
+                $output['estado_solicitud'] = $this->get_estado_solicitud($output['solicitud_excelencia']['cve_estado_solicitud']);
+                foreach ($documentos as $key => $value) {
+                    $output['documento'][$value['id_tipo_documento']] = $value;
+                }
+            }
+
+            $output['tipo_documentos'] = $this->registro_excelencia->tipo_documentos(array('estado' => '1', 'id_tipo_documento<>' => 9));
+            $output['tipo_categoria'] = $this->registro_excelencia->tipo_categoria();
+            //$output['pnpc_anio'] = $this->registro_excelencia->pnpc_anio();
+            $output['categoria_docente'] = $this->registro_excelencia->categoria_docente();
+            $output['curso'] = dropdown_options($this->registro_excelencia->curso(), "id_especialidad", "especialidades");
+            $pncp_curso = [["id_pnc_curso" => true, "nombre" => 'Sí'], ["id_pnc_curso" => false, "nombre" => 'No']];
+            $output['pncp_curso'] = dropdown_options($pncp_curso, "id_pnc_curso", "nombre");
+
+            $this->load->model('Usuario_model', 'usuario');
+            $output['solicitud'] = $this->usuario->get_usuarios(array('where' => array("usuarios.username" => $id_informacion_usuario)));
+            $output['language_text'] = $lan_txt;
+//          $output['estado'] = $this->get_estados_solicitud($output['solicitud_excelencia']['cve_estado_solicitud']);
+            $main_content = $this->load->view('registro_excelencia/registro.tpl.php', $output, true);
         } else {
             $main_content = $this->load->view('registro_excelencia/registro_no_disponible.tpl.php', $output, true);
         }
         $this->template->setMainContent($main_content);
         $this->template->getTemplate();
     }
-    
-    private function get_estado_solicitud($cve_estado_solicitud){
-        $data['estado'] = $this->registro_excelencia->get_estado_solicitud(array('where'=>'cve_estado_solicitud=\''.$cve_estado_solicitud.'\''));
+
+    private function get_estado_solicitud($cve_estado_solicitud) {
+        $data['estado'] = $this->registro_excelencia->get_estado_solicitud(array('where' => 'cve_estado_solicitud=\'' . $cve_estado_solicitud . '\''));
         $data['config'] = null;
         $data['transicion'] = null;
-        if(count($data['estado'])>0){
+        if (count($data['estado']) > 0) {
             $data['config'] = json_decode($data['estado'][0]['config'], true);
             $data['transicion'] = json_decode($data['estado'][0]['transicion'], true);
         }
@@ -143,30 +143,75 @@ class Registro extends MY_Controller {
         return $data;
     }
 
+    private function get_archivo($id_solicitud, $id_tipo_documento, $documento) {
+        $param['where'] = ['d.id_solicitud' => $id_solicitud, 'd.id_tipo_documento' => $id_tipo_documento, 'd.id_documento' => $documento];
+        $documento_solicitud = $this->registro_excelencia->get_documento($param);
+        if (!empty($documento_solicitud)) {
+            return $documento_solicitud[0];
+        }
+        return null;
+    }
+
     public function cargar_archivo() {
-        if ($_FILES) {
-            //pr($_POST);
-            $id_tipo_documento = $this->input->post('id_tipo_documento', TRUE);
-            $id_solicitud = $this->input->post('id_solicitud', TRUE);
+        if ($_FILES && $this->input->post(null, true)) {
+            $post = $this->input->post(null, true);
             $datos_sesion = $this->get_datos_sesion();
             $id_informacion_usuario = $datos_sesion['username'];
+            $id_tipo_documento = $this->input->post('id_tipo_documento', TRUE);
+            $id_solicitud = $this->input->post('id_solicitud', TRUE);
             $archivos = $this->archivos($_FILES, array('id_informacion_usuario' => $id_informacion_usuario, 'id_tipo_documento' => $id_tipo_documento));
-            //pr($archivos);
-            if ($archivos['resultado'] == true) {
-                $datos_archivo = array(
-                    'ruta' => trim($archivos['data']['ruta'], '.') . $archivos['data']['file_name'],
-                    'extension_archivo' => 'pdf',
-                    'id_solicitud' => $id_solicitud,
-                    'id_tipo_documento' => $id_tipo_documento
-                );
-                $insercion_archivo = $this->registro_excelencia->insertar_documento($datos_archivo);
-                if ($insercion_archivo['result'] == true) {
-                    echo $this->load->view('registro_excelencia/archivo_correcto', array('id_tipo_documento' => $id_tipo_documento, 'ruta' => base_url() . trim($archivos['data']['ruta'], '.') . $archivos['data']['file_name']), true);
+            //pr($_POST);
+            if (isset($post['documento'])) {//Edicion de archivo
+                $documento = $this->input->post('documento', TRUE);
+                $archivos_solicitud = $this->get_archivo($id_solicitud, $id_tipo_documento, $documento);
+//                pr($archivos_solicitud);
+//                pr($archivos);
+                if (!is_null($archivos_solicitud)) {
+                    $archivos = $this->archivos($_FILES, array('id_informacion_usuario' => $id_informacion_usuario, 'id_tipo_documento' => $id_tipo_documento));
+                    if ($archivos['resultado'] == 1 && isset($archivos['data']) && !empty($archivos['data'])) {
+                        $filename = $archivos['data']['ruta'] . $archivos['data']['file_name'];
+                        $filename = substr($filename, 1);
+                        $datos_curso = ['ruta' => $filename];
+                        $where = ['id_documento' => $archivos_solicitud['id_documento']];
+                        $actualizaCurso = $this->registro_excelencia->update_registro_general('excelencia.documento', $datos_curso, $where);
+                        if ($actualizaCurso['tp_msg'] == En_tpmsg::SUCCESS) {
+//                            $this->delete_file('.' . $archivos_solicitud['ruta']);
+                            $actualizaCurso['url'] = $filename;
+                            $actualizaCurso['messaje'] = 'El archivo se actualizo correctamente';
+                            header('Content-Type: application/json;charset=utf-8');
+                            echo json_encode($actualizaCurso);
+                            exit();
+                        } else {
+                            echo 'No fue posible guardar el archivo. Por favor intentelo mas tarde';
+                            exit();
+                        }
+                    } else {
+                        echo 'No fue posible guardar el archivo. Por favor intentelo mas tarde';
+                        exit();
+                    }
                 } else {
-                    echo $this->load->view('registro_excelencia/archivo_incorrecto', array('id_tipo_documento' => $id_tipo_documento, 'error' => $insercion_archivo['msg']), true);
+                    echo 'No fue posible guardar el archivo. Por favor intentelo mas tarde';
+                    exit();
                 }
             } else {
-                echo $this->load->view('registro_excelencia/archivo_incorrecto', array('id_tipo_documento' => $id_tipo_documento, 'error' => $archivos['error']), true);
+                $archivos = $this->archivos($_FILES, array('id_informacion_usuario' => $id_informacion_usuario, 'id_tipo_documento' => $id_tipo_documento));
+                //pr($archivos);
+                if ($archivos['resultado'] == true) {
+                    $datos_archivo = array(
+                        'ruta' => trim($archivos['data']['ruta'], '.') . $archivos['data']['file_name'],
+                        'extension_archivo' => 'pdf',
+                        'id_solicitud' => $id_solicitud,
+                        'id_tipo_documento' => $id_tipo_documento
+                    );
+                    $insercion_archivo = $this->registro_excelencia->insertar_documento($datos_archivo);
+                    if ($insercion_archivo['result'] == true) {
+                        echo $this->load->view('registro_excelencia/archivo_correcto', array('id_tipo_documento' => $id_tipo_documento, 'ruta' => base_url() . trim($archivos['data']['ruta'], '.') . $archivos['data']['file_name']), true);
+                    } else {
+                        echo $this->load->view('registro_excelencia/archivo_incorrecto', array('id_tipo_documento' => $id_tipo_documento, 'error' => $insercion_archivo['msg']), true);
+                    }
+                } else {
+                    echo $this->load->view('registro_excelencia/archivo_incorrecto', array('id_tipo_documento' => $id_tipo_documento, 'error' => $archivos['error']), true);
+                }
             }
         } else {
             return "No se ha enviado archivo a procesar.";
@@ -201,12 +246,6 @@ class Registro extends MY_Controller {
         } else {
             $resultado = $this->registro_excelencia->update_solicitud(array('id_solicitud' => $id_solicitud));
             echo '<div class="alert alert-success" role="alert">' . $resultado['mensaje'] . '</div><script>alert("' . $resultado['mensaje'] . '"); document.location.href=document.location.href;</script>';
-        }
-    }
-
-    public function guardar_curso_participado() {
-        if ($this->input->post(null, true)) {
-            
         }
     }
 

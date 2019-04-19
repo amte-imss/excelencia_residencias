@@ -131,7 +131,7 @@ function editar_curso(param) {
                         $('#pncp_curso').val(obtuvo_pnpc);
                     } else {
                         $(div_respuesta).html(data.html);
-                        setTimeout("$('#curso_msg').html('')", 5000);
+                        setTimeout("$('#curso_msg').html('')", 7000);
                     }
                 } catch (e) {
 //                        $(div_respuesta).html(data);
@@ -195,56 +195,77 @@ function cambio_botones_formulario(param) {
 
 }
 
-function editar_archivos(formulario, div_respuesta, id_documento) {
-        //alert($("#archivo_"+id_tipo_documento).val());
-        if ($("#archivo_" + id_tipo_documento).val() != '') {
-            var formData = new FormData($('#' + formulario)[0]);
-            formData.append('id_tipo_documento', id_tipo_documento);
-            formData.append('id_solicitud', solicitud);
-            $.ajax({
-                //url: site_url + '/actividad_docente/datos_actividad',
-                url: site_url + '/registro/cargar_archivo',
-                data: formData,
-                type: 'POST',
-                mimeType: "multipart/form-data",
-                contentType: false,
-                cache: true,
-                processData: false,
-                //                dataType: 'JSON',
-                beforeSend: function (xhr) {
-                    //            $('#tabla_actividades_docente').html(create_loader());
-                    mostrar_loader();
-                }
-            })
-                    .done(function (data) {
-                        try {//Cacha el error
-                            $(div_respuesta).empty();
-                            //var resp = $.parseJSON(data);
-                            //if (typeof resp.html !== 'undefined') {
-                            //if (resp.tp_msg === 'success') {
-                            $(div_respuesta).html(data);
+function editar_archivos(element) {
+    //alert($("#archivo_"+id_tipo_documento).val());
+    var prop = $(element);
+    var id_tipo_documento = prop.data('idtipodocumento');
+    var formulario = prop.data('formulario');
+    var documento = prop.data('documento');
+    var solicitud = prop.data('solicitud');
+//    console.log(url);
+    if ($("#archivo_" + id_tipo_documento).val() != '') {
+        var formData = new FormData($('#' + formulario)[0]);
+        var div_respuesta = '#msgloadfile_' + id_tipo_documento;
+        formData.append('id_tipo_documento', id_tipo_documento);
+        formData.append('documento', documento);
+        formData.append('id_solicitud', solicitud);
+        $.ajax({
+            //url: site_url + '/actividad_docente/datos_actividad',
+            url: site_url + '/registro/cargar_archivo',
+            data: formData,
+            type: 'POST',
+            mimeType: "multipart/form-data",
+            contentType: false,
+            cache: true,
+            processData: false,
+            //                dataType: 'JSON',
+            beforeSend: function (xhr) {
+                //            $('#tabla_actividades_docente').html(create_loader());
+                mostrar_loader();
+            }
+        })
+                .done(function (data) {
+                    try {//Cacha el error
+                        /*Modifica la ruta de descarga*/
+                        $(div_respuesta).empty();
+                        var resp = $.parseJSON(data);
+                        //if (typeof resp.html !== 'undefined') {
+                        console.log('data');
+                        console.log(resp);
+                        if (typeof resp.tp_msg !== 'undefined' && resp.tp_msg == 'success') {
+                            var url_ = url + resp.url;
+                            $('#archivo_' + id_tipo_documento).val('');
+                            $(div_respuesta).html(resp.messaje);
+                            $(div_respuesta).removeClass('hidden').removeClass('alert-danger').addClass('visible');
+                            $(div_respuesta).addClass('alert-success');
+                            var href = $("#lbl_" + id_tipo_documento + " > a[href]");
+                            href.attr('href', url_);
+                            setTimeout("$('" + div_respuesta + "').removeClass('visible').addClass('hidden')", 6000);
                             //reinicia_monitor();
                             //actaliza_data_table(url_actualiza_tabla);
-                            /*} else {
-                             $(div_respuesta).html(resp.html);
-                             }
-                             if (typeof resp.mensaje !== 'undefined') {//Muestra mensaje al usuario si este existe
-                             get_mensaje_general(resp.mensaje, resp.tp_msg, 5000);
-                             }
-                             }*/
-                        } catch (e) {
-                            $(div_respuesta).html(data);
+//                        /*} else {
+//                         $(div_respuesta).html(resp.html);
                         }
+                        /*
+                         if (typeof resp.mensaje !== 'undefined') {//Muestra mensaje al usuario si este existe
+                         get_mensaje_general(resp.mensaje, resp.tp_msg, 5000);
+                         }
+                         }*/
+                    } catch (e) {
+                        $(div_respuesta).removeClass('hidden').removeClass('alert-success').addClass('visible').addClass('alert-danger');
+                        $(div_respuesta).html(data);
+                        setTimeout("$('" + div_respuesta + "').removeClass('visible').addClass('hidden')", 6000);
+                    }
 
-                    })
-                    .fail(function (jqXHR, response) {
-                        //$(div_respuesta).html(response);
-                        get_mensaje_general('Ocurrió un error durante el proceso, inténtelo más tarde.', 'warning', 5000);
-                    })
-                    .always(function () {
-                        ocultar_loader();
-                    });
-        } else {
-            alert('Debe seleccionar el archivo a cargar');
-        }
+                })
+                .fail(function (jqXHR, response) {
+                    //$(div_respuesta).html(response);
+                    get_mensaje_general('Ocurrió un error durante el proceso, inténtelo más tarde.', 'warning', 5000);
+                })
+                .always(function () {
+                    ocultar_loader();
+                });
+    } else {
+        alert('Debe seleccionar el archivo a cargar');
     }
+}

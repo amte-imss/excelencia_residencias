@@ -164,7 +164,7 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
 
                     <div class="col-sm-offset-1 col-sm-10 panel">
                         <div class="panel-heading"><h2><?php echo $language_text['registro_excelencia']['cursos_participado']; ?></h2></div>
-                        <?php if(isset($estado_solicitud['config']['div_formulario_registro']) && $estado_solicitud['config']['div_formulario_registro']=="true"){ ?>
+                        <?php if((isset($estado_solicitud['config']['btn_agregar_curso']) && $estado_solicitud['config']['btn_agregar_curso']=="true")||(isset($estado_solicitud['config']['btn_editar_curso']) && $estado_solicitud['config']['btn_editar_curso']=="true")){ ?>
                         <div id="div_formulario_registro" class="table-responsive" onmousedown="elemento(event);">
                             <input type="hidden" id="solicitud_cur" name="solicitud_cur" value="<?php echo $solicitud_excelencia['id_solicitud']; ?>">
                             <div id="" class="form-group">
@@ -247,10 +247,8 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
                             </div>
 
                             <div class="col-sm-12 text-right">
-                              <?php if(isset($estado_solicitud['config']['btn_cancelar_curso']) && $estado_solicitud['config']['btn_cancelar_curso']=="true"){ ?>
+                                <?php if(isset($estado_solicitud['config']['btn_editar_curso']) && $estado_solicitud['config']['btn_editar_curso']=="true"){ ?>
                                 <input type="button" value="<?php echo $language_text['registro_excelencia']['reg_btn_cancel']; ?>" class="btn btn-theme animated flipInY hidden" id="btn_cancelar_curso" onclick="cancelar_curso()" />
-                              <?php }
-                                if(isset($estado_solicitud['config']['btn_editar_curso']) && $estado_solicitud['config']['btn_editar_curso']=="true"){ ?>
                                 <input type="button" value="<?php echo $language_text['registro_excelencia']['reg_btn_actualizar']; ?>" class="btn btn-theme animated flipInY hidden"  id="btn_editar_curso" />
                               <?php } 
                                 if(isset($estado_solicitud['config']['btn_agregar_curso']) && $estado_solicitud['config']['btn_agregar_curso']=="true"){ ?>
@@ -285,13 +283,15 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
                                         <?php
                                         $tam = 12;
                                         $agrega_edicion = FALSE;
-                                        if (isset($estado['config']['modificar_archivos']) && $estado['config']['modificar_archivos'] == 'true') {
+                                        if (isset($estado_solicitud['config']['modificar_archivos']) && $estado_solicitud['config']['modificar_archivos'] == 'true') {
                                             $tam = 5;
                                             $agrega_edicion = true;
                                         }
                                         ?>
                                         <div class="col-sm-<?php echo $tam; ?>">
-                                            <label class="control-label"><?php echo str_replace('||X||', base_url() . $documento[$value['id_tipo_documento']]['ruta'], $language_text['registro_excelencia']['reg_liga_msg_descarga']); ?></label>
+                                            <label class="control-label" id="lbl_<?php echo $value['id_tipo_documento']; ?>">
+                                                <?php echo str_replace('||X||', base_url() . $documento[$value['id_tipo_documento']]['ruta'], $language_text['registro_excelencia']['reg_liga_msg_descarga']); ?>
+                                            </label>
                                         </div>
 
                                         <?php if ($agrega_edicion) { ?>
@@ -303,7 +303,11 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
                                                        > <!-- application/pdf, application/mswor -->
                                                 <button class="text-left btn btn-theme animated flipInY visible" id="btn_envio_doctos" 
                                                         name="btn_envio_doctos" type="button" 
-                                                        onclick="javascript:editar_archivos('form_registro_solicitud_documentacion', '#capa_archivo_<?php echo $value['id_tipo_documento']; ?>', '<?php echo $documento[$value['id_tipo_documento']]['id_documento']; ?>');">
+                                                        data-idtipodocumento ="<?php echo $value['id_tipo_documento']; ?>"
+                                                        data-solicitud ="<?php echo $solicitud_excelencia['id_solicitud']; ?>"
+                                                        data-formulario ="form_registro_solicitud_documentacion"
+                                                        data-documento ="<?php echo $documento[$value['id_tipo_documento']]['id_documento']; ?>"
+                                                        onclick="javascript:editar_archivos(this);">
                                                             <?php echo "Actualizar archivo"; //$language_text['registro_excelencia']['reg_btn_cargar_archivos'];  ?>
                                                 </button>
                                             </div >
@@ -320,7 +324,7 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
                                     } ?>
                                 </div>
                             </div>
-                            <div id="msgloadfile_<?php echo $documento[$value['id_tipo_documento']]['id_documento']; ?>" class="alert alert-danger" role="alert"></div>
+                            <div id="msgloadfile_<?php echo $value['id_tipo_documento']; ?>" class="alert alert-danger hidden" role="alert"></div>
                         <?php } ?>
                         <div id="div_respuesta"></div>
                         <?php echo form_close(); ?>
@@ -331,10 +335,10 @@ if (isset($solicitud_excelencia['estado']) && $solicitud_excelencia['estado'] ==
             <div class="row">
                 <div class="col-sm-offset-2 col-sm-8" id="msg"></div>
             </div><!--row-->
-            <?php if (isset($estado['config']['btn_envio']) && $estado['config']['btn_envio'] == 'true') { ?>
+            <?php if (isset($estado_solicitud['config']['btn_envio']) && $estado_solicitud['config']['btn_envio'] == 'true') { ?>
                 <div class="row">
                     <br><br>
-                    <div class="col-sm-offset-2 col-sm-8" style="<?php echo $ocultar; ?>">
+                    <div class="col-sm-offset-2 col-sm-8" >
                         <center>
                             <button class="btn btn-theme animated flipInY visible" id="btn_envio" name="btn_envio" type="button"><?php echo $language_text['registro_excelencia']['registrar_solicitud']; ?></button>
                             <!--a href="<?php // echo site_url('registro_investigacion');         ?>" class="btn btn-theme animated flipInY visible"><?php // echo $language_text['template_general']['cancelar'];         ?></a-->
