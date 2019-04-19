@@ -46,6 +46,20 @@ where cve_estado_solicitud in('REGISTRO');
 
 /*Agrear modulos */
 --get_detalle_curso
+/* Modificaciones para actualizar 20190418 */
+CREATE TABLE excelencia.convocatoria (
+	id_convocatoria serial,
+	nombre varchar(100) NULL,
+	anio int4 NOT NULL,
+	activo bool NULL DEFAULT true,
+	registro bool NULL DEFAULT true,
+	revision bool NULL DEFAULT false,
+	CONSTRAINT convocatoria_pkey PRIMARY KEY (id_convocatoria)
+);
 
+insert into excelencia.convocatoria values(1, 'Excelencia 2019', 2019, true, true, true);
+
+insert into idiomas.traduccion values('msg_convocatoria_deshabilitada', 'lbl', 'mensajes', '{"es":"El acceso no esta disponible","en":"El acceso no esta disponible."}');
+	
 
 
