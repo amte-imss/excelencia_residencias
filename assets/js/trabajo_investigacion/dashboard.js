@@ -125,7 +125,7 @@ function registros() {
                 clearFilterButtonTooltip: language_text.jsgrid_elementos.actualizar_js, // tooltip of clear filter button
                // updateButtonTooltip: language_text.jsgrid_elementoscancelar_js, // tooltip of update item button
                 //cancelEditButtonTooltip: language_text.jsgrid_elementos.buscar_js, // tooltip of cancel editing button
-               /* itemTemplate: function (value, item) {
+             /*  itemTemplate: function (value, item) {
                     var result = get_detalle(item);
                     return result;
                 }*/
