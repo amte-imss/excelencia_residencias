@@ -4,6 +4,19 @@
     #div_carrera_categoria{
         display: none;
     }
+
+    .div-borde {
+    margin-top: 10px;
+    border: #cdcdcd medium solid;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    padding: 0.5em;
+    }
+
+    .delrow{
+        visibility: hidden;
+    }
 </style>
  
 <div class="panel panel-default from-trabajos">
@@ -17,7 +30,8 @@
                             <span aria-hidden="true">&times;</span>
                         </button>-->
                 </div>
-            </div><!--row-->
+            </div>
+            <!--row-->
             <div class="row">
                 <div class="col-sm-offset-2 col-sm-8">
                     <strong>Los campos marcados con * son de caracter obligatorios</strong>
@@ -28,78 +42,237 @@
                 <div class="col-sm-offset-1 col-sm-10 panel">
                     <div class="panel-heading"><h2>Información general</h2></div>
                     <div class="panel-body">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Matricula</label>
-                            <div class="col-sm-9">
+
+                        <div class="col-sm-6">
+                            <div class="div-borde" >
+                                <label class="control-label"> <strong>Matricula:</strong></label><br>
                                 <label class="control-label">333333333</label>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label  class="col-sm-3 control-label">Delegación</label>
-                            <div class="col-sm-9">
-                                <label  class="control-label">OFICINAS CENTRALES</label>
+                        <div class="col-sm-6">
+                            <div class="div-borde" >
+                                <label class="control-label"> <strong>Delegación:</strong></label><br>
+                                <label class="control-label">OFICINAS CENTRALES</label>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label  class="col-sm-3 control-label">Unidad</label>
-                            <div class="col-sm-9">
-                                <label  class="control-label">DIRECCION DE PRESTACIONES MEDICAS</label>
+                        <div class="col-sm-6">
+                            <div class="div-borde" >
+                                <label class="control-label"> <strong>Unidad:</strong></label><br>
+                                <label class="control-label">DIRECCION DE PRESTACIONES MEDICAS</label>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label  class="col-sm-3 control-label">Categoría</label>
-                            <div class="col-sm-9">
-                                <label  class="control-label">SUPERV PROYECTOS E3</label>
+                        <div class="col-sm-6">
+                            <div class="div-borde" >
+                                <label class="control-label"> <strong>Categoría:</strong></label><br>
+                                <label class="control-label">SUPERV PROYECTOS E3</label>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label  class="col-sm-3 control-label">Nombre</label>
-                            <div class="col-sm-9">
-                                <label  class="control-label">MIGUEL ANGEL GONZALEZ GUAGNELLI</label>
+                        <div class="col-sm-6">
+                            <div class="div-borde" >
+                                <label class="control-label"> <strong>Nombre:</strong></label><br>
+                                <label class="control-label">MIGUEL ANGEL GONZALEZ GUAGNELLI</label>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="carrera" class="col-sm-3 control-label">¿Tiene carrera docente?*</label>
-                        <div class="col-sm-9">
-                            <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp SI<br>
-                            <input type="radio" name="carrera" value="0" onclick="javascript:habilitar_categoria();">&nbsp NO<br>
-                        </div><div style="clear:both;"></div>   
-                    </div>
-
-                    <div id="div_carrera_categoria" class="form-group">
-                        <label for="tipo_categoria" class="col-sm-3 control-label">¿Qué categoría tiene?*</label>
-                        <div class="col-sm-9">
-                            <select id="tipo_categoria" name="tipo_categoria" class="form-control">
-                            <option value="volvo">Aux A</option>
-                            <option value="saab">Aux B</option>
-                            <option value="audi">Tit A</option>
-                            <option value="audi">Tit B</option>
-                            </select>
-
+                        <div class="col-sm-6">
+                            <div class="div-borde" >
+                                <label class="control-label"> <strong>¿Tiene carrera docente?*</strong></label><br>
+                                <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp SI<br>
+                                <input type="radio" name="carrera" value="0" onclick="javascript:habilitar_categoria();">&nbsp NO
+                            </div>
                         </div>
-                    </div>
 
-                    <hr>
-                    
+                        <div class="col-sm-6">
+                            <div class="div-borde" >
+                                <label class="control-label"> <strong>¿Qué categoría tiene?*</strong></label><br>
+                                <div>
+                                    <select id="tipo_categoria" name="tipo_categoria" class="form-control">
+                                    <option value="volvo">Aux A  aaaaaaa</option>
+                                    <option value="saab">Aux B</option>
+                                    <option value="audi">Tit A</option>
+                                    <option value="audi">Tit B</option>
+                                    </select>
+                                </div>
+                               
+                            </div>
+                            <br><br>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="div-borde" >
+                                <label class="control-label"> <strong>¿Tiene PNCP?*</strong></label><br>
+                                <select id="tipo_categoria" name="tipo_categoria" class="form-control">
+                                <option value="volvo">Si</option>
+                                <option value="saab">No</option>
+                                </select>
+                            </div>
+                            <br><br>
+                        </div>
 
-                    <!--div class="form-group">
-                            <label for="pnpc" class="col-sm-3 control-label"><?php //echo $language_text['registro_excelencia']['pnpc_tiene']; ?>*</label>
-                            <div class="col-sm-9">
-                                            <input type="radio" name="pnpc" value="1" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='1') echo 'checked';} ?>><?php //echo $language_text['template_general']['si_op']; ?><br>
-                                            <input type="radio" name="pnpc" value="0" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='0') echo 'checked';} ?>><?php //echo $language_text['template_general']['no_op']; ?><br>
-                            </div><div style="clear:both;"></div>
-                <?php //echo form_error_format('pnpc');?>
-                    </div -->
-
-                        <div class="panel-footer text-right">
+                        <div class="text-center"> 
                             <button class="btn btn-theme animated flipInY visible" id="btn_envio_general" name="btn_envio_general" type="button">Guardar solicitud</button>
                         </div>
+         
+                    </div>
+                    <hr>
+                     <!--Sección 2-->
+                    <div class="panel-heading"><h2>Cursos en los que ha participado como docente</h2></div>
+                    <div class="panel-body">
+                        <br>
+                        <table class="table ">
+                            <thead>
+                            <tr>
+                                <th>Nombre del curso</th>
+                                <th>Categoría del docente</th>
+                                <th>Años</th>
+                                <th>Archivo</th>
+                                <th>¿El curso está registrado en el PNCP?</th>
+                                <th>Opciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Nombre del curso</td>
+                                <td>Titular A</td>
+                                <td>3</td>
+                                <td>archivo.pdf</td>
+                                <td>Si</td>
+                                <td>                                   
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 1<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 2<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 3<br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Nombre del curso</td>
+                                <td>Auxiliar B</td>
+                                <td>3</td>
+                                <td>archivo.pdf</td>
+                                <td>NoDoe</td>
+                                <td>                                   
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 1<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 2<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 3<br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Nombre del curso</td>
+                                <td>Titular C</td>
+                                <td>2</td>
+                                <td>archivo.pdf</td>
+                                <td>Si</td>
+                                <td>                                   
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 1<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 2<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 3<br>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="text-center"> 
+                            <button class="btn btn-theme animated flipInY visible" id="btn_envio_general" name="btn_envio_general" type="button">Guardar opciones</button>
+                        </div>
+                        <br>
+                    </div>
+                    <hr>
+                    <!--Sección 3-->
+                    <div class="panel-heading"><h2>Documentación</h2></div>
+                    <div class="panel-body">
+                    <br>
+                        <table class="table ">
+                           
+                            <tbody>
+                            <tr>
+                                <td>Nombre del documento</td>
+                                <td>Descripción</td>
+                                <td>                                   
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 1<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 2<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 3<br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Nombre del documento</td>
+                                <td>Descripción</td>
+                                <td>                                   
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 1<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 2<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 3<br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Nombre del documento</td>
+                                <td>Descripción</td>
+                                <td>                                   
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 1<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 2<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 3<br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Nombre del documento</td>
+                                <td>Descripción</td>
+                                <td>                                   
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 1<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 2<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 3<br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Nombre del documento</td>
+                                <td>Descripción</td>
+                                <td>                                   
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 1<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 2<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 3<br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Nombre del documento</td>
+                                <td>Descripción</td>
+                                <td>                                   
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 1<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 2<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 3<br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Nombre del documento</td>
+                                <td>Descripción</td>
+                                <td>                                   
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 1<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 2<br>
+                                    <input type="radio" name="carrera" value="1" onclick="javascript:habilitar_categoria();">&nbsp Op 3<br>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="text-center"> 
+                            <button class="btn btn-theme animated flipInY visible" id="btn_envio_general" name="btn_envio_general" type="button">Guardar opciones</button>
+                        </div>
+                        <br>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+            
+                   
+
+                    
+
+               
+                    
+
+
+                       
                 </div>
 
 
