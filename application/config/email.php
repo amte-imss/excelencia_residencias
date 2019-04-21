@@ -19,7 +19,8 @@ $config['email'] = Array(
     'crypt' => 'tls',
     'username' => "sied.ad.imss@gmail.com",
     'password' => "s13d.4d.1mss",
-    'setFrom' => array('email'=>'sied.ad.imss@gmail.com', 'name'=>'Foro Nacional e Internacional de Educación en Salud'),
+    'setFrom' => array('email'=>'sied.ad.imss@gmail.com', 'name'=>'Excelencia de residencias de Educación en Salud'),
+//    'setFrom' => array('email'=>'cenitluis.pumas@gmail.com', 'name'=>'Excelencia de residencias de Educación en Salud'),
     /*'SMTPOptions' => array(
         'ssl' => array(
             'verify_peer' => false,

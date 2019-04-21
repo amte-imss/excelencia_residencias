@@ -165,7 +165,7 @@ class MY_Controller extends CI_Controller {
             } else {//Valida que la extencion exista para concatenar con el nombre del archivo
                 $file_nombre_ = '.' . $ruta . $nombre_file . '.' . $extencion;
             }
-        }else{
+        } else {
             $file_nombre_ = $ruta;
         }
 //        pr($file_nombre_);
@@ -433,6 +433,36 @@ class MY_Controller extends CI_Controller {
                 $value[$label] = $campo; //Modifica el texto de las validaciones
             }
         }
+    }
+
+    /**
+     * 
+     * @param type $view Vista que contiene la plantilla del correo
+     * @param type $email Correo electrónico destino
+     * @param type $datos datos que recibira la vista
+     * @param type $subject Se refiere al asunto del correo
+     * @author LEAS 21042019
+     */
+    protected function enviar_correo_electronico($view = 'correo_foro/recepcion.php', $email, $datos, $subject) {
+        $this->load->config('email');
+        $this->load->library('My_phpmailer');
+        $mailStatus = $this->my_phpmailer->phpmailerclass();
+
+        /*  $mailStatus->SMTPOptions = array(
+          'ssl' => array(
+          'verify_peer' => false,
+          'verify_peer_name' => false,
+          'allow_self_signed' => true
+          )
+          ); */
+
+        $mailStatus->SMTPAuth = false;
+        $emailStatus = $this->load->view($view, $datos, true);
+        //$emailStatus = $this->procesar_correo($texto, array('{{$folio}}' => $folio, '{{$titulo}}' => $titulo));
+        $mailStatus->addAddress($email);
+        $mailStatus->Subject = $subject;
+        $mailStatus->msgHTML($emailStatus);
+        $mailStatus->send();
     }
 
 //    public function obtener_catalogo_idiomas($idiomas, $lenguaje) {
