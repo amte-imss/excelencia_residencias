@@ -13,8 +13,7 @@ class Registro_excelencia_model extends CI_Model {
         $this->db->flush_cache();
         $this->db->reset_query();
 
-        $this->db->select(array('s.*', "u.id_usuario", "u.activo", "u.email", "h.curp", "h.rfc", "h.nombre", 
-            "h.apellido_paterno", "h.apellido_materno", "h.clave_delegacional"));
+        $this->db->select(array('s.*', "u.id_usuario", "u.activo", "u.email", "h.curp", "h.rfc", "h.nombre","h.apellido_paterno", "h.apellido_materno", "h.clave_delegacional"));
         $this->db->where(array(
             's.matricula' => $id_informacion_usuario,
             'hs.actual' => true,
@@ -42,9 +41,10 @@ class Registro_excelencia_model extends CI_Model {
             if (isset($param['select'])) {
                 $this->db->select($param['select']);
             } else {
-                $this->db->select(array('s.*','u.email','i.*', 'h.*', 'hs.cve_estado_solicitud', 'hs.fecha as fecha_hs', 'del.nombre as delegacion', 'dep.nombre as departamento', 'unidad.nombre as unidad','unidad.es_umae', "to_char(s.fecha, 'yyyy-dd-mm hh:MI:ss') as fecha_format"));
+                $this->db->select(array('s.*','u.email','i.*', 'h.*', 'hs.cve_estado_solicitud', 'hs.fecha as fecha_hs', 'del.nombre as delegacion', 'dep.nombre as departamento', 'unidad.nombre as unidad','unidad.es_umae', "to_char(s.fecha, 'yyyy-dd-mm hh:MI:ss') as fecha_format", "conv.*"));
             }
             $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and actual=true', 'left', false);
+            $this->db->join('excelencia.convocatoria conv', 'conv.id_convocatoria=s.id_convocatoria and conv.activo=true', 'left', false);
             $this->db->join('sistema.usuarios u', 'u.username=s.matricula', 'left');
             $this->db->join('sistema.informacion_usuario i', 'i.matricula=u.username', 'left');
             $this->db->join('sistema.historico_informacion_usuario h', 'h.id_informacion_usuario=i.id_informacion_usuario', 'left');
@@ -202,6 +202,7 @@ class Registro_excelencia_model extends CI_Model {
         $historico = array(
             'matricula' => $data['matricula'],
             //'pnpc_tiene' => $data['pnpc'],
+            'id_convocatoria' => $data['id_convocatoria'],
             'carrera_tiene' => $data['carrera'],
             'carrera_categoria' => $data['tipo_categoria']
         );

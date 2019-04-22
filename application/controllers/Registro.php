@@ -93,6 +93,7 @@ class Registro extends MY_Controller {
 
                 if ($this->form_validation->run() == TRUE) {
                     $trabajo['matricula'] = $id_informacion_usuario;
+                    $trabajo['id_convocatoria'] = $convocatoria[0]['id_convocatoria'];
                     $solicitud_excelencia = $this->registro_excelencia->insertar_solicitud($trabajo);
                     //$registro = $solicitud_excelencia['id_solicitud'];
                     redirect('/registro/solicitud/' . $solicitud_excelencia['id_solicitud'], 'refresh');

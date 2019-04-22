@@ -37,7 +37,7 @@ class Sesion_model extends CI_Model {
                     return 1; //Existe
                 } else { // de lo contrario validamos que este activa convocatoria
                     $this->db->reset_query();
-                    $this->db->where('c.activo=true');
+                    $this->db->where('c.activo=true and acceso=true');
                     $conv = $this->db->get('excelencia.convocatoria c');
                     $convocatoria = $conv->result_array();
                     //pr($convocatoria); exit();
@@ -48,12 +48,11 @@ class Sesion_model extends CI_Model {
                     }
                 }
             }
-            exit();
             return 2; //contraseña incorrrecta
         } else {
             return 3; //Usuario no existe
         }
-
+        exit();
         //$cadena = $result[0]['token'] . $password . $result[0]['token'];
     }
 

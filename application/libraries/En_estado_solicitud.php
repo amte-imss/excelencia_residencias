@@ -10,7 +10,8 @@ class En_estado_solicitud {
     const
             __default = 'sn_estado',
             REGISTRO = 'REGISTRO',
-            SIN_COMITE = 'SIN_COMITE'
-
+            SIN_COMITE = 'SIN_COMITE',
+            EN_REVISION = 'EN_REVISION',
+            REVISADOS = 'REVISADOS'
     ;
 }

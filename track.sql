@@ -71,3 +71,16 @@ insert into  excelencia.opcion (opcion,tipo,activo) values
 ('Documento no valido','VALIDA_DOCUMENTOS',true)
 ;
 
+/* Modificaciones para actualizar los estados de la solicitud */
+update excelencia.estado_solicitud set transicion='{"EN_REVISION":""}' WHERE cve_estado_solicitud='SIN_COMITE';
+
+insert into excelencia.estado_solicitud values('EN_REVISION','En revision',null,true,'{"btn_asignar_revisor":"true"}','{"REVISADO":"","CORRECCION":""}');
+insert into excelencia.estado_solicitud values('REVISADO','Revisado',null, true,null,null);
+insert into excelencia.estado_solicitud values('CORRECCION','En corrección',null, true,null,'{"SIN_COMITE":""}');
+
+
+/* Modificaciones para actualizar la tabla convocatoria 20190420 */
+alter table excelencia.convocatoria add column acceso boolean not null default true;
+alter table excelencia.solicitud add column id_convocatoria integer;
+
+update excelencia.solicitud set id_convocatoria=1;

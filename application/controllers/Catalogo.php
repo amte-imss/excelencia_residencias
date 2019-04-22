@@ -756,7 +756,7 @@ class Catalogo extends MY_Controller {
         *
         */
         public function gestion_configuracion(){
-            $this->db->schema = 'foro';
+            $this->db->schema = 'excelencia';
             $crud = $this->new_crud();
             $crud->set_table('configuracion');
             $crud->set_subject('configuracion');
@@ -778,19 +778,20 @@ class Catalogo extends MY_Controller {
          *
          */
          public function gestion_convocatoria(){
-             $this->db->schema = 'foro';
+             $this->db->schema = 'excelencia';
              $crud = $this->new_crud();
              $crud->set_table('convocatoria');
              $crud->set_subject('convocatoria');
              $crud->set_primary_key('id_convocatoria');
 
-             $crud->columns("id_convocatoria","nombre", "anio","activo","registro","revision");
+             $crud->columns("id_convocatoria","nombre", "anio","activo","registro","revision","acceso");
              $crud->change_field_type('id_convocatoria', 'hidden');
-             $crud->add_fields('nombre','anio','activo',"registro","revision");
-             $crud->edit_fields('nombre','anio','activo',"registro","revision");
+             $crud->add_fields('nombre','anio','activo',"registro","revision","acceso");
+             $crud->edit_fields('nombre','anio','activo',"registro","revision","acceso");
              $crud->field_type('activo','true_false');
              $crud->field_type('registro','true_false');
              $crud->field_type('revision','true_false');
+             $crud->field_type('acceso','true_false');
              $crud->required_fields('anio');
 
              $data_view['output'] = $crud->render();
@@ -810,7 +811,7 @@ class Catalogo extends MY_Controller {
           *
           */
           public function gestion_estado_trabajo(){
-              $this->db->schema = 'foro';
+              $this->db->schema = 'excelencia';
               $crud = $this->new_crud();
               $crud->set_table('estado_trabajo');
               $crud->set_subject('estado_trabajo');
@@ -866,7 +867,7 @@ class Catalogo extends MY_Controller {
            *
            */
            public function gestion_opciones(){
-               $this->db->schema = 'foro';
+               $this->db->schema = 'excelencia';
                $crud = $this->new_crud();
                $crud->set_table('opcion');
                $crud->set_subject('opcion');
@@ -914,7 +915,7 @@ class Catalogo extends MY_Controller {
             *
             */
             public function gestion_rangos(){
-                $this->db->schema = 'foro';
+                $this->db->schema = 'excelencia';
                 $crud = $this->new_crud();
                 $crud->set_table('rango');
                 $crud->set_subject('rango');
@@ -960,7 +961,7 @@ class Catalogo extends MY_Controller {
              *
              */
              public function gestion_seccion(){
-                 $this->db->schema = 'foro';
+                 $this->db->schema = 'excelencia';
                  $crud = $this->new_crud();
                  $crud->set_table('seccion');
                  $crud->set_subject('seccion');
@@ -1008,7 +1009,7 @@ class Catalogo extends MY_Controller {
               *
               */
               public function gestion_tipo_metodologia(){
-                  $this->db->schema = 'foro';
+                  $this->db->schema = 'excelencia';
                   $crud = $this->new_crud();
                   $crud->set_table('tipo_metodologia');
                   $crud->set_subject('tipo_metodologia');
