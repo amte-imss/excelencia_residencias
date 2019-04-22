@@ -13,9 +13,11 @@ class Registro_excelencia_model extends CI_Model {
         $this->db->flush_cache();
         $this->db->reset_query();
 
-        $this->db->select(array('s.*', "u.id_usuario", "u.activo", "u.email", "h.curp", "h.rfc", "h.nombre", "h.apellido_paterno", "h.apellido_materno", "h.clave_delegacional"));
+        $this->db->select(array('s.*', "u.id_usuario", "u.activo", "u.email", "h.curp", "h.rfc", "h.nombre", 
+            "h.apellido_paterno", "h.apellido_materno", "h.clave_delegacional"));
         $this->db->where(array(
             's.matricula' => $id_informacion_usuario,
+            'hs.actual' => true,
                 //'s.estado' => '1'
         ));
         $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud = s.id_solicitud');
@@ -26,7 +28,7 @@ class Registro_excelencia_model extends CI_Model {
         /* $this->db->join('foro.convocatoria c', 'ti.id_convocatoria = c.id_convocatoria');
           $this->db->order_by('ti.folio', 'desc'); */
         $res = $this->db->get('excelencia.solicitud s');
-        // $this->bd->last_query();
+//         pr($this->db->last_query());
         $this->db->flush_cache();
         $this->db->reset_query();
 

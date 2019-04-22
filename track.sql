@@ -60,6 +60,14 @@ CREATE TABLE excelencia.convocatoria (
 insert into excelencia.convocatoria values(1, 'Excelencia 2019', 2019, true, true, true);
 
 insert into idiomas.traduccion values('msg_convocatoria_deshabilitada', 'lbl', 'mensajes', '{"es":"El acceso no esta disponible","en":"El acceso no esta disponible."}');
-	
 
+/*Carga opciones*/	
+insert into  excelencia.opcion (opcion,tipo,activo) values 
+('Constancia valida','VALIDA_CURSO',true),
+('Constancia por corregir','VALIDA_CURSO',true),
+('Constancia no valida','VALIDA_CURSO',true),
+('Documento valido','VALIDA_DOCUMENTOS',true),
+('Documento por corregir','VALIDA_DOCUMENTOS',true),
+('Documento no valido','VALIDA_DOCUMENTOS',true)
+;
 
