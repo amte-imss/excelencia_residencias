@@ -71,6 +71,7 @@ class Revision extends MY_Controller {
         $select = ['id_opcion', 'opcion'];
         $where_opcion = ['tipo' => self::TIPO_OPCION_CURSO_PARTICIPANTE, 'activo' => true];
         $output['opciones_curso'] = $this->registro_excelencia->getConsutasGenerales('excelencia.opcion', $select, $where_opcion);
+        $output['solicitud']['id_solicitud'] = $id_solicitud;
         $cursos_doc = $this->load->view('registro_excelencia/revision_cursos.php', $output, true);
         return $cursos_doc;
     }
@@ -87,7 +88,7 @@ class Revision extends MY_Controller {
         $select = ['id_opcion', 'opcion'];
         $where_opcion = ['tipo' => self::TIPO_OPCION_DOCUMENTOS_PARTICIPANTE, 'activo' => true];
         $output['opciones_curso'] = $this->registro_excelencia->getConsutasGenerales('excelencia.opcion', $select, $where_opcion);
-
+        $output['solicitud']['id_solicitud'] = $id_solicitud;
         $documentos_doc = $this->load->view('registro_excelencia/revision_documentos.php', $output, true);
         return $documentos_doc;
     }
@@ -129,29 +130,29 @@ class Revision extends MY_Controller {
         }
     }
 
-    public function get_cursos_participacion($solicitud) {
-        $result = '';
-        if (!is_null($solicitud) && is_numeric($solicitud)) {
-            $where = ['c.id_solicitud' => $solicitud];
-            $solicitud_excelencia = $this->registro_excelencia->curso_participantes($where);
-            $output['categoria_docente'] = $this->registro_excelencia->categoria_docente();
-            if (!empty($solicitud_excelencia)) {
-//                pr($solicitud_excelencia );
-                /* foreach ($solicitud_excelencia as $value) {
-                  $output['curso'] = $value;
-
-                  } */
-                $idioma = $this->obtener_idioma();
-                $lan_txt = $this->obtener_grupos_texto(array('registro_excelencia', 'template_general', 'registro_usuario'), $idioma);
-                $output['language_text'] = $lan_txt;
-                $output['cursos'] = $solicitud_excelencia;
-                $output['solicitud'] = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $solicitud)))[0];
-                $output['estados'] = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $solicitud)))[0];
-                //pr($output);
-                $result = $this->load->view('registro_excelencia/tabla_cursos.php', $output, true);
-            }
+    public function guarda_validacion_cursos() {
+        if ($this->input->post(null, true)) {
+            $idioma = $this->obtener_idioma();
+            $output['language_text'] = $this->obtener_grupos_texto(array('registro_excelencia', 'template_general', 'registro_usuario'), $idioma);
+            $this->language_text = $output['language_text'];
+            $post = $this->input->post(null, true);
+            pr($post);
+        } else {
+            
         }
-        echo $result;
+    }
+
+    public function guarda_validacion_documentos() {
+        if ($this->input->post(null, true)) {
+            $idioma = $this->obtener_idioma();
+            $output['language_text'] = $this->obtener_grupos_texto(array('registro_excelencia', 'template_general', 'registro_usuario'), $idioma);
+            $this->language_text = $output['language_text'];
+
+            $post = $this->input->post(null, true);
+            pr($post);
+        } else {
+            
+        }
     }
 
 }

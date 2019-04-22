@@ -1,5 +1,3 @@
-<?php echo js('trabajo_investigacion/registro.js'); ?>
-<?php echo js('trabajo_investigacion/control_curso.js'); ?>
 <style type="text/css">
     #div_carrera_categoria{
         display: none;
@@ -156,3 +154,5 @@
         </div>
     </div>
 </div><!--col-->
+
+<?php echo js('trabajo_investigacion/control_revision.js'); ?>
