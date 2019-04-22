@@ -805,25 +805,28 @@ class Catalogo extends MY_Controller {
 
          /**
           * Función que hace la gestión del estado
-          * del trabajo de investigación
-          * @author Cheko
-          * @date 28/05/2018
+          * de la solicitud
+          * @author JZDP
+          * @date 22/04/2019
           *
           */
-          public function gestion_estado_trabajo(){
+          public function gestion_estado_solicitud(){
               $this->db->schema = 'excelencia';
               $crud = $this->new_crud();
-              $crud->set_table('estado_trabajo');
-              $crud->set_subject('estado_trabajo');
-              $crud->set_primary_key('clave_estado');
+              $crud->set_table('estado_solicitud');
+              $crud->set_subject('estado_solicitud');
+              $crud->set_primary_key('cve_estado_solicitud');
 
-              $crud->columns("clave_estado","lang", "descripcion", "activo");
-              $crud->fields('clave_estado','lang','investigador','gestor','revisor','descripcion','activo');
-              $crud->change_field_type('lang', 'hidden');
-              $crud->change_field_type('clave_estado', 'hidden');
+              $crud->columns("cve_estado_solicitud","nombre_estado", "activo","config","transicion");
+              //$crud->fields("cve_estado_solicitud","nombre_estado", "descripcion", "activo","config","transicion");
+              //$crud->change_field_type('lang', 'hidden');
+              $crud->change_field_type('cve_estado_solicitud', 'hidden');
               $crud->field_type('activo','true_false');
 
-              if($crud->getState() == 'edit'){
+              $crud->add_fields("cve_estado_solicitud","nombre_estado", "descripcion", "activo","config","transicion");
+              $crud->edit_fields("nombre_estado", "descripcion", "activo","config","transicion");
+
+              /*if($crud->getState() == 'edit'){
                   $crud->change_field_type('lang', 'string');
                   $crud->edit_fields("lang","descripcion", "activo");
                   //falta editar los campos con json
@@ -846,12 +849,12 @@ class Catalogo extends MY_Controller {
                   $crud->callback_read_field('investigador',array($this,'_callback_leer_investigador'));
                   $crud->callback_read_field('gestor',array($this,'_callback_leer_gestor'));
                   $crud->callback_read_field('revisor',array($this,'_callback_leer_revisor'));
-              }
+              }*/
 
 
 
               $data_view['output'] = $crud->render();
-              $data_view['title'] = "Estado del trabajo";
+              $data_view['title'] = "Estado de la solicitud";
 
               $vista = $this->load->view('admin/admin.tpl.php', $data_view, true);
               $this->template->setMainContent($vista);

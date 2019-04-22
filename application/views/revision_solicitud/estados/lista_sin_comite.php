@@ -7,16 +7,19 @@
           if(count($data_sn_comite['result']) > 0)
           {
 ?>
-            <button type="button" data-animation="flipInY" data-animation-delay="100" class="btn btn-theme btn-block submit-button btn-asignar-multiple" data-toggle="modal" data-target="#exampleModal"> <a  style="color:#fff;"><?php echo $opciones_secciones['btn_asignar'];?></a> </button>
-            <br>
+            <!--button type="button" data-animation="flipInY" data-animation-delay="100" class="btn btn-theme btn-block submit-button btn-asignar-multiple" data-toggle="modal" data-target="#exampleModal"> <a  style="color:#fff;"><?php //echo $opciones_secciones['btn_asignar'];?></a> </button>
+            <br-->
             <!-- lista sin comité -->
             <table class="table">
               <thead>
                 <tr>
-                  <th scope="col"></th>
-                  <th scope="col"><?php echo $opciones_secciones['col_folio'];?></th>
-                  <th scope="col"><?php echo $opciones_secciones['col_titulo'];?></th>
-                  <th scope="col"><?php echo $opciones_secciones['col_metodologia'];?></th>
+                  <!--th scope="col"></th-->
+                  <th scope="col"><?php echo $opciones_secciones['col_matricula'];?></th>
+                  <th scope="col"><?php echo $opciones_secciones['col_nombre'];?></th>
+                  <th scope="col"><?php echo $opciones_secciones['col_apellido_paterno'];?></th>
+                  <th scope="col"><?php echo $opciones_secciones['col_apellido_materno'];?></th>
+                  <th scope="col"><?php echo $opciones_secciones['col_delegacion'];?></th>
+                  <th scope="col"><?php echo $opciones_secciones['col_fecha_registro'];?></th>
                   <th scope="col"><?php echo $opciones_secciones['col_opciones'];?></th>
                 </tr>
               </thead>
@@ -24,21 +27,23 @@
               <?php
               foreach ($data_sn_comite['result'] as $row)
               {
-                $folio_enc = encrypt_base64($row['folio']);
+                //$folio_enc = encrypt_base64($row['folio']);
                 ?>
                   <tr>
-                    <td>
+                    <!--td>
                       <div class="form-check">
                         <?php echo $this->form_complete->create_element(array('id'=>'check_'.$folio_enc, 'type'=>'checkbox', 'value'=>$folio_enc, 'attributes'=>array('class'=>'check_asignar'))); ?>
                       </div>
-                    </td>
-                    <td scope="row"><?php echo $row['folio'];?></td>
-                    <td><?php echo $row['titulo'];?></td>
-                    <td><?php echo $row['metodologia'];?></td>
+                    </td -->
+                    <td scope="row"><?php echo $row['matricula'];?> <?php echo $this->form_complete->create_element(array('id'=>'check_'.$row['id_solicitud'], 'type'=>'checkbox', 'value'=>$row['id_solicitud'], 'attributes'=>array('class'=>'check_asignar','style'=>'display:none;'))); ?></td>
+                    <td><?php echo $row['nombre'];?></td>
+                    <td><?php echo $row['apellido_paterno'];?></td>
+                    <td><?php echo $row['apellido_materno'];?></td>
+                    <td><?php echo $row['delegacion'];?></td>
+                    <td><?php echo $row['fecha'];?></td>
                     <td>
-                        <a type="button" data-f="<?php echo $folio_enc; ?>" data-toggle="modal" class="btn-asignar" data-target="#exampleModal" href=""><?php echo $opciones_secciones['btn_asignar'];?> <span class="glyphicon glyphicon-new-window"></a>
-                      <!-- <a type="button" data-f="<?php echo $folio_enc; ?>" data-toggle="modal" data-target="#exampleModal" href=""><?php echo $opciones_secciones['btn_ver'];?> <span class="glyphicon glyphicon-new-window"></a> -->
-                      <a href="<?php echo site_url().'/registro_investigacion/ver/'.$row['folio']; ?>" type="button"><?php echo $opciones_secciones['btn_ver'];?> <span class="glyphicon glyphicon-new-window"/></a>
+                        <a type="button" data-f="<?php echo $row['id_solicitud']; ?>" data-toggle="modal" class="btn-asignar" data-target="#exampleModal" href=""><?php echo $opciones_secciones['btn_asignar'];?> <span class="glyphicon glyphicon-new-window"></a>
+                      <a href="<?php echo site_url().'/registro_investigacion/ver/'.$row['id_solicitud']; ?>" type="button"><?php echo $opciones_secciones['btn_ver'];?> <span class="glyphicon glyphicon-new-window"/></a>
                     </td>
                   </tr>
                   <?php
@@ -82,7 +87,7 @@ $(document).ready(function () {
         data_ajax(site_url + '/gestion_revision/asignar_revisor/', "#asignar_form", "#modal_contenido");
     });
 
-    $(".btn-asignar-multiple").on('click', function (e) {
+    /*$(".btn-asignar-multiple").on('click', function (e) {
         var numberOfChecked = $('.check_asignar:checked').length; ///Validar número de usuarios seleccionadas
         if(numberOfChecked==0){
             e.stopPropagation(); //Evitar envío
@@ -91,7 +96,7 @@ $(document).ready(function () {
             $("#modal_contenido").html('');
             data_ajax(site_url + '/gestion_revision/asignar_revisor/', "#asignar_form", "#modal_contenido");
         }
-    });
+    });*/
 });
   $("#comite").addClass("active");
   $("#atencion").removeClass();

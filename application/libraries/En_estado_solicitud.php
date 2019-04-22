@@ -12,6 +12,7 @@ class En_estado_solicitud {
             REGISTRO = 'REGISTRO',
             SIN_COMITE = 'SIN_COMITE',
             EN_REVISION = 'EN_REVISION',
-            REVISADOS = 'REVISADOS'
+            REVISADOS = 'REVISADOS',
+            CANDIDATOS = 'CANDIDATOS'
     ;
 }

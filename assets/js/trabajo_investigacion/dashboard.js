@@ -89,13 +89,14 @@ function registros() {
                                 console.log(filter);
 
                                 return (!filter.matricula || (registro.matricula !== null && registro.matricula.toLowerCase().indexOf(filter.matricula.toString().toLowerCase()) > -1))
-                                        && (!filter.nombre || (registro.nombre !== null && registro.nombre.toLowerCase().indexOf(filter.nombre.toString().toLowerCase()) > -1))
+                                        && (!filter.nombre_ui || (registro.nombre_ui !== null && registro.nombre_ui.toLowerCase().indexOf(filter.nombre_ui.toString().toLowerCase()) > -1))
                                         && (!filter.apellido_paterno || (registro.apellido_paterno !== null && registro.apellido_paterno.toLowerCase().indexOf(filter.apellido_paterno.toString().toLowerCase()) > -1))
                                         && (!filter.apellido_materno || (registro.apellido_materno !== null && registro.apellido_materno.toLowerCase().indexOf(filter.apellido_materno.toString().toLowerCase()) > -1))
                                         && (!filter.unidad || (registro.unidad !== null && registro.unidad.toLowerCase().indexOf(filter.unidad.toString().toLowerCase()) > -1))
                                         && (!filter.es_umae || (registro.es_umae !== null && registro.es_umae.toString().indexOf(filter.es_umae.toString()) > -1))
                                         && (!filter.delegacion || (registro.delegacion !== null && registro.delegacion.toLowerCase().indexOf(filter.delegacion.toString().toLowerCase()) > -1))
                                         && (!filter.fecha_format || (registro.fecha_format !== null && registro.fecha_format.toString().indexOf(filter.fecha_format.toString()) > -1))
+                                        && (!filter.email || (registro.email !== null && registro.email.toLowerCase().indexOf(filter.email.toString().toLowerCase()) > -1))
                                         ;
                                         return true;
                             });
@@ -111,13 +112,14 @@ function registros() {
         },
         fields: [
             {name: "matricula", title: name_fields.matricula, type: "text", inserting: false, editing: false},
-            {name: "nombre", title: name_fields.nombre, type: "text", inserting: false, editing: false},
+            {name: "nombre_ui", title: name_fields.nombre_ui, type: "text", inserting: false, editing: false},
             {name: "apellido_paterno", title: name_fields.apellido_paterno, type: "text", inserting: false, editing: false},
             {name: "apellido_materno", title: name_fields.apellido_materno, type: "text", inserting: false, editing: false},
             {name: "unidad", title: name_fields.unidad, type: "text", inserting: false, editing: false},
             {name: "es_umae", title: name_fields.es_umae, type: "text", inserting: false, editing: false},
             {name: "delegacion", title: name_fields.delegacion, type: "text", inserting: false, editing: false},
             {name: "fecha_format", title: name_fields.fecha_format, type: "text", inserting: false, editing: false},
+            {name: "email", title: name_fields.email, type: "text", inserting: false, editing: false},
             {type: "control", editButton: false, deleteButton: false, width: 40,
                 searchModeButtonTooltip: language_text.jsgrid_elementos.cambio_busqueda, // tooltip of switching filtering/inserting button in inserting mode
                // editButtonTooltip: language_text.jsgrid_elementos.editar, // tooltip of edit item button
@@ -138,13 +140,14 @@ function registros() {
 function obtener_cabeceras() {
     var arr_header = {
         matricula: 'Matrícula', 
-        nombre: 'Nombre',
+        nombre_ui: 'Nombre',
         apellido_paterno: 'Apellido Paterno',
         apellido_materno: 'Apellido Materno',
         unidad: 'Unidad',
         es_umae: 'Es UMAE',
         delegacion: 'Delegación',
         fecha_format:'Fecha de registro',
+        email: 'Correo electrónico',
         control: 'Detalle'
     }
 

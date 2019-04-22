@@ -76,7 +76,7 @@ update excelencia.estado_solicitud set transicion='{"EN_REVISION":""}' WHERE cve
 
 insert into excelencia.estado_solicitud values('EN_REVISION','En revision',null,true,'{"btn_asignar_revisor":"true"}','{"REVISADO":"","CORRECCION":""}');
 insert into excelencia.estado_solicitud values('REVISADO','Revisado',null, true,null,null);
-insert into excelencia.estado_solicitud values('CORRECCION','En correcci�n',null, true,null,'{"SIN_COMITE":""}');
+insert into excelencia.estado_solicitud values('CORRECCION','En correcci�n',null, true,null,'{"SIN_COMITE":""}');
 
 
 /* Modificaciones para actualizar la tabla convocatoria 20190420 */
@@ -84,3 +84,15 @@ alter table excelencia.convocatoria add column acceso boolean not null default t
 alter table excelencia.solicitud add column id_convocatoria integer;
 
 update excelencia.solicitud set id_convocatoria=1;
+
+
+
+/* Modificaciones para actualizar listados 20190422 */
+insert into idiomas.traduccion values('col_matricula','lbl','sin_comite','{"es":"Matrícula","en":"Matrícula"}');
+insert into idiomas.traduccion values('col_nombre','lbl','sin_comite','{"es":"Nombre","en":"Nombre"}');
+insert into idiomas.traduccion values('col_apellido_paterno','lbl','sin_comite','{"es":"Apellido paterno","en":"Apellido paterno"}');
+insert into idiomas.traduccion values('col_apellido_materno','lbl','sin_comite','{"es":"Apellido materno","en":"Apellido materno"}');
+insert into idiomas.traduccion values('col_delegacion','lbl','sin_comite','{"es":"Delegación","en":"Delegación"}');
+insert into idiomas.traduccion values('col_fecha_registro','lbl','sin_comite','{"es":"Fecha de registro","en":"Fecha de registro"}');
+
+insert into idiomas.traduccion values('tab_ca','tab','tabs_gestor','{"es":"Candidatos","en":"Candidatos"}');

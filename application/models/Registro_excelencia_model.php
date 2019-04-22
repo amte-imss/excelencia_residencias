@@ -41,7 +41,7 @@ class Registro_excelencia_model extends CI_Model {
             if (isset($param['select'])) {
                 $this->db->select($param['select']);
             } else {
-                $this->db->select(array('s.*','u.email','i.*', 'h.*', 'hs.cve_estado_solicitud', 'hs.fecha as fecha_hs', 'del.nombre as delegacion', 'dep.nombre as departamento', 'unidad.nombre as unidad','unidad.es_umae', "to_char(s.fecha, 'yyyy-dd-mm hh:MI:ss') as fecha_format", "conv.*"));
+                $this->db->select(array('s.*','u.email','i.*', 'h.*', 'hs.cve_estado_solicitud', 'hs.fecha as fecha_hs', 'del.nombre as delegacion', 'dep.nombre as departamento', 'unidad.nombre as unidad','unidad.es_umae', "to_char(s.fecha, 'yyyy-dd-mm hh:MI:ss') as fecha_format", "conv.*", "i.nombre as nombre_ui"));
             }
             $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and actual=true', 'left', false);
             $this->db->join('excelencia.convocatoria conv', 'conv.id_convocatoria=s.id_convocatoria and conv.activo=true', 'left', false);

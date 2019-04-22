@@ -51,6 +51,12 @@ class Gestion_revision extends General_revision {
                 $datos['language_text'] =  $this->language_text['evaluado'];
                 $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_revisados.php', $datos, true);
                 break;
+            case strtolower(En_estado_solicitud::CANDIDATOS):
+                $datos['data_revisados'] = $this->candidatos();
+                //pr($output);
+                $datos['language_text'] =  $this->language_text['candidatos'];
+                $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_candidatos.php', $datos, true);
+                break;
             /*case Gestion_revision::ACEPTADOS:
                 $datos['data_aceptados'] = $this->aceptados();
                 $datos['opciones_secciones'] = $this->obtener_grupos_texto('aceptado', $this->obtener_idioma())['aceptado'];
@@ -77,13 +83,14 @@ class Gestion_revision extends General_revision {
     private function sn_comite() {
       $lenguaje = obtener_lenguaje_actual();
       $respuesta_model = $this->gestion_revision->get_sn_comite();
+      //pr($respuesta_model);
       $result = array('success'=>$respuesta_model['success'],'msg'=>$respuesta_model['msg'],'result'=>[]);
       foreach ($respuesta_model['result'] as $row) {
-        $result['result'][$row['folio']]['folio'] = $row['folio'];
-        $result['result'][$row['folio']]['titulo'] = $row['titulo'];
+        $result['result'][$row['id_solicitud']] = $row;
+        /*$result['result'][$row['folio']]['titulo'] = $row['titulo'];
         $metodologia = json_decode($row['metodologia'],true);
-        $result['result'][$row['folio']]['metodologia'] = $metodologia[$lenguaje];
-      }
+        $result['result'][$row['folio']]['metodologia'] = $metodologia[$lenguaje];*/
+      } //pr($result);
       return $result;
     }
 
@@ -241,10 +248,13 @@ class Gestion_revision extends General_revision {
         if($this->input->post()){ //Se valida que se envien datos
           $folios = $this->input->post(null, true); //Obtener valores enviados por usuario y limpiarlos
           $datos['folios_enc'] = $folios; //Enviar datos a vista
-          $datos['folios'] = array_map("decrypt_base64", $folios); //Desencriptar identificadores de trabajos
+          //s$datos['folios'] = array_map("decrypt_base64", $folios); //Desencriptar identificadores de trabajos
+          $this->load->model('Registro_excelencia_model', 'registro_excelencia'); 
+          $datos['solicitud'] = $this->registro_excelencia->get_solicitud(array('where' => "s.id_solicitud IN (".implode(",",$folios).")"));
+          //pr($datos);
           $datos['revisores'] = $this->gestion_revision->get_revisores()['result']; //Obtener listado de revisores
           
-          $this->load->view('revision_trabajo_investigacion/asignar_revisor.php', $datos);
+          $this->load->view('revision_solicitud/asignar_revisor.php', $datos);
         }
       }
     }
@@ -294,7 +304,7 @@ class Gestion_revision extends General_revision {
           //pr($this->input->post());
           $id = $this->input->post(null, true);
           $datos['usuarios'] = array_map("decrypt_base64", $id['usuarios']); ///Obtener identificadores de usuarios
-          $datos['folios'] = array_map("decrypt_base64", explode(',', $id['folios'])); //Obtener identificadores de folios
+          $datos['folios'] = explode(',', $id['folios']); //Obtener identificadores de folios
           $datos['resultado'] = $this->gestion_revision->insert_asignar_revisor($datos);
           //print_r($id);
           //pr($datos);
