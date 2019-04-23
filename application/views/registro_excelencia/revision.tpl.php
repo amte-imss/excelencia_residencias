@@ -124,10 +124,6 @@
                             </div>
                             <br><br>
                         </div>
-                        <div class="col-sm-6">
-                            <div  >
-                            </div>
-                            <br><br>
                         </div>
                         <?php if (isset($cursos_participacion)) { ?>
                             <div id="revision_cursos" class="col-sm-12 col-lg-12 col-md-12">
@@ -142,10 +138,12 @@
                         <?php } ?>
 
 
-
-                        <div class="text-center"> 
-                            <button class="btn btn-theme animated flipInY visible" id="btn_envio_general" name="btn_envio_general" type="button">Guardar solicitud</button>
+                        
+                        <?php if (isset($estado_solicitud['config']['btn_finalizar_revision']) && $estado_solicitud['config']['btn_finalizar_revision'] == 'true') { ?>
+                        <div class="col-sm-12 text-center"> 
+                            <button class="btn btn-theme animated flipInY visible" id="btn_envio_general" name="btn_finalizar_revision" type="button">Finalzar revisión</button>
                         </div>
+                        <?php } ?>
 
                     </div>
                     <hr>

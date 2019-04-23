@@ -96,3 +96,13 @@ insert into idiomas.traduccion values('col_delegacion','lbl','sin_comite','{"es"
 insert into idiomas.traduccion values('col_fecha_registro','lbl','sin_comite','{"es":"Fecha de registro","en":"Fecha de registro"}');
 
 insert into idiomas.traduccion values('tab_ca','tab','tabs_gestor','{"es":"Candidatos","en":"Candidatos"}');
+
+/*Botones de validacion para la revision LEAS 22/04/2019*/
+update excelencia.estado_solicitud set 
+config='{"btn_asignar_revisor":"true","btn_validar_cursos":"true","btn_validar_documentos":"true","btn_finalizar_revision":"true"}' 
+where cve_estado_solicitud = 'EN_REVISION';
+;
+update excelencia.estado_solicitud set 
+config='{"btn_agregar_curso":"false","btn_editar_curso":"true","btn_envio_datos":"true","btn_envio":"true","btn_elimina_curso":"false","modificar_archivos":"true" }', 
+transicion='{"SIN_COMITE":""}' 
+where cve_estado_solicitud in('CORRECCION');
