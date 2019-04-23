@@ -47,15 +47,15 @@ class Gestion_revision extends General_revision {
                 break;
             case strtolower(En_estado_solicitud::REVISADOS):
                 $datos['data_revisados'] = $this->revisados();
-                //pr($output);
-                $datos['language_text'] =  $this->language_text['evaluado'];
+                $datos['opciones_secciones'] = $this->obtener_grupos_texto('revisados', $this->obtener_idioma())['revisados'];
                 $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_revisados.php', $datos, true);
                 break;
             case strtolower(En_estado_solicitud::CANDIDATOS):
                 $datos['data_revisados'] = $this->candidatos();
-                //pr($output);
-                $datos['language_text'] =  $this->language_text['candidatos'];
-                $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_candidatos.php', $datos, true);
+                $conf = $this->gestion_revision->get_configuracion(array('where'=>"llave='cupo'"));
+                $datos['configuracion'] = (isset($conf['result'][0])) ? json_decode($conf['result'][0]['valor'], true) : null;
+                $datos['opciones_secciones'] = $this->obtener_grupos_texto('candidatos', $this->obtener_idioma())['candidatos'];
+                $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_candidatos.php', $datos, true); //pr($datos);
                 break;
             /*case Gestion_revision::ACEPTADOS:
                 $datos['data_aceptados'] = $this->aceptados();

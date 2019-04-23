@@ -208,9 +208,11 @@ class Gestion_revision_model extends MY_Model {
             $this->db->where('actual', true);
             $this->db->where('rn.activo', true);*/
             $this->db->select(array('s.id_solicitud', 's.matricula', 'i.nombre', 'i.apellido_paterno', 'i.apellido_materno', 'del.nombre as delegacion', 'to_char(s.fecha, \'DD/MM/YYYY HH:MI:SS\') as fecha','(select count(*) from excelencia.revision rev where rev.id_solicitud=s.id_solicitud and fecha_revision is not null) as total',
-                "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario iu join excelencia.revision rev on rev.id_usuario_revision=iu.id_usuario WHERE rev.id_solicitud=s.id_solicitud and estatus=true) revisor"));
+                "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario iu join excelencia.revision rev on rev.id_usuario_revision=iu.id_usuario WHERE rev.id_solicitud=s.id_solicitud and estatus=true) revisor",
+                'eva.id_evaluacion', 'eva.puntaje_carrera_docente', 'eva.puntaje_pnpc', 'eva.puntaje_sede_academica'));
             $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and hs.actual=true', 'left', false);
             $this->db->join('sistema.informacion_usuario i', 'i.matricula=s.matricula', 'left');
+            $this->db->join('excelencia.evaluacion eva', 'eva.matricula = i.matricula', 'left');
             $this->db->join('excelencia.convocatoria cc', 'cc.id_convocatoria=s.id_convocatoria and cc.activo=true', 'left', false);
             $this->db->join('catalogo.delegaciones del', 'del.clave_delegacional=i.clave_delegacional', 'left');
             $this->db->where('hs.cve_estado_solicitud', 'REVISADO');
@@ -354,6 +356,38 @@ class Gestion_revision_model extends MY_Model {
             $resultado['msg'] = 'No existen solicitudes disponibles para la asignación, verifique el estado de las mismas.';
         }
         return $resultado;
+    }
+
+    public function get_configuracion($param = []) {
+        try {
+            $estado = array('success' => false, 'msg' => '', 'result' => []);
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            if (array_key_exists('select', $param)) {
+                $this->db->select($param['select']);
+            }
+            if (array_key_exists('where', $param)) {
+                $this->db->where($param['where']);
+            }
+            if (array_key_exists('order', $param)) {
+                $this->db->order_by($param['order']['field'], $param['order']['type']);
+            }
+
+            $result = $this->db->get('excelencia.configuracion');
+            //pr($this->db->last_query());
+            $salida = $result->result_array();
+            //pr($salida);
+            $result->free_result();
+            $this->db->flush_cache();
+            $this->db->reset_query();
+            $estado['success'] = true;
+            $estado['msg'] = "Se obtuvo el reporte con exito";
+            $estado['result'] = $salida;
+        } catch (Exception $ex) {
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        }
+        return $estado;
     }
 
     

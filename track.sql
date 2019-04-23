@@ -127,3 +127,45 @@ insert into idiomas.traduccion values('col_delegacion','lbl','candidatos','{"es"
 insert into idiomas.traduccion values('col_fecha_registro','lbl','candidatos','{"es":"Fecha de registro","en":"Fecha de registro"}');
 insert into idiomas.traduccion values('col_no_revisiones','lbl','candidatos','{"es":"Número de revisiones","en":"Número de revisiones"}');
 insert into idiomas.traduccion values('col_revisor','lbl','candidatos','{"es":"Revisor","en":"Revisor"}');
+insert into idiomas.traduccion values('col_opciones','lbl','candidatos','{"es":"Opciones","en":"Opciones"}');
+insert into idiomas.traduccion values('btn_ver','lbl','candidatos','{"es":"Ver","en":"Ver"}');
+
+insert into idiomas.traduccion values('lbl_nivel_1','lbl','candidatos','{"es":"Cupo nivel 1","en":"Cupo nivel 1"}');
+insert into idiomas.traduccion values('lbl_nivel_2','lbl','candidatos','{"es":"Cupo nivel 2","en":"Cupo nivel 2"}');
+insert into idiomas.traduccion values('lbl_nivel_3','lbl','candidatos','{"es":"Cupo nivel 3","en":"Cupo nivel 3"}');
+insert into idiomas.traduccion values('col_nivel','lbl','candidatos','{"es":"Niveles","en":"Niveles"}');
+
+insert into idiomas.traduccion values('col_pun_pnpv','lbl','candidatos','{"es":"Puntaje PNPC","en":"Puntaje PNPC"}');
+insert into idiomas.traduccion values('col_pun_sede','lbl','candidatos','{"es":"Puntaje sede académica","en":"Puntaje sede académica"}');
+insert into idiomas.traduccion values('col_pun_carrera','lbl','candidatos','{"es":"Puntaje carrera docente","en":"Puntaje carrera docente"}');
+insert into idiomas.traduccion values('col_pun_permanencia','lbl','candidatos','{"es":"Puntaje permanencia docente","en":"Puntaje permanencia docente"}');
+insert into idiomas.traduccion values('col_pun_excelencia','lbl','candidatos','{"es":"Puntaje excelencia docente","en":"Puntaje excelencia docente"}');
+
+insert into idiomas.traduccion values('col_matricula','lbl','revisados','{"es":"Matrícula","en":"Matrícula"}');
+insert into idiomas.traduccion values('col_nombre','lbl','revisados','{"es":"Nombre","en":"Nombre"}');
+insert into idiomas.traduccion values('col_apellido_paterno','lbl','revisados','{"es":"Apellido paterno","en":"Apellido paterno"}');
+insert into idiomas.traduccion values('col_apellido_materno','lbl','revisados','{"es":"Apellido materno","en":"Apellido materno"}');
+insert into idiomas.traduccion values('col_delegacion','lbl','revisados','{"es":"Delegación","en":"Delegación"}');
+insert into idiomas.traduccion values('col_fecha_registro','lbl','revisados','{"es":"Fecha de registro","en":"Fecha de registro"}');
+insert into idiomas.traduccion values('col_no_revisiones','lbl','revisados','{"es":"Número de revisiones","en":"Número de revisiones"}');
+insert into idiomas.traduccion values('col_revisor','lbl','revisados','{"es":"Revisor","en":"Revisor"}');
+insert into idiomas.traduccion values('col_opciones','lbl','revisados','{"es":"Opciones","en":"Opciones"}');
+insert into idiomas.traduccion values('btn_ver','lbl','revisados','{"es":"Ver","en":"Ver"}');
+
+CREATE TABLE excelencia.evaluacion (
+	id_evaluacion serial,
+	matricula varchar(15) NOT NULL,
+	id_solicitud int4 NOT NULL,
+	puntaje_pnpc numeric(5,2) NULL,
+	puntaje_sede_academica numeric(5,2) NULL,
+	puntaje_carrera_docente numeric(5,2) NULL,
+	CONSTRAINT evaluacion_pkey PRIMARY KEY (id_evaluacion)
+);
+
+CREATE TABLE foro.configuracion (
+	llave varchar(50) NOT NULL,
+	valor json NOT NULL,
+	CONSTRAINT configuracion_pkey PRIMARY KEY (llave)
+);
+
+insert into excelencia.configuracion VALUES('cupo','{ "nivel_1" : 10, "nivel_2" : 10, "nivel_3": 10}');

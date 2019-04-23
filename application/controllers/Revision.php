@@ -71,9 +71,12 @@ class Revision extends MY_Controller {
 
     public function solicitud_revision() {
         $this->load->model('Revision_model', 'revision');
+        $output['mensajes'] = $this->obtener_grupos_texto('mensajes', $this->obtener_idioma())['mensajes'];
+        $output['opciones_secciones'] = $this->obtener_grupos_texto('en_revision', $this->obtener_idioma())['en_revision'];
         $output['language_text'] = $this->language_text['en_revision'];
-        $output['data_revisar'] = $this->revision->get_listado_revisores();
-        $main_content = $this->load->view('revision_trabajo_investigacion/listas_revisor.php', $output, true);
+        $output['data_en_revision'] = $this->revision->get_listado_solicitudes_por_revisor();
+        $res['main_content'] = $this->load->view('revision_solicitud/estados/lista_revisor.php', $output, true);
+        $main_content = $this->load->view('revision_solicitud/listas_revisor.php', $res, true);
         $this->template->setMainContent($main_content);
         $this->template->getTemplate();
     }

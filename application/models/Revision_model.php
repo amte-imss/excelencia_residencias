@@ -68,6 +68,37 @@ class Revision_model extends MY_Model {
         return $estado;
     }
 
+    public function get_listado_solicitudes_por_revisor(){
+        try {
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+            $this->db->flush_cache();
+            $this->db->reset_query();
+            $this->db->select(array('s.id_solicitud', 's.matricula', 'i.nombre', 'i.apellido_paterno', 'i.apellido_materno', 'del.nombre as delegacion', 'to_char(s.fecha, \'DD/MM/YYYY HH:MI:SS\') as fecha','(select count(*) from excelencia.revision rev where rev.id_solicitud=s.id_solicitud and fecha_revision is not null) as total',
+                "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario iu join excelencia.revision rev on rev.id_usuario_revision=iu.id_usuario WHERE rev.id_solicitud=s.id_solicitud and estatus=true) revisor"));
+            $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and hs.actual=true', 'left', false);
+            $this->db->join('sistema.informacion_usuario i', 'i.matricula=s.matricula', 'left');
+            $this->db->join('excelencia.convocatoria cc', 'cc.id_convocatoria=s.id_convocatoria and cc.activo=true', 'left', false);
+            $this->db->join('catalogo.delegaciones del', 'del.clave_delegacional=i.clave_delegacional', 'left');
+            $this->db->where('hs.cve_estado_solicitud', 'EN_REVISION');
+            $this->db->where("s.id_solicitud in (SELECT id_solicitud FROM excelencia.revision rev WHERE rev.id_usuario_revision = ".$this->session->userdata('die_sipimss')['usuario']['id_usuario']." and estatus=true)");
+            //$this->db->where("r.id_usuario", $this->session->userdata('die_sipimss')['usuario']['id_usuario']);
+            $result = $this->db->get('excelencia.solicitud s'); //pr($this->db->last_query());
+            //pr($result);
+            $salida = $result->result_array();
+            $result->free_result();
+//            pr($this->db->last_query());
+//            pr($this->db->last_query());
+            $this->db->flush_cache();
+            $this->db->reset_query();
+            $estado['success'] = true;
+            $estado['msg'] = "Se obtuvo el reporte con exito";
+            $estado['result'] = $salida;
+        } catch (Exception $ex) {
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        }
+        return $estado;
+    }
+
     /**
      * Devuelve la información de los registros de la tabla catalogos
      * @author
