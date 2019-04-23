@@ -14,7 +14,7 @@ class Gestion_revision extends General_revision {
 
     function __construct() {
         $this->grupo_language_text = ['sin_comite','req_atencion','en_revision',
-        'evaluado','aceptado','rechazado','listado_trabajo','generales','evaluacion', 'en_revision','mensajes','detalle_revision','detalle_trabajo']; //Grupo de idiomas para el controlador actual
+        'evaluado','aceptado','rechazado','listado_trabajo','generales','evaluacion', 'en_revision','candidatos','mensajes','detalle_revision','detalle_trabajo']; //Grupo de idiomas para el controlador actual
         parent::__construct();
         $this->load->library('form_complete','security');
         $this->load->model('Gestion_revision_model','gestion_revision');
@@ -117,31 +117,52 @@ class Gestion_revision extends General_revision {
       $respuesta_model = $this->gestion_revision->get_en_revision();
       $result = array('success'=>$respuesta_model['success'],'msg'=>$respuesta_model['msg'],'result'=>[]);
       foreach ($respuesta_model['result'] as $row) {
-        $result['result'][$row['folio']]['folio'] = $row['folio'];
+        $result['result'][$row['id_solicitud']] = $row;
+        //$result['result'][$row['id_solicitud']]['revisores'] = $row['revisor'];
+        /*$result['result'][$row['folio']]['folio'] = $row['folio'];
         $result['result'][$row['folio']]['titulo'] = $row['titulo'];
         $result['result'][$row['folio']]['clave_estado'] = $row['clave_estado'];
         $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['revisor'] = $row['revisor'];
         $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['clave_estado'] = ($row['revisado']==true) ? 'Revisado' : 'Sin revisar';
         $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['fecha_limite_revision'] = $row['fecha_limite_revision'];
         $metodologia = json_decode($row['metodologia'],true);
-        $result['result'][$row['folio']]['metodologia'] = $metodologia[$lenguaje];
+        $result['result'][$row['folio']]['metodologia'] = $metodologia[$lenguaje];*/
       }
       return $result;
     }
 
     private function revisados() {
       $lenguaje = obtener_lenguaje_actual();
-      $respuesta_model = $this->gestion_revision->get_en_revision();
+      $respuesta_model = $this->gestion_revision->get_revisados();
       $result = array('success'=>$respuesta_model['success'],'msg'=>$respuesta_model['msg'],'result'=>[]);
       foreach ($respuesta_model['result'] as $row) {
-        $result['result'][$row['folio']]['folio'] = $row['folio'];
+        $result['result'][$row['id_solicitud']] = $row;
+        /*$result['result'][$row['folio']]['folio'] = $row['folio'];
         $result['result'][$row['folio']]['titulo'] = $row['titulo'];
         $result['result'][$row['folio']]['clave_estado'] = $row['clave_estado'];
         $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['revisor'] = $row['revisor'];
         $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['clave_estado'] = ($row['revisado']==true) ? 'Revisado' : 'Sin revisar';
         $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['fecha_limite_revision'] = $row['fecha_limite_revision'];
         $metodologia = json_decode($row['metodologia'],true);
-        $result['result'][$row['folio']]['metodologia'] = $metodologia[$lenguaje];
+        $result['result'][$row['folio']]['metodologia'] = $metodologia[$lenguaje];*/
+      }
+      return $result;
+    }
+
+    private function candidatos() {
+      $lenguaje = obtener_lenguaje_actual();
+      $respuesta_model = $this->gestion_revision->get_candidatos();
+      $result = array('success'=>$respuesta_model['success'],'msg'=>$respuesta_model['msg'],'result'=>[]);
+      foreach ($respuesta_model['result'] as $row) {
+        $result['result'][$row['id_solicitud']] = $row;
+        /*$result['result'][$row['folio']]['folio'] = $row['folio'];
+        $result['result'][$row['folio']]['titulo'] = $row['titulo'];
+        $result['result'][$row['folio']]['clave_estado'] = $row['clave_estado'];
+        $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['revisor'] = $row['revisor'];
+        $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['clave_estado'] = ($row['revisado']==true) ? 'Revisado' : 'Sin revisar';
+        $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['fecha_limite_revision'] = $row['fecha_limite_revision'];
+        $metodologia = json_decode($row['metodologia'],true);
+        $result['result'][$row['folio']]['metodologia'] = $metodologia[$lenguaje];*/
       }
       return $result;
     }

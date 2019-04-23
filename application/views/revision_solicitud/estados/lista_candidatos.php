@@ -76,7 +76,8 @@
   $("#comite").removeClass()
   $("#atencion").removeClass()
   $("#revision").removeClass()
-  $("#revisados").addClass("active")
+  $("#revisados").removeClass()
   $("#aceptados").removeClass()
+  $("#candidatos").addClass("active")
   $("#rechazados").removeClass()
   </script>

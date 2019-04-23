@@ -76,7 +76,7 @@ update excelencia.estado_solicitud set transicion='{"EN_REVISION":""}' WHERE cve
 
 insert into excelencia.estado_solicitud values('EN_REVISION','En revision',null,true,'{"btn_asignar_revisor":"true"}','{"REVISADO":"","CORRECCION":""}');
 insert into excelencia.estado_solicitud values('REVISADO','Revisado',null, true,null,null);
-insert into excelencia.estado_solicitud values('CORRECCION','En correcci�n',null, true,null,'{"SIN_COMITE":""}');
+insert into excelencia.estado_solicitud values('CORRECCION','En corrección',null, true,null,'{"SIN_COMITE":""}');
 
 
 /* Modificaciones para actualizar la tabla convocatoria 20190420 */
@@ -106,3 +106,24 @@ update excelencia.estado_solicitud set
 config='{"btn_agregar_curso":"false","btn_editar_curso":"true","btn_envio_datos":"true","btn_envio":"true","btn_elimina_curso":"false","modificar_archivos":"true" }', 
 transicion='{"SIN_COMITE":""}' 
 where cve_estado_solicitud in('CORRECCION');
+
+/* Modificaciones para actualizar listados 20190423 */
+insert into idiomas.traduccion values('col_matricula','lbl','en_revision','{"es":"Matrícula","en":"Matrícula"}');
+insert into idiomas.traduccion values('col_nombre','lbl','en_revision','{"es":"Nombre","en":"Nombre"}');
+insert into idiomas.traduccion values('col_apellido_paterno','lbl','en_revision','{"es":"Apellido paterno","en":"Apellido paterno"}');
+insert into idiomas.traduccion values('col_apellido_materno','lbl','en_revision','{"es":"Apellido materno","en":"Apellido materno"}');
+insert into idiomas.traduccion values('col_delegacion','lbl','en_revision','{"es":"Delegación","en":"Delegación"}');
+insert into idiomas.traduccion values('col_fecha_registro','lbl','en_revision','{"es":"Fecha de registro","en":"Fecha de registro"}');
+insert into idiomas.traduccion values('col_no_revisiones','lbl','en_revision','{"es":"Número de revisiones","en":"Número de revisiones"}');
+insert into idiomas.traduccion values('col_revisor','lbl','en_revision','{"es":"Revisor","en":"Revisor"}');
+
+insert into idiomas.traduccion values('er_no_datos','lbl','mensajes','{"es":"No existen datos relacionados.","en":"No existen datos relacionados."}');
+
+insert into idiomas.traduccion values('col_matricula','lbl','candidatos','{"es":"Matrícula","en":"Matrícula"}');
+insert into idiomas.traduccion values('col_nombre','lbl','candidatos','{"es":"Nombre","en":"Nombre"}');
+insert into idiomas.traduccion values('col_apellido_paterno','lbl','candidatos','{"es":"Apellido paterno","en":"Apellido paterno"}');
+insert into idiomas.traduccion values('col_apellido_materno','lbl','candidatos','{"es":"Apellido materno","en":"Apellido materno"}');
+insert into idiomas.traduccion values('col_delegacion','lbl','candidatos','{"es":"Delegación","en":"Delegación"}');
+insert into idiomas.traduccion values('col_fecha_registro','lbl','candidatos','{"es":"Fecha de registro","en":"Fecha de registro"}');
+insert into idiomas.traduccion values('col_no_revisiones','lbl','candidatos','{"es":"Número de revisiones","en":"Número de revisiones"}');
+insert into idiomas.traduccion values('col_revisor','lbl','candidatos','{"es":"Revisor","en":"Revisor"}');

@@ -12,7 +12,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div>
-                <div class="pager-panel">
+                <div class="pager-panel col-md-6">
                     <label>Cantidad por pagina:
                         <select id="pager">
                             <option selected>5</option>
@@ -23,6 +23,9 @@
                             <option>200</option>                            
                         </select>
                     </label>
+                </div>
+                <div class="col-md-6 text-right">
+                  <a href="<?php echo site_url().'/usuario/nuevo'; ?>" class="btn btn-info">Nuevo</a>
                 </div>
                 <div class="">
                     <div id="lista_usuarios">

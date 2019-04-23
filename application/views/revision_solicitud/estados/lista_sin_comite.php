@@ -43,7 +43,7 @@
                     <td><?php echo $row['fecha'];?></td>
                     <td>
                         <a type="button" data-f="<?php echo $row['id_solicitud']; ?>" data-toggle="modal" class="btn-asignar" data-target="#exampleModal" href=""><?php echo $opciones_secciones['btn_asignar'];?> <span class="glyphicon glyphicon-new-window"></a>
-                      <a href="<?php echo site_url().'/registro_investigacion/ver/'.$row['id_solicitud']; ?>" type="button"><?php echo $opciones_secciones['btn_ver'];?> <span class="glyphicon glyphicon-new-window"/></a>
+                      <a href="<?php echo site_url().'/revision/solicitud/'.$row['id_solicitud']; ?>" type="button"><?php echo $opciones_secciones['btn_ver'];?> <span class="glyphicon glyphicon-new-window"/></a>
                     </td>
                   </tr>
                   <?php
@@ -70,7 +70,7 @@
   }else
   {
   ?>
-    <h3><?php echo $mensajes['ern_mensaje'];?></h3>
+    <h3><?php echo $mensajes['er_no_datos'];?></h3>
   <?php
   }
 echo form_close();

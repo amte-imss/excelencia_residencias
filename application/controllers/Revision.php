@@ -13,8 +13,8 @@ class Revision extends MY_Controller {
             TIPO_OPCION_DOCUMENTOS_PARTICIPANTE = "VALIDA_DOCUMENTOS";
 
     function __construct() {
-        $this->grupo_language_text = ['registro_excelencia', 'mensajes']; //Grupo de idiomas para el controlador actual
-        parent::__construct();
+        $this->grupo_language_text = ['registro_excelencia', 'mensajes', 'en_revision']; //Grupo de idiomas para el controlador actual
+        parent::__construct();  
         $this->load->library('form_complete');
         $this->load->library('form_validation');
         $this->load->library('seguridad');
@@ -65,6 +65,15 @@ class Revision extends MY_Controller {
         } else {
             $main_content = $this->load->view('registro_excelencia/registro_no_disponible.tpl.php', $output, true);
         }
+        $this->template->setMainContent($main_content);
+        $this->template->getTemplate();
+    }
+
+    public function solicitud_revision() {
+        $this->load->model('Revision_model', 'revision');
+        $output['language_text'] = $this->language_text['en_revision'];
+        $output['data_revisar'] = $this->revision->get_listado_revisores();
+        $main_content = $this->load->view('revision_trabajo_investigacion/listas_revisor.php', $output, true);
         $this->template->setMainContent($main_content);
         $this->template->getTemplate();
     }

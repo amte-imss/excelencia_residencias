@@ -123,7 +123,7 @@ class Usuario_model extends MY_Model {
                     'token' => $token,
                     'username' => $parametros['matricula'],
                     'email' => $parametros['email'],
-                    'clave_idioma' => $parametros['idioma']
+                    'clave_idioma' => 'es'
                 );
                 $data['informacion_usuario'] = array(
                     'email' => $parametros['email'],
@@ -137,11 +137,11 @@ class Usuario_model extends MY_Model {
                     'es_imss' => true,
                     'activo' => true,
                     'status_siap' => $usuario['status'][0],
-                    'clave_pais' => $parametros['pais_origen'],
+                    'clave_pais' => 'MX',
 //                    'pais_institucion' => $parametros['pais_institucion'],
 //                    'institucion' => $parametros['institucion'],
-                    'telefono_personal' => $parametros['telefono_personal'],
-                    'telefono_oficina' => $parametros['telefono_oficina'],
+                    'telefono_personal' => '',
+                    'telefono_oficina' => '',
                     'clave_delegacional' => $parametros['delegacion'],
                 );
                 $data['historico_informacion_usuario'] = array(
