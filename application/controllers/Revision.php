@@ -28,6 +28,47 @@ class Revision extends MY_Controller {
         $this->load->model('Registro_excelencia_model', 'registro_excelencia');
         $this->load->model('Revision_model', 'revision');
     }
+    
+    public function index($id_solicitud = null) {
+        $output = [];
+        if (is_null($id_solicitud) || !is_numeric($id_solicitud)) {
+            $main_content = $this->load->view('registro_excelencia/registro_no_disponible.tpl.php', $output, true);
+            $this->template->setMainContent($main_content);
+            $this->template->getTemplate();
+//            exit();
+        }
+
+        $datos_sesion = $this->get_datos_sesion();
+        $id_informacion_usuario = $datos_sesion['username'];
+        $idioma = $this->obtener_idioma();
+        $output['language_text'] = $this->obtener_grupos_texto(array('registro_excelencia', 'template_general', 'registro_usuario'), $idioma);
+        $this->language_text = $output['language_text'];
+        /*$convocatoria = $this->convocatoria->get_activa(true);
+        $output['convocatoria_activa'] = false;
+        if (!empty($convocatoria) && $convocatoria[0]['registro'] == true) {
+            $output['convocatoria_activa'] = true;
+        }*/
+        $this->load->model('Usuario_model', 'usuario');
+        $output['solicitud_excelencia'] = $this->registro_excelencia->listado_solicitud($id_informacion_usuario);
+        $sol = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $id_solicitud)));
+        if (!empty($sol)) {//Valida que no sea vacio
+            $output['solicitud_excelencia'] = $sol[0];
+            $output['estado_solicitud'] = $this->get_estado_solicitud($output['solicitud_excelencia']['cve_estado_solicitud']);
+            $output['datos_generales'] = $this->usuario->get_usuarios(array('where' => array("usuarios.username" => $output['solicitud_excelencia']['matricula'])))[0];
+            $output['tipo_categoria'] = $this->registro_excelencia->tipo_categoria();
+            $output['cursos_participacion'] = $this->get_view_listado_cursos($output['solicitud_excelencia'], 'detalle');
+            $output['documentos_participacion'] = $this->get_view_listado_documentos($output['solicitud_excelencia'], 'detalle');
+            // echo $output;
+            $this->template->setTitle('Premio a la Excelencia Docente');
+//        $this->get_cursos_participacion($solicitud)
+            //$this->template->setNav($this->load->view('tc_template/menu.tpl.php', null, TRUE));
+            $main_content = $this->load->view('registro_excelencia/revision_detalle.tpl.php', $output, true);
+        } else {
+            $main_content = $this->load->view('registro_excelencia/registro_no_disponible.tpl.php', $output, true);
+        }
+        $this->template->setMainContent($main_content);
+        $this->template->getTemplate();
+    }
 
     public function solicitud($id_solicitud = null) {
         $output = [];
@@ -91,7 +132,7 @@ class Revision extends MY_Controller {
         $this->template->getTemplate();
     }
 
-    private function get_view_listado_cursos($solicitud_excelencia) {
+    private function get_view_listado_cursos($solicitud_excelencia, $tipo=null) {
 //        $where = ['c.id_solicitud' => $output['solicitud']['id_solicitud']];
         $where = ['c.id_solicitud' => $solicitud_excelencia['id_solicitud']];
         $output['cursos_participantes'] = $this->registro_excelencia->curso_participantes($where);
@@ -105,11 +146,15 @@ class Revision extends MY_Controller {
         $output['solicitud']['id_solicitud'] = $solicitud_excelencia['id_solicitud'];
         $output['evaluacion'] = $this->get_revision_curso($solicitud_excelencia['id_solicitud']);
 //        pr($output['evaluacion']);
-        $cursos_doc = $this->load->view('registro_excelencia/revision_cursos.php', $output, true);
+        if(!is_null($tipo)){
+            $cursos_doc = $this->load->view('registro_excelencia/revision_detalle_cursos.php', $output, true);
+        } else {
+            $cursos_doc = $this->load->view('registro_excelencia/revision_cursos.php', $output, true);
+        }
         return $cursos_doc;
     }
 
-    private function get_view_listado_documentos($solicitud_excelencia) {
+    private function get_view_listado_documentos($solicitud_excelencia, $tipo=null) {
         $output['tipo_documentos'] = $this->registro_excelencia->tipo_documentos(array('estado' => '1', 'id_tipo_documento<>' => 9));
 //        $output['estado_solicitud'] = $this->get_estado_solicitud($output['solicitud_excelencia']['cve_estado_solicitud']);
         $documentos = $this->registro_excelencia->get_documento(array('where' => 'id_solicitud=' . $solicitud_excelencia['id_solicitud']));
@@ -125,7 +170,11 @@ class Revision extends MY_Controller {
         $output['solicitud']['id_solicitud'] = $solicitud_excelencia['id_solicitud'];
         $output['evaluacion'] = $this->get_revision_documentos($solicitud_excelencia['id_solicitud']);
 //        pr($output['evaluacion']);
-        $documentos_doc = $this->load->view('registro_excelencia/revision_documentos.php', $output, true);
+        if(!is_null($tipo)){
+            $documentos_doc = $this->load->view('registro_excelencia/revision_detalle_documentos.php', $output, true);
+        } else {
+            $documentos_doc = $this->load->view('registro_excelencia/revision_documentos.php', $output, true);
+        }
         return $documentos_doc;
     }
 
