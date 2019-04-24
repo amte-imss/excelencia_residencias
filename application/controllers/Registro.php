@@ -108,6 +108,10 @@ class Registro extends MY_Controller {
             if (!is_null($id_solicitud)) { //Validamos que exista identificador de solicitud para realizar la búsqueda de información
                 $documentos = $this->registro_excelencia->get_documento(array('where' => 'id_solicitud=' . $id_solicitud));
                 $output['estado_solicitud'] = $this->get_estado_solicitud($output['solicitud_excelencia']['cve_estado_solicitud']);
+                $output['datos_revision'] = $this->get_revision($id_solicitud);
+                if (!empty($output['datos_revision'])) {
+                    $output['observaciones'] = $output['datos_revision']['observaciones'];
+                }
                 foreach ($documentos as $key => $value) {
                     $output['documento'][$value['id_tipo_documento']] = $value;
                 }
@@ -251,8 +255,8 @@ class Registro extends MY_Controller {
                 $datos_sesion = $this->get_datos_sesion();
                 $out['email'] = $datos_sesion['email'];
 //                $out['email'] = 'cenitluis_pumas@hotmail.com';
-                $out['profesor'] = $datos_sesion['nombre'] . ' ' . $datos_sesion['apellido_paterno'] .' ' . $datos_sesion['apellido_materno'];
-                $this->enviar_correo_electronico('correo_excelencia/recepcion.php', $out['email'],$out, 'Registro de excelencia satisfactorio');//Envia e mail
+                $out['profesor'] = $datos_sesion['nombre'] . ' ' . $datos_sesion['apellido_paterno'] . ' ' . $datos_sesion['apellido_materno'];
+                $this->enviar_correo_electronico('correo_excelencia/recepcion.php', $out['email'], $out, 'Registro de excelencia satisfactorio'); //Envia e mail
             }
             echo '<div class="alert alert-success" role="alert">' . $resultado['mensaje'] . '</div><script>alert("' . $resultado['mensaje'] . '"); document.location.href=document.location.href;</script>';
         }
@@ -568,6 +572,18 @@ class Registro extends MY_Controller {
         } else {
             return $this->estados_solicitud;
         }
+    }
+
+    private function get_revision($id_solicitud) {
+        $select = ['id_revision', 'id_solicitud', 'id_usuario_revision', 'observaciones',
+            'estatus', 'fecha_revision', 'fecha_asignacion'
+        ];
+        $where = ["id_solicitud" => $id_solicitud];
+        $archivo_curso = $this->registro_excelencia->getConsutasGenerales('excelencia.revision r', $select, $where);
+        if (!empty($archivo_curso)) {
+            return $archivo_curso[0];
+        }
+        return null;
     }
 
 }

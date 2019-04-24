@@ -494,7 +494,7 @@ class Revision extends MY_Controller {
         $select = ['id_revision', 'id_solicitud', 'id_usuario_revision', 'observaciones',
             'estatus', 'fecha_revision', 'fecha_asignacion'
         ];
-        $where = ["id_solicitud" => $id_solicitud];
+        $where = ["id_solicitud" => $id_solicitud, 'estatus'=>true];
         $archivo_curso = $this->registro_excelencia->getConsutasGenerales('excelencia.revision r', $select, $where);
         if (!empty($archivo_curso)) {
             return $archivo_curso[0];
