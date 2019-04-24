@@ -49,20 +49,29 @@ class Revision extends MY_Controller {
             $output['convocatoria_activa'] = true;
         }
         $this->load->model('Usuario_model', 'usuario');
-        $output['solicitud_excelencia'] = $this->registro_excelencia->listado_solicitud($id_informacion_usuario);
+//        $output['solicitud_excelencia'] = $this->registro_excelencia->listado_solicitud($id_informacion_usuario);
         $sol = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $id_solicitud)));
-        if (!empty($sol)) {//Valida que no sea vacio
+        $rev = $this->revision->get_listado_solicitudes_por_revisor($id_solicitud);
+        if (!empty($rev) && $rev['success'] == 1 && !empty($rev['result'])) {//Valida que no sea vacio
+            $output['revision'] = $rev['result'][0];
             $output['solicitud_excelencia'] = $sol[0];
             $output['estado_solicitud'] = $this->get_estado_solicitud($output['solicitud_excelencia']['cve_estado_solicitud']);
-            $output['datos_generales'] = $this->usuario->get_usuarios(array('where' => array("usuarios.username" => $output['solicitud_excelencia']['matricula'])))[0];
-            $output['tipo_categoria'] = $this->registro_excelencia->tipo_categoria();
-            $output['cursos_participacion'] = $this->get_view_listado_cursos($output['solicitud_excelencia']);
-            $output['documentos_participacion'] = $this->get_view_listado_documentos($output['solicitud_excelencia']);
-            // echo $output;
-            $this->template->setTitle('Premio a la Excelencia Docente');
+            if ($output['solicitud_excelencia']['cve_estado_solicitud'] == En_estado_solicitud::EN_REVISION) {
+                $output['datos_revision'] = $this->get_revision($id_solicitud);
+                $output['datos_generales'] = $this->usuario->get_usuarios(array('where' => array("usuarios.username" => $output['solicitud_excelencia']['matricula'])))[0];
+                $output['tipo_categoria'] = $this->registro_excelencia->tipo_categoria();
+                $output['cursos_participacion'] = $this->get_view_listado_cursos($output['solicitud_excelencia']);
+                $output['documentos_participacion'] = $this->get_view_listado_documentos($output['solicitud_excelencia']);
+                // echo $output;
+                $this->template->setTitle('Premio a la Excelencia Docente');
 //        $this->get_cursos_participacion($solicitud)
-            //$this->template->setNav($this->load->view('tc_template/menu.tpl.php', null, TRUE));
-            $main_content = $this->load->view('registro_excelencia/revision.tpl.php', $output, true);
+                //$this->template->setNav($this->load->view('tc_template/menu.tpl.php', null, TRUE));
+                $main_content = $this->load->view('registro_excelencia/revision.tpl.php', $output, true);
+            } else {
+                $main_content = $this->load->view('registro_excelencia/registro_no_disponible.tpl.php', $output, true);
+                $this->template->setMainContent($main_content);
+                $this->template->getTemplate();
+            }
         } else {
             $main_content = $this->load->view('registro_excelencia/registro_no_disponible.tpl.php', $output, true);
         }
@@ -184,8 +193,8 @@ class Revision extends MY_Controller {
                             'total_anios_curso' => $total_anios_cursos_validos,
                             'total_puntos_anios_cursos' => $total_puntos_cursos_validos
                         ];
-                        if(!empty($post['observaciones'])){
-                            $datos_rev['observaciones'] = $post['observaciones']; 
+                        if (!empty($post['observaciones'])) {
+                            $datos_rev['observaciones'] = $post['observaciones'];
                         }
                         $res_update_rev = $this->actualizar_registro_revision($post['solicitud'], $datos_rev);
                         if ($res_update_rev['tp_msg'] == En_tpmsg::SUCCESS) {
@@ -470,6 +479,9 @@ class Revision extends MY_Controller {
     private function actualizar_registro_revision($id_solicitud, $datos, $es_fin_revision = true) {
         if ($es_fin_revision && !isset($datos['fecha_revision'])) {
             $datos['fecha_revision'] = 'now()';
+        }
+        if ($es_fin_revision && !isset($datos['estatus'])) {
+            unset($datos['estatus']);
         }
         $where = [
             "id_solicitud" => $id_solicitud,

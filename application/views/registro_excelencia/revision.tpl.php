@@ -125,25 +125,28 @@
                             <br><br>
                         </div>
                     </div>
+                    <hr class="col-sm-11" style="border:1px solid;">
                     <?php if (isset($cursos_participacion)) { ?>
                         <div id="revision_cursos" class="col-sm-12 col-lg-12 col-md-12">
                             <?php echo $cursos_participacion; ?>
                         </div>
                     <?php } ?>
 
+                    <hr class="col-sm-11" style="border:1px solid;">
                     <?php if (isset($documentos_participacion)) { ?>
                         <div id="revision_documentos" class="col-sm-12 col-lg-12 col-md-12">
                             <?php echo $documentos_participacion; ?>
                         </div>
                     <?php } ?>
+                    <hr class="col-sm-11" style="border:1px solid;">
                     <?php echo form_open('revision/terminar_revision', array('id' => 'form_finaliza_revision', 'class' => 'form-horizontal')); ?>
                     <input type="hidden" id="solicitud" name="solicitud" value="<?php echo $solicitud_excelencia['id_solicitud']; ?>">
                     <div id="finalizar_msg" class="col-sm-12 form-group">
-                        
+
                     </div>
                     <div class="col-sm-12 form-group text-center">
                         <label  class="col-sm-3 control-label"><?php echo "Observaciones"; ?></label>
-                        <textarea class="form-control rounded-0" id="observaciones" name="observaciones" rows="3"></textarea>
+                        <textarea class="form-control rounded-0" id="observaciones" name="observaciones" rows="3"><?php echo (isset($datos_revision['observaciones']) and ! is_null($no)) ? $datos_revision['observaciones'] : ''; ?></textarea>
                     </div> 
                     <?php echo form_close(); ?>
                     <br>

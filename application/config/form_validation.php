@@ -181,15 +181,15 @@ $config["login"] = array(
       'required' => 'El campo %s es obligatorio, favor de ingresarlo.',
       ), */
     ),
-    array(
-        'field' => 'captcha',
-        'label' => 'Código de verificación',
-        'rules' => 'required|check_captcha',
+//    array(
+//        'field' => 'captcha',
+//        'label' => 'Código de verificación',
+//        'rules' => 'required|check_captcha',
+//    ),
     /* 'errors' => array(
       'required' => 'El campo %s es obligatorio, favor de ingresarlo.',
       'check_captcha' => "El texto no coincide con la imagen, favor de verificarlo."
       ), */ 
-    ),
 );
 
 $config['form_user_update_password'] = array(
@@ -1120,6 +1120,14 @@ $config['form_guarda_curso_participado'] = array(
         'field' => 'curso',
         'label' => '',
         'rules' => 'trim|required' //|callback_valid_pass
+    ),
+);
+
+$config['observaciones_revision'] = array(
+    array(
+        'field' => 'observaciones',
+        'label' => 'Observaciones',
+        'rules' => 'trim|required'
     ),
 );
 

@@ -138,7 +138,7 @@ function finalizar_validacion(element) {
                             $("#btn_finalizar_revision").removeClass('visible').addClass('hidden');
                             $(div_respuesta).html('<div class="alert alert-success" role="alert">' + resp.html + '</div>');
                             setTimeout("$('" + div_respuesta + "').html('')", 6000);
-                            var link = site_url + '/revision/solicitud';
+                            var link = site_url + '/revision/solicitud_revision';
                             setTimeout("location.href ='" + link + "'", 4000);
                         } else if (resp.tp_msg === 'warning') {
                             $(div_respuesta).html('<div class="alert alert-warning" role="alert">' + resp.html + '</div>');

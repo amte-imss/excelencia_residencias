@@ -3,6 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Revision_model extends MY_Model {
+
     const TAB_PERMANENCIA_DOCENTE = 'PERMANENCIA_DOCENTE';
 
     public function __construct() {
@@ -69,7 +70,7 @@ class Revision_model extends MY_Model {
         return $estado;
     }
 
-    public function get_listado_solicitudes_por_revisor() {
+    public function get_listado_solicitudes_por_revisor($id_solicitud = null) {
         try {
             $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
             $this->db->flush_cache();
@@ -81,7 +82,13 @@ class Revision_model extends MY_Model {
             $this->db->join('excelencia.convocatoria cc', 'cc.id_convocatoria=s.id_convocatoria and cc.activo=true', 'left', false);
             $this->db->join('catalogo.delegaciones del', 'del.clave_delegacional=i.clave_delegacional', 'left');
             $this->db->where('hs.cve_estado_solicitud', 'EN_REVISION');
-            $this->db->where("s.id_solicitud in (SELECT id_solicitud FROM excelencia.revision rev WHERE rev.id_usuario_revision = " . $this->session->userdata('die_sipimss')['usuario']['id_usuario'] . " and estatus=true)");
+            if (is_null($id_solicitud)) {
+                $this->db->where("s.id_solicitud in (SELECT id_solicitud FROM excelencia.revision rev WHERE rev.id_solicitud = " . $id_solicitud . " and rev.id_usuario_revision = " . $this->session->userdata('die_sipimss')['usuario']['id_usuario'] . " and estatus=true)");
+
+            } else {
+                $this->db->where("s.id_solicitud in (SELECT id_solicitud FROM excelencia.revision rev WHERE rev.id_usuario_revision = " . $this->session->userdata('die_sipimss')['usuario']['id_usuario'] . " and estatus=true)");
+                
+            }
             //$this->db->where("r.id_usuario", $this->session->userdata('die_sipimss')['usuario']['id_usuario']);
             $result = $this->db->get('excelencia.solicitud s'); //pr($this->db->last_query());
             //pr($result);
