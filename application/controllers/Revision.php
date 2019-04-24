@@ -28,7 +28,7 @@ class Revision extends MY_Controller {
         $this->load->model('Registro_excelencia_model', 'registro_excelencia');
         $this->load->model('Revision_model', 'revision');
     }
-    
+
     public function index($id_solicitud = null) {
         $output = [];
         if (is_null($id_solicitud) || !is_numeric($id_solicitud)) {
@@ -43,11 +43,11 @@ class Revision extends MY_Controller {
         $idioma = $this->obtener_idioma();
         $output['language_text'] = $this->obtener_grupos_texto(array('registro_excelencia', 'template_general', 'registro_usuario'), $idioma);
         $this->language_text = $output['language_text'];
-        /*$convocatoria = $this->convocatoria->get_activa(true);
-        $output['convocatoria_activa'] = false;
-        if (!empty($convocatoria) && $convocatoria[0]['registro'] == true) {
-            $output['convocatoria_activa'] = true;
-        }*/
+        /* $convocatoria = $this->convocatoria->get_activa(true);
+          $output['convocatoria_activa'] = false;
+          if (!empty($convocatoria) && $convocatoria[0]['registro'] == true) {
+          $output['convocatoria_activa'] = true;
+          } */
         $this->load->model('Usuario_model', 'usuario');
         $output['solicitud_excelencia'] = $this->registro_excelencia->listado_solicitud($id_informacion_usuario);
         $sol = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $id_solicitud)));
@@ -132,7 +132,7 @@ class Revision extends MY_Controller {
         $this->template->getTemplate();
     }
 
-    private function get_view_listado_cursos($solicitud_excelencia, $tipo=null) {
+    private function get_view_listado_cursos($solicitud_excelencia, $tipo = null) {
 //        $where = ['c.id_solicitud' => $output['solicitud']['id_solicitud']];
         $where = ['c.id_solicitud' => $solicitud_excelencia['id_solicitud']];
         $output['cursos_participantes'] = $this->registro_excelencia->curso_participantes($where);
@@ -146,7 +146,7 @@ class Revision extends MY_Controller {
         $output['solicitud']['id_solicitud'] = $solicitud_excelencia['id_solicitud'];
         $output['evaluacion'] = $this->get_revision_curso($solicitud_excelencia['id_solicitud']);
 //        pr($output['evaluacion']);
-        if(!is_null($tipo)){
+        if (!is_null($tipo)) {
             $cursos_doc = $this->load->view('registro_excelencia/revision_detalle_cursos.php', $output, true);
         } else {
             $cursos_doc = $this->load->view('registro_excelencia/revision_cursos.php', $output, true);
@@ -154,7 +154,7 @@ class Revision extends MY_Controller {
         return $cursos_doc;
     }
 
-    private function get_view_listado_documentos($solicitud_excelencia, $tipo=null) {
+    private function get_view_listado_documentos($solicitud_excelencia, $tipo = null) {
         $output['tipo_documentos'] = $this->registro_excelencia->tipo_documentos(array('estado' => '1', 'id_tipo_documento<>' => 9));
 //        $output['estado_solicitud'] = $this->get_estado_solicitud($output['solicitud_excelencia']['cve_estado_solicitud']);
         $documentos = $this->registro_excelencia->get_documento(array('where' => 'id_solicitud=' . $solicitud_excelencia['id_solicitud']));
@@ -170,7 +170,7 @@ class Revision extends MY_Controller {
         $output['solicitud']['id_solicitud'] = $solicitud_excelencia['id_solicitud'];
         $output['evaluacion'] = $this->get_revision_documentos($solicitud_excelencia['id_solicitud']);
 //        pr($output['evaluacion']);
-        if(!is_null($tipo)){
+        if (!is_null($tipo)) {
             $documentos_doc = $this->load->view('registro_excelencia/revision_detalle_documentos.php', $output, true);
         } else {
             $documentos_doc = $this->load->view('registro_excelencia/revision_documentos.php', $output, true);
@@ -221,6 +221,10 @@ class Revision extends MY_Controller {
                                 $resultado = $this->registro_excelencia->update_solicitud(array('id_solicitud' => $post['solicitud']), En_estado_solicitud::CORRECCION);
                                 if ($resultado['tp_msg'] == En_tpmsg::SUCCESS) {
                                     $resultado['html'] = 'La información se guardo correctamente';
+                                    /* Envio de correo electronico, para notificar el envío a correccións */
+                                    $out['profesor'] = $sol['nombre_ui'] . ' ' . $sol['apellido_paterno'] . ' ' . $sol['apellido_materno'];
+                                    $this->enviar_correo_electronico('correo_excelencia/correccion.php', $sol['email'], $out, 'Corrección de documentación'); //Envia e mail
+
                                     header('Content-Type: application/json; charset=utf-8;');
                                     echo json_encode($resultado);
                                     exit();

@@ -200,3 +200,12 @@ where cve_estado_solicitud in('EN_REVISION');
 
 alter table excelencia.revision add column total_anios_curso int4 NULL;
 alter table excelencia.revision add column 	total_puntos_anios_cursos numeric(3,2) NULL;
+
+
+/*Permisos duda en ejectar desde aqui, ya que las claves pueden cambiar**/
+insert into sistema.modulos (clave_modulo, nombre,url, activo, modulo_padre_clave, orden, clave_configurador_modulo) values 
+('CAINFO_CURSO',	'{"es":"Carga informacion de curso","en":""}',	'/registro/get_detalle_curso',true,'M2nxOiMxoD',1,'ACCION');
+
+insert into sistema.roles_modulos (clave_modulo, clave_rol, activo) values
+('CAINFO_CURSO','INV',true);
+
