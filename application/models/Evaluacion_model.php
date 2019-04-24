@@ -25,5 +25,6 @@ class Evaluacion_model extends MY_Model {
             $query = $this->db->get("excelencia.evaluacion eval");
 
             return $query->result_array();
-    }    
+    }
+    
 }

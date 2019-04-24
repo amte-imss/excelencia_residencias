@@ -13,6 +13,7 @@ class Evaluacion extends MY_Controller {
         parent::__construct();
         
         $this->load->model('Evaluacion_model', 'em');
+        $this->load->library('cart');
     }
 
     /**
@@ -28,11 +29,11 @@ class Evaluacion extends MY_Controller {
             $crud = $this->new_crud();
             $crud->set_table('evaluacion');
             $crud->set_subject('evaluacion');
-            $crud->unset_add(); //quito el botón addRecord
+            //$crud->unset_add(); //quito el botón addRecord
             $crud->set_primary_key('id_evaluacion');
 
-            $crud->fields("matricula", "puntaje_pnpc", "puntaje_carrera_docente", "puntaje_sa_et", "puntaje_sa_satisfaccion", "puntaje_anios_docente");
-            $crud->columns("matricula", "puntaje_pnpc", "puntaje_carrera_docente", "puntaje_sa_et", "puntaje_sa_satisfaccion", "puntaje_anios_docente");
+            $crud->fields("matricula", "id_solicitud", "puntaje_pnpc", "puntaje_carrera_docente", "puntaje_sa_et", "puntaje_sa_satisfaccion", "puntaje_anios_docente");
+            $crud->columns("matricula",  "id_solicitud", "puntaje_pnpc", "puntaje_carrera_docente", "puntaje_sa_et", "puntaje_sa_satisfaccion", "puntaje_anios_docente");
             
             //$crud->required_fields("matricula");
             
@@ -54,5 +55,7 @@ class Evaluacion extends MY_Controller {
         catch(Exception $e){
             show_error($e->getMessage() . 'No se pudo mostrar la página' . $e->getTraceAsString());
         }
-     }
+    }
+
+
 }
