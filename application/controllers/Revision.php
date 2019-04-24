@@ -222,8 +222,8 @@ class Revision extends MY_Controller {
                                 if ($resultado['tp_msg'] == En_tpmsg::SUCCESS) {
                                     $resultado['html'] = 'La información se guardo correctamente';
                                     /* Envio de correo electronico, para notificar el envío a correccións */
-                                    $out['profesor'] = $sol['nombre_ui'] . ' ' . $sol['apellido_paterno'] . ' ' . $sol['apellido_materno'];
-                                    $this->enviar_correo_electronico('correo_excelencia/correccion.php', $sol['email'], $out, 'Corrección de documentación'); //Envia e mail
+                                    $out['profesor'] = $sol[0]['nombre_ui'] . ' ' . $sol[0]['apellido_paterno'] . ' ' . $sol[0]['apellido_materno'];
+                                    $this->enviar_correo_electronico('correo_excelencia/correccion.php', $sol[0]['email'], $out, 'Corrección de documentación'); //Envia e mail
 
                                     header('Content-Type: application/json; charset=utf-8;');
                                     echo json_encode($resultado);
