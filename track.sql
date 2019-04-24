@@ -209,3 +209,20 @@ insert into sistema.modulos (clave_modulo, nombre,url, activo, modulo_padre_clav
 insert into sistema.roles_modulos (clave_modulo, clave_rol, activo) values
 ('CAINFO_CURSO','INV',true);
 
+insert into idiomas.traduccion values('er_mensaje','lbl','revisados','{"es":"Ver","en":"Ver"}');
+
+insert into sistema.modulos (clave_modulo, nombre,url, activo, modulo_padre_clave, orden, clave_configurador_modulo) values 
+('SAVE_VALCUR',	'{"es":"Carga informacion de curso","en":""}',	'/revision/guarda_validacion_cursos',true,'M2nxOiMxoD',1,'ACCION'),
+('SAVE_VALDOC',	'{"es":"Carga informacion de documentos","en":""}',	'/revision/guarda_validacion_documentos',true,'M2nxOiMxoD',1,'ACCION'),
+('SAVE_FINREV',	'{"es":"Finalizar revisión","en":""}',	'/revision/terminar_revision',true,'M2nxOiMxoD',1,'ACCION')
+;
+
+insert into sistema.roles_modulos (clave_modulo, clave_rol, activo) values
+('CAINFO_CURSO','REVISOR',true),
+('SAVE_VALDOC','REVISOR',true),
+('SAVE_FINREV','REVISOR',true)
+;
+
+insert into idiomas.traduccion values('er_mensaje','lbl','candidatos','{"es":"No existen datos relacionados.","en":"No existen datos relacionados."}');
+insert into idiomas.traduccion values('er_mensaje','lbl','revisados','{"es":"No existen datos relacionados.","en":"No existen datos relacionados."}');
+

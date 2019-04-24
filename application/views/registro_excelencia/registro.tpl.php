@@ -135,10 +135,10 @@
                     </div>
 
                     <!--div class="form-group">
-                            <label for="pnpc" class="col-sm-3 control-label"><?php //echo $language_text['registro_excelencia']['pnpc_tiene'];                  ?>*</label>
+                            <label for="pnpc" class="col-sm-3 control-label"><?php //echo $language_text['registro_excelencia']['pnpc_tiene'];                     ?>*</label>
                             <div class="col-sm-9">
-                                            <input type="radio" name="pnpc" value="1" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='1') echo 'checked';}                 ?>><?php //echo $language_text['template_general']['si_op'];                 ?><br>
-                                            <input type="radio" name="pnpc" value="0" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='0') echo 'checked';}                  ?>><?php //echo $language_text['template_general']['no_op'];                  ?><br>
+                                            <input type="radio" name="pnpc" value="1" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='1') echo 'checked';}                    ?>><?php //echo $language_text['template_general']['si_op'];                    ?><br>
+                                            <input type="radio" name="pnpc" value="0" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='0') echo 'checked';}                     ?>><?php //echo $language_text['template_general']['no_op'];                     ?><br>
                             </div><div style="clear:both;"></div>
                     <?php //echo form_error_format('pnpc'); ?>
                     </div -->
@@ -153,8 +153,10 @@
                 <?php echo form_close(); ?>
 
                 <?php if (isset($observaciones)) { ?>
+                    <br>
                     <div class="col-sm-offset-1 col-sm-10 panel">
-                        <br>
+                        <div class="panel-heading"><h2><?php echo 'Observaciones por parte del revisor'; ?></h2></div>
+                    <!--<label for="curso" class="col-sm-12 control-label"><?php // echo 'Observaciones por parte del revisor'; ?></label>-->
                         <div class="alert alert-info" role="alert">
                             <?php echo $observaciones; ?>
                         </div>
@@ -355,7 +357,7 @@
                     <div class="col-sm-offset-2 col-sm-8" >
                         <center>
                             <button class="btn btn-theme animated flipInY visible" id="btn_envio" name="btn_envio" type="button"><?php echo $language_text['registro_excelencia']['registrar_solicitud']; ?></button>
-                            <!--a href="<?php // echo site_url('registro_investigacion');                ?>" class="btn btn-theme animated flipInY visible"><?php // echo $language_text['template_general']['cancelar'];                ?></a-->
+                            <!--a href="<?php // echo site_url('registro_investigacion');                   ?>" class="btn btn-theme animated flipInY visible"><?php // echo $language_text['template_general']['cancelar'];                   ?></a-->
                         </center>
                     </div>
                 </div><!--row-->
