@@ -133,7 +133,7 @@ class Revision extends MY_Controller {
         if ($this->input->post(null, true)) {
             $post = $this->input->post(null, true);
             $sol = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $post['solicitud'])));
-            if (!empty($sol)) {//Valida que no sea vacio
+            if (!empty($sol) && $sol[0]['cve_estado_solicitud'] == En_estado_solicitud::EN_REVISION) {//Valida que no sea vacio
 //                $output['solicitud_excelencia'] = $sol[0];
                 $res_detalle = $this->get_estado_detalle_validacion($post['solicitud']);
                 $validacion_completa = $this->es_completa_validacion_cursos_documentos($res_detalle);
@@ -282,7 +282,7 @@ class Revision extends MY_Controller {
             $post = $this->input->post(null, true);
 //            pr($post);
             $sol = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $post['id_solicitud'])));
-            if (!empty($sol)) {
+            if (!empty($sol) && $sol[0]['cve_estado_solicitud'] == En_estado_solicitud::EN_REVISION) {
                 $datos_revision = $this->get_revision($post['id_solicitud']);
                 if (is_null($datos_revision)) {//No Existe la revision
                     //Se crea el registro de revision
@@ -379,7 +379,7 @@ class Revision extends MY_Controller {
 //            pr($post);
             $sol = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $post['id_solicitud'])));
 //            exit();
-            if (!empty($sol)) {
+            if (!empty($sol) && $sol[0]['cve_estado_solicitud'] == En_estado_solicitud::EN_REVISION) {
                 $datos_revision = $this->get_revision($post['id_solicitud']);
                 if (is_null($datos_revision)) {//No Existe la revision
                     //Se crea el registro de revision

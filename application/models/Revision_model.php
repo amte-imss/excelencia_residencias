@@ -83,10 +83,10 @@ class Revision_model extends MY_Model {
             $this->db->join('catalogo.delegaciones del', 'del.clave_delegacional=i.clave_delegacional', 'left');
             $this->db->where('hs.cve_estado_solicitud', 'EN_REVISION');
             if (is_null($id_solicitud)) {
-                $this->db->where("s.id_solicitud in (SELECT id_solicitud FROM excelencia.revision rev WHERE rev.id_solicitud = " . $id_solicitud . " and rev.id_usuario_revision = " . $this->session->userdata('die_sipimss')['usuario']['id_usuario'] . " and estatus=true)");
+                $this->db->where("s.id_solicitud in (SELECT id_solicitud FROM excelencia.revision rev WHERE rev.id_usuario_revision = " . $this->session->userdata('die_sipimss')['usuario']['id_usuario'] . " and estatus=true)");
 
             } else {
-                $this->db->where("s.id_solicitud in (SELECT id_solicitud FROM excelencia.revision rev WHERE rev.id_usuario_revision = " . $this->session->userdata('die_sipimss')['usuario']['id_usuario'] . " and estatus=true)");
+                $this->db->where("s.id_solicitud in (SELECT id_solicitud FROM excelencia.revision rev WHERE rev.id_solicitud = " . $id_solicitud . " and rev.id_usuario_revision = " . $this->session->userdata('die_sipimss')['usuario']['id_usuario'] . " and estatus=true)");
                 
             }
             //$this->db->where("r.id_usuario", $this->session->userdata('die_sipimss')['usuario']['id_usuario']);
