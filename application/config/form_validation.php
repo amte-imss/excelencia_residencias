@@ -348,11 +348,11 @@ $config['form_registro_usuario'] = array(
         'label' => 'Confirmación contraseña',
         'rules' => 'trim|required|matches[reg_password]'
     ),
-    array(
+    /*array(
         'field' => 'reg_captcha',
         'label' => 'Captcha',
         'rules' => 'required|check_captcha'
-    )
+    )*/
 );
 $config['form_registro_usuario_internos'] = array(
     array(
@@ -381,11 +381,11 @@ $config['form_registro_usuario_internos'] = array(
         'label' => 'Confirmación contraseña',
         'rules' => 'trim|required|matches[reg_password]'
     ),
-    array(
+    /*array(
         'field' => 'reg_captcha',
         'label' => 'Captcha',
         'rules' => 'required|check_captcha'
-    ),
+    ),*/
     /*array(
         'field' => 'reg_captcha',
         'label' => 'Captcha',
