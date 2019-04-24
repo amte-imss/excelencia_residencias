@@ -456,7 +456,7 @@ class MY_Controller extends CI_Controller {
           )
           ); */
 
-        $mailStatus->SMTPAuth = false;
+//        $mailStatus->SMTPAuth = false;
         $emailStatus = $this->load->view($view, $datos, true);
         //$emailStatus = $this->procesar_correo($texto, array('{{$folio}}' => $folio, '{{$titulo}}' => $titulo));
         $mailStatus->addAddress($email);

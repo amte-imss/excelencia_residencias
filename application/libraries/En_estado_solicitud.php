@@ -13,6 +13,8 @@ class En_estado_solicitud {
             SIN_COMITE = 'SIN_COMITE',
             EN_REVISION = 'EN_REVISION',
             REVISADOS = 'REVISADOS',
-            CANDIDATOS = 'CANDIDATOS'
+            CANDIDATOS = 'CANDIDATOS',
+            NO_CALIFICO = 'NO_CALIFICO',
+            CORRECCION = 'CORRECCION'
     ;
 }

@@ -124,33 +124,48 @@
                             </div>
                             <br><br>
                         </div>
-                        </div>
-                        <?php if (isset($cursos_participacion)) { ?>
-                            <div id="revision_cursos" class="col-sm-12 col-lg-12 col-md-12">
-                                <?php echo $cursos_participacion; ?>
-                            </div>
-                        <?php } ?>
-
-                        <?php if (isset($documentos_participacion)) { ?>
-                            <div id="revision_documentos" class="col-sm-12 col-lg-12 col-md-12">
-                                <?php echo $documentos_participacion; ?>
-                            </div>
-                        <?php } ?>
-
-
-                        
-                        <?php if (isset($estado_solicitud['config']['btn_finalizar_revision']) && $estado_solicitud['config']['btn_finalizar_revision'] == 'true') { ?>
-                        <div class="col-sm-12 text-center"> 
-                            <button class="btn btn-theme animated flipInY visible" id="btn_envio_general" name="btn_finalizar_revision" type="button">Finalzar revisión</button>
-                        </div>
-                        <?php } ?>
-
                     </div>
-                    <hr>
+                    <?php if (isset($cursos_participacion)) { ?>
+                        <div id="revision_cursos" class="col-sm-12 col-lg-12 col-md-12">
+                            <?php echo $cursos_participacion; ?>
+                        </div>
+                    <?php } ?>
+
+                    <?php if (isset($documentos_participacion)) { ?>
+                        <div id="revision_documentos" class="col-sm-12 col-lg-12 col-md-12">
+                            <?php echo $documentos_participacion; ?>
+                        </div>
+                    <?php } ?>
+                    <?php echo form_open('revision/terminar_revision', array('id' => 'form_finaliza_revision', 'class' => 'form-horizontal')); ?>
+                    <input type="hidden" id="solicitud" name="solicitud" value="<?php echo $solicitud_excelencia['id_solicitud']; ?>">
+                    <div id="finalizar_msg" class="col-sm-12 form-group">
+                        
+                    </div>
+                    <div class="col-sm-12 form-group text-center">
+                        <label  class="col-sm-3 control-label"><?php echo "Observaciones"; ?></label>
+                        <textarea class="form-control rounded-0" id="observaciones" name="observaciones" rows="3"></textarea>
+                    </div> 
+                    <?php echo form_close(); ?>
+                    <br>
+
+                    <?php if (isset($estado_solicitud['config']['btn_finalizar_revision']) && $estado_solicitud['config']['btn_finalizar_revision'] == 'true') { ?>
+                        <div class="col-sm-12 text-center"> 
+                            <button class="btn btn-theme animated flipInY visible" 
+                                    id="btn_finalizar_revision" 
+                                    data-formulario="form_finaliza_revision"
+                                    data-divmsg="finalizar_msg"
+                                    name="btn_finalizar_revision" type="button">
+                                Finalzar revisión
+                            </button>
+                        </div>
+                    <?php } ?>
+
                 </div>
+                <hr>
             </div>
         </div>
     </div>
+</div>
 </div><!--col-->
 
 <?php echo js('trabajo_investigacion/control_revision.js'); ?>

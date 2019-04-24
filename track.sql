@@ -74,7 +74,7 @@ insert into  excelencia.opcion (opcion,tipo,activo) values
 /* Modificaciones para actualizar los estados de la solicitud */
 update excelencia.estado_solicitud set transicion='{"EN_REVISION":""}' WHERE cve_estado_solicitud='SIN_COMITE';
 
-insert into excelencia.estado_solicitud values('EN_REVISION','En revision',null,true,'{"btn_asignar_revisor":"true"}','{"REVISADO":"","CORRECCION":""}');
+insert into excelencia.estado_solicitud values('EN_REVISION','En revision',null,true,'{"btn_asignar_revisor":"true"}','{"REVISADO":"","CORRECCION":"","NO_CALIFICO":""}');
 insert into excelencia.estado_solicitud values('REVISADO','Revisado',null, true,null,null);
 insert into excelencia.estado_solicitud values('CORRECCION','En corrección',null, true,null,'{"SIN_COMITE":""}');
 
@@ -106,6 +106,7 @@ update excelencia.estado_solicitud set
 config='{"btn_agregar_curso":"false","btn_editar_curso":"true","btn_envio_datos":"true","btn_envio":"true","btn_elimina_curso":"false","modificar_archivos":"true" }', 
 transicion='{"SIN_COMITE":""}' 
 where cve_estado_solicitud in('CORRECCION');
+
 
 /* Modificaciones para actualizar listados 20190423 */
 insert into idiomas.traduccion values('col_matricula','lbl','en_revision','{"es":"Matrícula","en":"Matrícula"}');
@@ -162,10 +163,37 @@ CREATE TABLE excelencia.evaluacion (
 	CONSTRAINT evaluacion_pkey PRIMARY KEY (id_evaluacion)
 );
 
-CREATE TABLE foro.configuracion (
+CREATE TABLE excelencia.configuracion (
 	llave varchar(50) NOT NULL,
 	valor json NOT NULL,
 	CONSTRAINT configuracion_pkey PRIMARY KEY (llave)
 );
 
 insert into excelencia.configuracion VALUES('cupo','{ "nivel_1" : 10, "nivel_2" : 10, "nivel_3": 10}');
+
+
+/*Tabla de tabulador LEAS 24042019*/
+CREATE TABLE excelencia.tabulador (
+	id_tabulador serial,
+	tipo_tabulador varchar(30) NOT NULL,
+	descripcion text null,
+	rango_inicial int4 NOT NULL,
+	rango_final int4 NULL,
+	puntaje numeric(5,2) NULL,
+	CONSTRAINT tabulador_pkey PRIMARY KEY (id_tabulador)
+);
+
+insert into excelencia.tabulador (tipo_tabulador, rango_inicial,rango_final,puntaje) values 
+('PERMANENCIA_DOCENTE', 1,3, 2.5),
+('PERMANENCIA_DOCENTE', 4,9, 5.0),
+('PERMANENCIA_DOCENTE', 10,null, 10)
+;
+
+insert into excelencia.estado_solicitud values('NO_CALIFICO','No calífico',null, true,null,'{"CORRECCION":""}');
+update excelencia.estado_solicitud set 
+transicion = '{"REVISADO":"","CORRECCION":"","NO_CALIFICO":""}'
+where cve_estado_solicitud in('EN_REVISION');
+
+
+alter table excelencia.revision add column total_anios_curso int4 NULL;
+alter table excelencia.revision add column 	total_puntos_anios_cursos numeric(3,2) NULL;

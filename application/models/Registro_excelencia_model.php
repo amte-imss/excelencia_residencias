@@ -93,7 +93,10 @@ class Registro_excelencia_model extends CI_Model {
 
       } */
 
-    public function update_solicitud($data) {
+    public function update_solicitud($data, $estado_solicitud = null) {
+        if(is_null($estado_solicitud)){
+            $estado_solicitud = En_estado_solicitud::SIN_COMITE;
+        }
         $this->db->trans_begin(); //Inicia la transacción
 
         $array_update = array(
@@ -104,7 +107,7 @@ class Registro_excelencia_model extends CI_Model {
 
         $insert = array(
             'id_solicitud' => $data['id_solicitud'],
-            'cve_estado_solicitud' => En_estado_solicitud::SIN_COMITE,
+            'cve_estado_solicitud' => $estado_solicitud,
             'actual' => true
         );
         $this->db->insert('excelencia.historico_solicitud', $insert); //Se inserta el nuevo registro del historico de datos IMSS

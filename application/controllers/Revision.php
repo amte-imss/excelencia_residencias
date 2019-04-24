@@ -14,7 +14,7 @@ class Revision extends MY_Controller {
 
     function __construct() {
         $this->grupo_language_text = ['registro_excelencia', 'mensajes', 'en_revision']; //Grupo de idiomas para el controlador actual
-        parent::__construct();  
+        parent::__construct();
         $this->load->library('form_complete');
         $this->load->library('form_validation');
         $this->load->library('seguridad');
@@ -26,6 +26,7 @@ class Revision extends MY_Controller {
         $this->load->model('Sesion_model', 'sesion');
         $this->load->model('Convocatoria_model', 'convocatoria');
         $this->load->model('Registro_excelencia_model', 'registro_excelencia');
+        $this->load->model('Revision_model', 'revision');
     }
 
     public function solicitud($id_solicitud = null) {
@@ -119,42 +120,149 @@ class Revision extends MY_Controller {
         return $documentos_doc;
     }
 
-    public function terminar_revision($id_solicitud) {
-          $error = 0;
-        $msg = '';
-        $output['solicitud_excelencia'] = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $id_solicitud)))[0];
-
-        $where = ['c.id_solicitud' => $id_solicitud];
-        $solicitud_excelencia = $this->registro_excelencia->curso_participantes($where);
-        //pr($solicitud_excelencia);
-        if (count($solicitud_excelencia) <= 0) {
-            $msg .= 'Debe registrar al menos un curso.<br>';
-            $error++;
-        }
-
-        $documentos = $this->registro_excelencia->get_documento(array('where' => 'id_solicitud=' . $id_solicitud));
-        $tipo_documentos = $this->registro_excelencia->tipo_documentos(array('estado' => '1', 'id_tipo_documento<>' => 9));
-        if (count($documentos) < count($tipo_documentos)) {
-            $msg .= 'Debe de completar la documentación solicitada.<br>';
-            $error++;
-        }
-        //pr($documentos);
-        //pr($tipo_documentos);
-        //$this->registro_excelencia->get_documento();
-
-        if ($error > 0) {
-            echo '<div class="alert alert-danger" role="alert">' . $msg . '</div>';
-        } else {
-            $resultado = $this->registro_excelencia->update_solicitud(array('id_solicitud' => $id_solicitud));
-            if ($resultado['tp_msg'] == En_tpmsg::SUCCESS) {//Valida que se haya guardado correctamente el estado
-                $datos_sesion = $this->get_datos_sesion();
-                $out['email'] = $datos_sesion['email'];
-//                $out['email'] = 'cenitluis_pumas@hotmail.com';
-                $out['profesor'] = $datos_sesion['nombre'] . ' ' . $datos_sesion['apellido_paterno'] .' ' . $datos_sesion['apellido_materno'];
-                $this->enviar_correo_electronico('correo_excelencia/recepcion.php', $out['email'],$out, 'Registro de excelencia satisfactorio');//Envia e mail
+    public function terminar_revision() {
+        if ($this->input->post(null, true)) {
+            $post = $this->input->post(null, true);
+            $sol = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $post['solicitud'])));
+            if (!empty($sol)) {//Valida que no sea vacio
+//                $output['solicitud_excelencia'] = $sol[0];
+                $res_detalle = $this->get_estado_detalle_validacion($post['solicitud']);
+                $validacion_completa = $this->es_completa_validacion_cursos_documentos($res_detalle);
+                if ($validacion_completa['tp_msg'] == En_tpmsg::SUCCESS) {
+                    if ($res_detalle['val_detalle_documento']['total_no_validos'] > 0) {//Enviar a descalificado
+                        $datos_rev = [
+                            'estatus' => FALSE
+                        ];
+                        $res_update_rev = $this->actualizar_registro_revision($post['solicitud'], $datos_rev);
+                        if ($res_update_rev['tp_msg'] == En_tpmsg::SUCCESS) {
+                            $resultado = $this->registro_excelencia->update_solicitud(array('id_solicitud' => $post['solicitud']), En_estado_solicitud::NO_CALIFICO);
+                            if ($resultado['tp_msg'] == En_tpmsg::SUCCESS) {
+                                $resultado['html'] = 'La información se guardo correctamente';
+                                header('Content-Type: application/json; charset=utf-8;');
+                                echo json_encode($resultado);
+                                exit();
+                            } else {
+                                echo 'Ocurrió un error durante el proceso. Por favor intentelo nuevamente';
+                                exit();
+                            }
+                        } else {
+                            echo 'Ocurrió un error durante el proceso. Por favor intentelo nuevamente';
+                            exit();
+                        }
+                    } else if ($res_detalle['val_detalle_documento']['total_correccion'] > 0 || $res_detalle['val_detalle_curso']['total_correccion'] > 0) {//Enviar a correccion, es obligatorio que ponga observaciones
+                        $res_val = $this->aplica_validaciones_correccion();
+                        if ($res_val['tp_msg'] == En_tpmsg::SUCCESS) {
+                            $datos_rev = [
+                                'observaciones' => $post['observaciones'],
+//                                'estatus' => FALSE
+                            ];
+                            $res_update_rev = $this->actualizar_registro_revision($post['solicitud'], $datos_rev);
+                            if ($res_update_rev['tp_msg'] == En_tpmsg::SUCCESS) {
+                                $resultado = $this->registro_excelencia->update_solicitud(array('id_solicitud' => $post['solicitud']), En_estado_solicitud::CORRECCION);
+                                if ($resultado['tp_msg'] == En_tpmsg::SUCCESS) {
+                                    $resultado['html'] = 'La información se guardo correctamente';
+                                    header('Content-Type: application/json; charset=utf-8;');
+                                    echo json_encode($resultado);
+                                    exit();
+                                } else {
+                                    echo 'Ocurrió un error durante el proceso. Por favor intentelo nuevamente';
+                                    exit();
+                                }
+                            } else {
+                                echo 'Ocurrió un error durante el proceso. Por favor intentelo nuevamente';
+                                exit();
+                            }
+                        } else {
+                            echo $res_val['html'];
+                            exit();
+                        }
+                    } else {//Actualizar estado a revisado
+                        $total_anios_cursos_validos = $res_detalle['val_detalle_curso']['total_anios_cursos_validos'];
+                        $total_puntos_cursos_validos = (isset($res_detalle['tab_anios_permanencia']['puntaje'])) ? $res_detalle['tab_anios_permanencia']['puntaje'] : 0;
+                        $datos_rev = [
+                            'estatus' => FALSE,
+                            'total_anios_curso' => $total_anios_cursos_validos,
+                            'total_puntos_anios_cursos' => $total_puntos_cursos_validos
+                        ];
+                        if(!empty($post['observaciones'])){
+                            $datos_rev['observaciones'] = $post['observaciones']; 
+                        }
+                        $res_update_rev = $this->actualizar_registro_revision($post['solicitud'], $datos_rev);
+                        if ($res_update_rev['tp_msg'] == En_tpmsg::SUCCESS) {
+                            $resultado = $this->registro_excelencia->update_solicitud(array('id_solicitud' => $post['solicitud']), En_estado_solicitud::REVISADOS);
+                            if ($resultado['tp_msg'] == En_tpmsg::SUCCESS) {
+                                $resultado['html'] = 'La información se guardo correctamente';
+                                header('Content-Type: application/json; charset=utf-8;');
+                                echo json_encode($resultado);
+                                exit();
+                            } else {
+                                echo 'Ocurrió un error durante el proceso. Por favor intentelo nuevamente';
+                                exit();
+                            }
+                        } else {
+                            echo 'Ocurrió un error durante el proceso. Por favor intentelo nuevamente';
+                            exit();
+                        }
+                    }
+                } else {
+                    echo $validacion_completa['html'];
+                    exit();
+                }
+            } else {
+                echo 'Ocurrió un error durante el proceso. Por favor intentelo nuevamente';
+                exit();
             }
-            echo '<div class="alert alert-success" role="alert">' . $resultado['mensaje'] . '</div><script>alert("' . $resultado['mensaje'] . '"); document.location.href=document.location.href;</script>';
+        } else {
+            echo 'Ocurrió un error durante el proceso. Por favor intentelo nuevamente';
+            exit();
         }
+    }
+
+    private function aplica_validaciones_correccion() {
+        $this->config->load('form_validation'); //Cargar archivo
+        $validations = $this->config->item('observaciones_revision');
+        $this->form_validation->set_rules($validations); //Añadir validaciones
+        $result['tp_msg'] = En_tpmsg::SUCCESS;
+        if ($this->form_validation->run() == FALSE) {
+            $result['tp_msg'] = En_tpmsg::DANGER;
+            $result['html'] = validation_errors();
+        }
+        return $result;
+    }
+
+    private function es_completa_validacion_cursos_documentos($array_detalle_validacion) {
+        $result['tp_msg'] = En_tpmsg::SUCCESS;
+        $result['html'] = '';
+        $salto = '';
+        if (!isset($array_detalle_validacion['val_detalle_documento']['validacion_completa']) || !$array_detalle_validacion['val_detalle_documento']['validacion_completa'] == 1) {
+            $result['tp_msg'] = En_tpmsg::DANGER;
+            $result['html'] = 'Faltan documentos por validar ';
+            $salto = '<br>';
+        }
+        if (!isset($array_detalle_validacion['val_detalle_curso']['validacion_completa']) || !$array_detalle_validacion['val_detalle_curso']['validacion_completa'] == 1) {
+            $result['tp_msg'] = En_tpmsg::DANGER;
+            $result['html'] .= $salto . 'Faltan cursos por validar ';
+        }
+        return $result;
+    }
+
+    private function get_estado_detalle_validacion($id_solicitud) {
+        $output = [];
+        $res_dd = $this->revision->get_estado_detalle_validacion_documentos($id_solicitud);
+        if (!empty($res_dd)) {
+            $output['val_detalle_documento'] = $res_dd[0];
+        }
+        $res_dc = $this->revision->get_estado_detalle_validacion_curso($id_solicitud);
+        if (!empty($res_dc)) {
+            $output['val_detalle_curso'] = $res_dc[0];
+            if ($output['val_detalle_curso']['validacion_completa'] == 1) {
+                $res_tab = $this->revision->get_puntaje_tabulador(Revision_model::TAB_PERMANENCIA_DOCENTE, $output['val_detalle_curso']['total_anios_cursos_validos']);
+                if (!empty($res_tab)) {
+                    $output['tab_anios_permanencia'] = $res_tab[0];
+                }
+            }
+        }
+        return $output;
     }
 
     public function guarda_validacion_cursos() {
@@ -178,8 +286,20 @@ class Revision extends MY_Controller {
                     }
                 }
                 $result = $this->guarda_validacion_cursos_detalle($datos_revision, $post);
+
                 if ($result['tp_msg'] == En_tpmsg::SUCCESS) {
-                    $result['html'] = 'La validación se guardo correctamente';
+                    $res_dc = $this->revision->get_estado_detalle_validacion_curso($post['id_solicitud']);
+                    if (!empty($res_dc)) {
+                        $res_dc = $res_dc[0];
+                        if ($res_dc['validacion_completa'] == 1) {
+                            $result['html'] = 'La validación se guardo correctamente';
+                        } else {
+                            $result['html'] = 'La validación se guardo correctamente.<br>Por favor complete la validación de cursos';
+                            $result['tp_msg'] = En_tpmsg::WARNING;
+                        }
+                    } else {
+                        $result['html'] = 'La validación se guardo correctamente';
+                    }
                     header('Content-Type: application/json; charset=utf-8;');
                     echo json_encode($result);
                     exit();
@@ -264,7 +384,18 @@ class Revision extends MY_Controller {
                 }
                 $result = $this->guarda_validacion_documentos_detalle($datos_revision, $post);
                 if ($result['tp_msg'] == En_tpmsg::SUCCESS) {
-                    $result['html'] = 'La validación se guardo correctamente';
+                    $res_dc = $this->revision->get_estado_detalle_validacion_documentos($post['id_solicitud']);
+                    if (!empty($res_dc)) {
+                        $res_dc = $res_dc[0];
+                        if ($res_dc['validacion_completa'] == 1) {
+                            $result['html'] = 'La validación se guardo correctamenteeee';
+                        } else {
+                            $result['html'] = 'La validación se guardo correctamente.<br>Por favor complete la validación de documentos';
+                            $result['tp_msg'] = En_tpmsg::WARNING;
+                        }
+                    } else {
+                        $result['html'] = 'La validación se guardo correctamente';
+                    }
                     header('Content-Type: application/json; charset=utf-8;');
                     echo json_encode($result);
                     exit();
@@ -334,6 +465,17 @@ class Revision extends MY_Controller {
         ];
         $result_insert = $this->registro_excelencia->insert_registro_general('excelencia.revision', $datos_archivo, 'id_revision');
         return $result_insert;
+    }
+
+    private function actualizar_registro_revision($id_solicitud, $datos, $es_fin_revision = true) {
+        if ($es_fin_revision && !isset($datos['fecha_revision'])) {
+            $datos['fecha_revision'] = 'now()';
+        }
+        $where = [
+            "id_solicitud" => $id_solicitud,
+        ];
+        $result_update = $this->registro_excelencia->update_registro_general('excelencia.revision', $datos, $where);
+        return $result_update;
     }
 
     private function get_revision($id_solicitud) {
