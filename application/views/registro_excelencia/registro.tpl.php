@@ -157,7 +157,7 @@
                     <div class="col-sm-offset-1 col-sm-10 panel">
                         <div class="panel-heading"><h2><?php echo 'Observaciones por parte del revisor'; ?></h2></div>
                     <!--<label for="curso" class="col-sm-12 control-label"><?php // echo 'Observaciones por parte del revisor'; ?></label>-->
-                        <strong><p style="color:red; size: 9">La solicitud de premio,  ya ha sido revisada anteriormente, por tal motivo le sugerimos realizar una revisión exhaustiva.</p></strong>
+                        <strong><p style="color:red; size: 9">Nota: Recuerde que es importante tomar en cuenta las observaciones realizadas por el Comité evaluador ya que de ello depende su correcta participación para el Premio a la Excelencia Docente.</p></strong>
                         <div class="alert alert-info" role="alert">
                             <?php echo $observaciones; ?>
                         </div>
@@ -348,7 +348,7 @@
                     </div>
                 </div><!--col-->
             </div> <!--row-->
-
+                        
             <div class="row">
                 <div class="col-sm-offset-2 col-sm-8" id="msg"></div>
             </div><!--row-->

@@ -30,11 +30,13 @@
                 </div>
             </div>
             <!--row-->
+            <?php if($total_revisiones>0){ ?>
             <div class="row">
                 <div class="col-sm-offset-2 col-sm-8">
-                    <strong>Los campos marcados con * son de caracter obligatorios</strong>
+                    <strong>La solicitud de premio,  ya ha sido revisada anteriormente, por tal motivo le sugerimos realizar una revisión exhaustiva</strong>
                 </div>
             </div><!--row-->
+            <?php } ?>
             <br>
             <div class="row">
                 <div class="col-sm-offset-1 col-sm-10 panel">

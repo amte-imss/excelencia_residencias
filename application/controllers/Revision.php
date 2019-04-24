@@ -80,7 +80,6 @@ class Revision extends MY_Controller {
         }
 
         $datos_sesion = $this->get_datos_sesion();
-        $id_informacion_usuario = $datos_sesion['username'];
         $idioma = $this->obtener_idioma();
         $output['language_text'] = $this->obtener_grupos_texto(array('registro_excelencia', 'template_general', 'registro_usuario'), $idioma);
         $this->language_text = $output['language_text'];
@@ -99,6 +98,11 @@ class Revision extends MY_Controller {
             $output['estado_solicitud'] = $this->get_estado_solicitud($output['solicitud_excelencia']['cve_estado_solicitud']);
             if ($output['solicitud_excelencia']['cve_estado_solicitud'] == En_estado_solicitud::EN_REVISION) {
                 $output['datos_revision'] = $this->get_revision($id_solicitud);
+                $total_revisiones = $this->get_total_revisiones_solicitud($id_solicitud);
+                $output['total_revisiones'] = 0;
+                if(!empty($total_revisiones)){
+                    $output['total_revisiones'] = $total_revisiones['total_revisiones'];
+                }
                 $output['datos_generales'] = $this->usuario->get_usuarios(array('where' => array("usuarios.username" => $output['solicitud_excelencia']['matricula'])))[0];
                 $output['tipo_categoria'] = $this->registro_excelencia->tipo_categoria();
                 $output['cursos_participacion'] = $this->get_view_listado_cursos($output['solicitud_excelencia']);
@@ -586,6 +590,18 @@ class Revision extends MY_Controller {
         }
         return null;
     }
+    private function get_total_revisiones_solicitud($id_solicitud) {
+        $select = ['count(*) total_revisiones'
+        ];
+        $where = ["id_solicitud" => $id_solicitud];
+        $archivo_curso = $this->registro_excelencia->getConsutasGenerales('excelencia.revision r', $select, $where);
+        if (!empty($archivo_curso)) {
+            return $archivo_curso[0];
+        }
+        return null;
+    }
+    
+    
 
     private function get_revision_curso($id_solicitud = null, $id_revision = null) {
         if (is_null($id_solicitud) && is_null($id_revision)) {

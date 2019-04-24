@@ -21,9 +21,10 @@
                 <td><a href="<?php echo base_url() . trim($curso['ruta'], '.'); ?>" target="_blank"><?php echo $language_text['registro_excelencia']['reg_liga_descarga']; ?></a></td>
                 <td><?php echo ($curso['obtuvo_pnpc']) ? 'Si' : 'No'; ?></td>
                             <!--<td><input type="button" value="X" class="btn animated flipInY visible" tooltip="<?php // echo $language_text['registro_excelencia']['reg_exc_curso_eliminar'];         ?>" onclick="eliminar_curso('<?php // echo $curso['id_curso'];         ?>', '#curso_msg');" style="color:red;" /><i class="far fa-edit" color:red></i></td>-->
-                <?php if(isset($estado_solicitud['config']['btn_elimina_curso']) or isset($estado_solicitud['config']['btn_editar_curso']) ){ ?>
+                <?php if((isset($estado_solicitud['config']['btn_elimina_curso']) && $estado_solicitud['config']['btn_elimina_curso'] == 'true') or (isset($estado_solicitud['config']['btn_editar_curso']) && $estado_solicitud['config']['btn_editar_curso'] == 'true')){ ?>
                 <td>
-                    <?php if(isset($estado_solicitud['config']['btn_elimina_curso']) or $estado_solicitud['config']['btn_elimina_curso']=="true"){ ?>
+                    <?php // pr($estado_solicitud['config']);?>
+                    <?php if(isset($estado_solicitud['config']['btn_elimina_curso']) && $estado_solicitud['config']['btn_elimina_curso']=="true"){ ?>
                         <input type="button" value="X" class="fa fa-edit btn animated flipInY visible" tooltip="<?php echo $language_text['registro_excelencia']['reg_exc_curso_eliminar']; ?>" onclick="eliminar_curso('<?php echo $curso['id_curso']; ?>', '#curso_msg');" style="color:red;" />
                     <?php } if (isset($estado_solicitud['config']['btn_editar_curso']) && $estado_solicitud['config']['btn_editar_curso'] == "true") { ?>
                         <button type="button" class="btn animated flipInY visible"  onclick="editar_curso('<?php echo $curso['id_curso']; ?>');"><i class="fa fa-edit" style="color:red;" ></i></button>
