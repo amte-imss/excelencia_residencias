@@ -278,7 +278,7 @@ class Revision extends MY_Controller {
                         $total_anios_cursos_validos = $res_detalle['val_detalle_curso']['total_anios_cursos_validos'];
                         $total_puntos_cursos_validos = (isset($res_detalle['tab_anios_permanencia']['puntaje'])) ? $res_detalle['tab_anios_permanencia']['puntaje'] : 0;
                         $datos_rev = [
-                            'estatus' => FALSE,
+//                            'estatus' => FALSE,
                             'total_anios_curso' => $total_anios_cursos_validos,
                             'total_puntos_anios_cursos' => $total_puntos_cursos_validos
                         ];
@@ -569,7 +569,7 @@ class Revision extends MY_Controller {
         if ($es_fin_revision && !isset($datos['fecha_revision'])) {
             $datos['fecha_revision'] = 'now()';
         }
-        if ($es_fin_revision && !isset($datos['estatus'])) {
+        if ($es_fin_revision && isset($datos['estatus'])) {
             unset($datos['estatus']);
         }
         $where = [
