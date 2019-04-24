@@ -154,14 +154,17 @@ insert into idiomas.traduccion values('col_opciones','lbl','revisados','{"es":"O
 insert into idiomas.traduccion values('btn_ver','lbl','revisados','{"es":"Ver","en":"Ver"}');
 
 CREATE TABLE excelencia.evaluacion (
-	id_evaluacion serial,
+	id_evaluacion serial NOT NULL,
 	matricula varchar(15) NOT NULL,
 	id_solicitud int4 NOT NULL,
 	puntaje_pnpc numeric(5,2) NULL,
-	puntaje_sede_academica numeric(5,2) NULL,
 	puntaje_carrera_docente numeric(5,2) NULL,
+	puntaje_sa_et numeric(5,2) NULL,
+	puntaje_sa_satisfaccion numeric(5,2) NULL DEFAULT 0,
+	puntaje_anios_docente numeric(5,2) NULL DEFAULT 0,
 	CONSTRAINT evaluacion_pkey PRIMARY KEY (id_evaluacion)
 );
+
 
 CREATE TABLE excelencia.configuracion (
 	llave varchar(50) NOT NULL,
