@@ -120,7 +120,7 @@ class Revision extends MY_Controller {
     }
 
     public function terminar_revision($id_solicitud) {
-        $error = 0;
+          $error = 0;
         $msg = '';
         $output['solicitud_excelencia'] = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $id_solicitud)))[0];
 
@@ -146,6 +146,13 @@ class Revision extends MY_Controller {
             echo '<div class="alert alert-danger" role="alert">' . $msg . '</div>';
         } else {
             $resultado = $this->registro_excelencia->update_solicitud(array('id_solicitud' => $id_solicitud));
+            if ($resultado['tp_msg'] == En_tpmsg::SUCCESS) {//Valida que se haya guardado correctamente el estado
+                $datos_sesion = $this->get_datos_sesion();
+                $out['email'] = $datos_sesion['email'];
+//                $out['email'] = 'cenitluis_pumas@hotmail.com';
+                $out['profesor'] = $datos_sesion['nombre'] . ' ' . $datos_sesion['apellido_paterno'] .' ' . $datos_sesion['apellido_materno'];
+                $this->enviar_correo_electronico('correo_excelencia/recepcion.php', $out['email'],$out, 'Registro de excelencia satisfactorio');//Envia e mail
+            }
             echo '<div class="alert alert-success" role="alert">' . $resultado['mensaje'] . '</div><script>alert("' . $resultado['mensaje'] . '"); document.location.href=document.location.href;</script>';
         }
     }

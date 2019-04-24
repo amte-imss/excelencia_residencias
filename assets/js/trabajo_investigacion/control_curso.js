@@ -65,6 +65,8 @@ function agregar_curso() {
                             $(div_respuesta).html('<div class="alert alert-success" role="alert">' + resp.html + '</div>');
                             setTimeout("$('#curso_msg').html('')", 6000);
                             cambio_botones_formulario("reiniciar");
+                            $("#editar_").remove();
+                            $("#curso_row").remove();
                             $('#pncp_curso').val('');
                             $('#curso').val('');
                             $('#categoria_docente').val('');
