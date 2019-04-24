@@ -190,23 +190,53 @@ class Revision extends MY_Controller {
 //                exit();
                 if ($validacion_completa['tp_msg'] == En_tpmsg::SUCCESS) {
                     if ($res_detalle['val_detalle_documento']['total_no_validos'] > 0) {//Enviar a descalificado
-                        $datos_rev = [
-                            'estatus' => FALSE
-                        ];
-                        $res_update_rev = $this->actualizar_registro_revision($post['solicitud'], $datos_rev);
-                        if ($res_update_rev['tp_msg'] == En_tpmsg::SUCCESS) {
-                            $resultado = $this->registro_excelencia->update_solicitud(array('id_solicitud' => $post['solicitud']), En_estado_solicitud::NO_CALIFICO);
-                            if ($resultado['tp_msg'] == En_tpmsg::SUCCESS) {
-                                $resultado['html'] = 'La información se guardo correctamente';
-                                header('Content-Type: application/json; charset=utf-8;');
-                                echo json_encode($resultado);
-                                exit();
+//                        $datos_rev = [
+//                            'estatus' => FALSE
+//                        ];
+//                        $res_update_rev = $this->actualizar_registro_revision($post['solicitud'], $datos_rev);
+//                        if ($res_update_rev['tp_msg'] == En_tpmsg::SUCCESS) {
+//                            $resultado = $this->registro_excelencia->update_solicitud(array('id_solicitud' => $post['solicitud']), En_estado_solicitud::NO_CALIFICO);
+//                            if ($resultado['tp_msg'] == En_tpmsg::SUCCESS) {
+//                                $resultado['html'] = 'La información se guardo correctamente';
+//                                header('Content-Type: application/json; charset=utf-8;');
+//                                echo json_encode($resultado);
+//                                exit();
+//                            } else {
+//                                echo 'Ocurrió un error durante el proceso. Por favor intentelo nuevamente';
+//                                exit();
+//                            }
+//                        } else {
+//                            echo 'Ocurrió un error durante el proceso. Por favor intentelo nuevamente';
+//                            exit();
+//                        }
+                        $res_val = $this->aplica_validaciones_correccion();
+                        if ($res_val['tp_msg'] == En_tpmsg::SUCCESS) {
+                            $datos_rev = [
+                                'observaciones' => $post['observaciones'],
+//                                'estatus' => FALSE
+                            ];
+                            $res_update_rev = $this->actualizar_registro_revision($post['solicitud'], $datos_rev);
+                            if ($res_update_rev['tp_msg'] == En_tpmsg::SUCCESS) {
+                                $resultado = $this->registro_excelencia->update_solicitud(array('id_solicitud' => $post['solicitud']), En_estado_solicitud::CORRECCION);
+                                if ($resultado['tp_msg'] == En_tpmsg::SUCCESS) {
+                                    $resultado['html'] = 'La información se guardo correctamente';
+                                    /* Envio de correo electronico, para notificar el envío a correccións */
+                                    $out['profesor'] = $sol[0]['nombre_ui'] . ' ' . $sol[0]['apellido_paterno'] . ' ' . $sol[0]['apellido_materno'];
+                                    $this->enviar_correo_electronico('correo_excelencia/correccion.php', $sol[0]['email'], $out, 'Corrección de documentación'); //Envia e mail
+
+                                    header('Content-Type: application/json; charset=utf-8;');
+                                    echo json_encode($resultado);
+                                    exit();
+                                } else {
+                                    echo 'Ocurrió un error durante el proceso. Por favor intentelo nuevamente';
+                                    exit();
+                                }
                             } else {
                                 echo 'Ocurrió un error durante el proceso. Por favor intentelo nuevamente';
                                 exit();
                             }
                         } else {
-                            echo 'Ocurrió un error durante el proceso. Por favor intentelo nuevamente';
+                            echo $res_val['html'];
                             exit();
                         }
                     } else if ($res_detalle['val_detalle_documento']['total_correccion'] > 0 || $res_detalle['val_detalle_curso']['total_correccion'] > 0) {//Enviar a correccion, es obligatorio que ponga observaciones

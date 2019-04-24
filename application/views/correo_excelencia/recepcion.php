@@ -42,20 +42,20 @@
                 </tr>
                 <tr>
                 <td style="text-align:justify;">
-                    Por medio de la presente La Unidad de Educación, Investigación y Políticas de Salud, a través de la Coordinación de Educación en Salud, 
+                    Por medio de la presente La Unidad de Educaci&oacute;n, Investigaci&oacute;n y Pol&iacute;ticas de Salud, a trav&eacute;s de la Coordinaci&oacute;n de Educaci&oacute;n en Salud, 
                     tiene el agrado de confirmar que su registro como participante para el <b> PREMIO A LA EXCELENCIA DOCENTE 
-                    2019 </b>se recibió satisfactoriamente, así como la información correspondiente a dicho registro.
+                    2019 </b>se recibi&oacute; satisfactoriamente, as&iacute; como la informaci&oacute;n correspondiente a dicho registro.
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <br>Ante todo, nos gustaría agradecer el interés mostrado por su participación en la presente convocatoria, del mismo modo por su tiempo,
-                    preparación y dedicación en la docencia.
+                    <br>Ante todo, nos gustar&iacute;a agradecer el inter&eacute;s mostrado por su participaci&oacute;n en la presente convocatoria, del mismo modo por su tiempo,
+                    preparaci&oacute;n y dedicaci&oacute;n en la docencia.
                   </td>
                 </tr>
                 <tr>
                   <td style="text-align:justify;">
-                    <br> Nos despedimos de usted deseándole éxito en este concurso y lo invitamos a continuar con su crecimiento profesional, que enorgullece al
+                    <br> Nos despedimos de usted dese&aacute;ndole &eacute;xito en este concurso y lo invitamos a continuar con su crecimiento profesional, que enorgullece al
                     instituto. 
                   </td>
                 </tr>
@@ -66,7 +66,7 @@
                 </tr>
                 <tr>
                   <td >
-                    <p>Sin otro particular, le envío un cordial saludo.</p>
+                    <p>Sin otro particular, le env&iacute;o un cordial saludo.</p>
                   </td>
                 </tr>
               </table>
@@ -75,7 +75,7 @@
           <tr>
             <td align="center" bgcolor="#ffffff" style="line-height: 0;">
               <b><p>Atentamente</p></b><br>
-              <b><p>Coordinación de Educación en Salud</p></b>
+              <b><p>Coordinaci&oacute;n de Educaci&oacute;n en Salud</p></b>
             </td>
           </tr>
           <tr>

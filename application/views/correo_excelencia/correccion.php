@@ -42,9 +42,9 @@
                                     </tr>
                                     <tr>
                                         <td style="text-align:justify;">
-                                            Estimado docente es de nuestro agrado informarte que tu trabajo se encuentra en revisión, pero se encontraron algunas observaciones con respecto a tu documentación. 
+                                            Estimado docente es de nuestro agrado informarte que tu trabajo se encuentra en revisi&oacute;n, pero se encontraron algunas observaciones con respecto a tu documentaci&oacute;n. 
                                             por lo que es necesario, que ingreses nuevamente al sistema y con base en las observaciones realizadas por parte del Comite Evaluador, realices las correcciones pertinentes
-                                            para que tu particiación en el concurso pueda continuar satisfactoriamente.
+                                            para que tu particiaci&oacute;n en el concurso pueda continuar satisfactoriamente.
                                         </td>
                                     </tr>
                                     <tr>
@@ -54,7 +54,7 @@
                                     </tr>
                                     <tr>
                                         <td >
-                                            <p>Sin otro particular, le envío un cordial saludo.</p>
+                                            <p>Sin otro particular, le env&iacute;o un cordial saludo.</p>
                                         </td>
                                     </tr>
                                 </table>
@@ -63,7 +63,7 @@
                         <tr>
                             <td align="center" bgcolor="#ffffff" style="line-height: 0;">
                                 <b><p>Atentamente</p></b><br>
-                                    <b><p>Coordinación de Educación en Salud</p></b>
+                                    <b><p>Coordinaci&oacute;n de Educaci&oacute;n en Salud</p></b>
                             </td>
                         </tr>
                         <tr>
