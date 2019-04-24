@@ -84,10 +84,8 @@ class Revision_model extends MY_Model {
             $this->db->where('hs.cve_estado_solicitud', 'EN_REVISION');
             if (is_null($id_solicitud)) {
                 $this->db->where("s.id_solicitud in (SELECT id_solicitud FROM excelencia.revision rev WHERE rev.id_usuario_revision = " . $this->session->userdata('die_sipimss')['usuario']['id_usuario'] . " and estatus=true)");
-
             } else {
                 $this->db->where("s.id_solicitud in (SELECT id_solicitud FROM excelencia.revision rev WHERE rev.id_solicitud = " . $id_solicitud . " and rev.id_usuario_revision = " . $this->session->userdata('die_sipimss')['usuario']['id_usuario'] . " and estatus=true)");
-                
             }
             //$this->db->where("r.id_usuario", $this->session->userdata('die_sipimss')['usuario']['id_usuario']);
             $result = $this->db->get('excelencia.solicitud s'); //pr($this->db->last_query());
@@ -129,11 +127,14 @@ class Revision_model extends MY_Model {
             , "sum(case when drc.id_opcion = 3 then 1 else 0 end) total_no_validos"
         ];
         $this->db->select($select); //Asigna el select de la consulta
-        $this->db->join("excelencia_revision.excelencia.documento_curso dc", "dc.id_documento_curso = c.id_documento_curso", "inner"); //Asigna el select de la consulta
-        $this->db->join("excelencia_revision.excelencia.detalle_revision_curso drc", "drc.id_documento_curso = dc.id_documento_curso", "left"); //Asigna el select de la consulta
+        $this->db->join("excelencia.curso c", "c.id_solicitud = s.id_solicitud", "inner"); //Asigna el select de la consulta
+        $this->db->join("excelencia.documento_curso dc", "dc.id_documento_curso = c.id_documento_curso", "inner"); //Asigna el select de la consulta
+        $this->db->join("excelencia.revision r", "r.id_solicitud = s.id_solicitud", "left"); //Asigna el select de la consulta
+        $this->db->join("excelencia.detalle_revision_curso drc", "r.id_revision = drc.id_revision and  drc.id_documento_curso = dc.id_documento_curso", "left"); //Asigna el select de la consulta
         $this->db->where("c.id_solicitud ", $id_solicitud); //Asigna el select de la consulta 
-
-        $result = $this->db->get("excelencia_revision.excelencia.curso c")->result_array(); //Asigna el select de la consulta 
+        $this->db->where("r.estatus", true);
+        $result = $this->db->get("excelencia.solicitud s")->result_array(); //Asigna el select de la consulta 
+//        pr($this->db->last_query());
         return $result;
     }
 
@@ -148,9 +149,13 @@ class Revision_model extends MY_Model {
             , "sum(case when drd.id_opcion = 6 then 1 else 0 end) total_no_validos"
         ];
         $this->db->select($select); //Asigna el select de la consulta
-        $this->db->join("excelencia_revision.excelencia.detalle_revision_documento drd", "drd.id_documento = d.id_documento", "left"); //Asigna el select de la consulta
+        $this->db->join("excelencia.documento d", "d.id_solicitud = s.id_solicitud", "inner"); //Asigna el select de la consulta
+        $this->db->join("excelencia.revision r", "r.id_solicitud = s.id_solicitud", "left"); //Asigna el select de la consulta
+        $this->db->join("excelencia.detalle_revision_documento drd", "drd.id_revision = r.id_revision and drd.id_documento = d.id_documento", "left"); //Asigna el select de la consulta
         $this->db->where("d.id_solicitud ", $id_solicitud); //Asigna el select de la consulta 
-        $result = $this->db->get("excelencia_revision.excelencia.documento d")->result_array(); //Asigna el select de la consulta 
+        $this->db->where("r.estatus", true); //Asigna el select de la consulta 
+        $result = $this->db->get("excelencia.solicitud s")->result_array(); //Asigna el select de la consulta 
+//        pr($this->db->last_query());
         return $result;
     }
 

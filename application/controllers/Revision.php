@@ -186,6 +186,8 @@ class Revision extends MY_Controller {
 //                $output['solicitud_excelencia'] = $sol[0];
                 $res_detalle = $this->get_estado_detalle_validacion($post['solicitud']);
                 $validacion_completa = $this->es_completa_validacion_cursos_documentos($res_detalle);
+//                pr($res_detalle );
+//                exit();
                 if ($validacion_completa['tp_msg'] == En_tpmsg::SUCCESS) {
                     if ($res_detalle['val_detalle_documento']['total_no_validos'] > 0) {//Enviar a descalificado
                         $datos_rev = [
@@ -543,7 +545,7 @@ class Revision extends MY_Controller {
         $select = ['id_revision', 'id_solicitud', 'id_usuario_revision', 'observaciones',
             'estatus', 'fecha_revision', 'fecha_asignacion'
         ];
-        $where = ["id_solicitud" => $id_solicitud, 'estatus'=>true];
+        $where = ["id_solicitud" => $id_solicitud, 'estatus' => true];
         $archivo_curso = $this->registro_excelencia->getConsutasGenerales('excelencia.revision r', $select, $where);
         if (!empty($archivo_curso)) {
             return $archivo_curso[0];
@@ -564,6 +566,7 @@ class Revision extends MY_Controller {
         if (!is_null($id_revision)) {
             $where['r.id_revision'] = $id_revision;
         }
+        $where['r.estatus'] = true;
         $join = ['excelencia.detalle_revision_curso drc' => ['typejoin' => 'inner', 'condicion' => 'drc.id_revision = r.id_revision']];
         $result_revision_curso = $this->registro_excelencia->getConsutasGenerales('excelencia.revision r', $select, $where, $join);
         if (!empty($result_revision_curso)) {
@@ -589,6 +592,7 @@ class Revision extends MY_Controller {
         if (!is_null($id_revision)) {
             $where['r.id_revision'] = $id_revision;
         }
+        $where['r.estatus'] = true;
         $join = ['excelencia.detalle_revision_documento drd' => ['typejoin' => 'inner', 'condicion' => 'drd.id_revision = r.id_revision']];
         $result_revision_curso = $this->registro_excelencia->getConsutasGenerales('excelencia.revision r', $select, $where, $join);
         if (!empty($result_revision_curso)) {
