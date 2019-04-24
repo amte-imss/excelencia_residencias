@@ -55,10 +55,10 @@
                     <td><?php  echo $row['delegacion'];?></td>
                     <td><?php  echo $row['fecha'];?></td>
                     <td><?php  echo $row['puntaje_pnpc'];?></td>
-                    <td><?php  echo $row['puntaje_sede_academica'];?></td>
+                    <td><?php  echo ($row['puntaje_sa_et']+$row['puntaje_sa_satisfaccion']);?></td>
                     <td><?php  echo $row['puntaje_carrera_docente'];?></td>
-                    <td><?php  echo "-";?></td>
-                    <td><?php  echo $row['puntaje_pnpc']+$row['puntaje_sede_academica']+$row['puntaje_carrera_docente'];?></td>
+                    <td><?php  echo $row['total_puntos_anios_cursos'];?></td>
+                    <td><?php  echo ($row['puntaje_pnpc']+$row['puntaje_sa_et']+$row['puntaje_sa_satisfaccion']+$row['puntaje_carrera_docente']+$row['total_puntos_anios_cursos']);?></td>
                     <!--td><?php  echo $row['total'];?></td>
                     <td><?php echo $row['revisor']; ?></td-->
                     <td>

@@ -209,7 +209,8 @@ class Gestion_revision_model extends MY_Model {
             $this->db->where('rn.activo', true);*/
             $this->db->select(array('s.id_solicitud', 's.matricula', 'i.nombre', 'i.apellido_paterno', 'i.apellido_materno', 'del.nombre as delegacion', 'to_char(s.fecha, \'DD/MM/YYYY HH:MI:SS\') as fecha','(select count(*) from excelencia.revision rev where rev.id_solicitud=s.id_solicitud and fecha_revision is not null) as total',
                 "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario iu join excelencia.revision rev on rev.id_usuario_revision=iu.id_usuario WHERE rev.id_solicitud=s.id_solicitud and estatus=true) revisor",
-                'eva.id_evaluacion', 'eva.puntaje_carrera_docente', 'eva.puntaje_pnpc', 'eva.puntaje_sede_academica'));
+                "(SELECT total_puntos_anios_cursos FROM excelencia.revision rev WHERE rev.id_solicitud=s.id_solicitud and estatus=true) total_puntos_anios_cursos",
+                'eva.*'));
             $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and hs.actual=true', 'left', false);
             $this->db->join('sistema.informacion_usuario i', 'i.matricula=s.matricula', 'left');
             $this->db->join('excelencia.evaluacion eva', 'eva.matricula = i.matricula', 'left');
