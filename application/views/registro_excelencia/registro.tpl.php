@@ -135,10 +135,10 @@
                     </div>
 
                     <!--div class="form-group">
-                            <label for="pnpc" class="col-sm-3 control-label"><?php //echo $language_text['registro_excelencia']['pnpc_tiene'];             ?>*</label>
+                            <label for="pnpc" class="col-sm-3 control-label"><?php //echo $language_text['registro_excelencia']['pnpc_tiene'];                 ?>*</label>
                             <div class="col-sm-9">
-                                            <input type="radio" name="pnpc" value="1" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='1') echo 'checked';}            ?>><?php //echo $language_text['template_general']['si_op'];            ?><br>
-                                            <input type="radio" name="pnpc" value="0" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='0') echo 'checked';}             ?>><?php //echo $language_text['template_general']['no_op'];             ?><br>
+                                            <input type="radio" name="pnpc" value="1" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='1') echo 'checked';}                ?>><?php //echo $language_text['template_general']['si_op'];                ?><br>
+                                            <input type="radio" name="pnpc" value="0" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='0') echo 'checked';}                 ?>><?php //echo $language_text['template_general']['no_op'];                 ?><br>
                             </div><div style="clear:both;"></div>
                     <?php //echo form_error_format('pnpc'); ?>
                     </div -->
@@ -152,17 +152,19 @@
 
                 <?php echo form_close(); ?>
 
-                <div class="col-sm-offset-1 col-sm-10 panel">
-                    <br>
-                    <div class="alert alert-info" role="alert">
-                        <?php echo $observaciones; ?>
+                <?php if (isset($observaciones)) { ?>
+                    <div class="col-sm-offset-1 col-sm-10 panel">
+                        <br>
+                        <div class="alert alert-info" role="alert">
+                            <?php echo $observaciones; ?>
+                        </div>
                     </div>
-                </div>
+                <?php } ?>
 
                 <?php if (isset($solicitud_excelencia['id_solicitud']) && !empty($solicitud_excelencia['id_solicitud'])) { ?>
 
 
-                    <?php // echo form_open_multipart('registro/solicitud', array('id' => 'form_registro_solicitud_curso', 'class'=>'form-horizontal', 'data-toggle'=>"validator", 'role'=>"form", 'accept-charset'=>"utf-8")); ?>
+                    <?php // echo form_open_multipart('registro/solicitud', array('id' => 'form_registro_solicitud_curso', 'class'=>'form-horizontal', 'data-toggle'=>"validator", 'role'=>"form", 'accept-charset'=>"utf-8"));  ?>
                     <?php echo form_open('', array('id' => 'form_registro_solicitud_curso', 'class' => 'form-horizontal', 'data-toggle' => "validator", 'role' => "form", 'accept-charset' => "utf-8")); ?>
                     <div style="clear:both;"></div>
                     <hr class="col-sm-11" style="border:1px solid;">
@@ -316,7 +318,7 @@
                                                         data-formulario ="form_registro_solicitud_documentacion"
                                                         data-documento ="<?php echo $documento[$value['id_tipo_documento']]['id_documento']; ?>"
                                                         onclick="javascript:editar_archivos(this);">
-                                                            <?php echo "Actualizar archivo"; //$language_text['registro_excelencia']['reg_btn_cargar_archivos'];    ?>
+                                                            <?php echo "Actualizar archivo"; //$language_text['registro_excelencia']['reg_btn_cargar_archivos'];      ?>
                                                 </button>
                                             </div >
                                         <?php } ?>
@@ -353,7 +355,7 @@
                     <div class="col-sm-offset-2 col-sm-8" >
                         <center>
                             <button class="btn btn-theme animated flipInY visible" id="btn_envio" name="btn_envio" type="button"><?php echo $language_text['registro_excelencia']['registrar_solicitud']; ?></button>
-                            <!--a href="<?php // echo site_url('registro_investigacion');           ?>" class="btn btn-theme animated flipInY visible"><?php // echo $language_text['template_general']['cancelar'];           ?></a-->
+                            <!--a href="<?php // echo site_url('registro_investigacion');               ?>" class="btn btn-theme animated flipInY visible"><?php // echo $language_text['template_general']['cancelar'];               ?></a-->
                         </center>
                     </div>
                 </div><!--row-->
