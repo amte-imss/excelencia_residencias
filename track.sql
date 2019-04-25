@@ -229,3 +229,6 @@ insert into sistema.modulos (clave_modulo, nombre,url, activo, modulo_padre_clav
 ('GET_DETALLE_CURSO',	'{"es":"Carga informacion de curso","en":""}',	'/registro/get_detalle_curso',true,'M2nxOiMxoD',1,'ACCION');
 insert into sistema.roles_modulos (clave_modulo, clave_rol, activo) values
 ('GET_DETALLE_CURSO','INV',true);
+
+
+update idiomas.traduccion set lang='{"es":"","en":"Candidatos"}' where clave_traduccion='tab_ca' and clave_grupo='tabs_gestor';
