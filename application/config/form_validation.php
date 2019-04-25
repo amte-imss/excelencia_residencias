@@ -181,11 +181,11 @@ $config["login"] = array(
       'required' => 'El campo %s es obligatorio, favor de ingresarlo.',
       ), */
     ),
-//    array(
-//        'field' => 'captcha',
-//        'label' => 'Código de verificación',
-//        'rules' => 'required|check_captcha',
-//    ),
+    array(
+        'field' => 'captcha',
+        'label' => 'Código de verificación',
+        'rules' => 'required|check_captcha',
+    ),
     /* 'errors' => array(
       'required' => 'El campo %s es obligatorio, favor de ingresarlo.',
       'check_captcha' => "El texto no coincide con la imagen, favor de verificarlo."
