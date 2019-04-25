@@ -136,6 +136,8 @@ function finalizar_validacion(element) {
                     if (typeof resp.html !== 'undefined') {
                         if (resp.tp_msg === 'success') {
                             $("#btn_finalizar_revision").removeClass('visible').addClass('hidden');
+                            $("#btn_guardar_validaion_documentos").removeClass('visible').addClass('hidden');
+                            $("#btn_guardar_validaion_cursos").removeClass('visible').addClass('hidden');
                             $(div_respuesta).html('<div class="alert alert-success" role="alert">' + resp.html + '</div>');
                             setTimeout("$('" + div_respuesta + "').html('')", 6000);
                             var link = site_url + '/revision/solicitud_revision';
