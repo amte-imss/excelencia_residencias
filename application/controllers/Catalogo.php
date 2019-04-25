@@ -802,6 +802,32 @@ class Catalogo extends MY_Controller {
              $this->template->getTemplate();
          }
 
+         public function gestion_solicitud(){
+            $this->db->schema = 'excelencia';
+            $crud = $this->new_crud();
+            $crud->set_table('solicitud');
+            $crud->set_subject('solicitud');
+            $crud->set_primary_key('id_solicitud');
+
+            $crud->columns("id_solicitud","matricula", "carrera_tiene","carrera_categoria","fecha","id_convocatoria");
+            $crud->change_field_type('id_solicitud', 'hidden');
+            $crud->add_fields("matricula", "carrera_tiene","carrera_categoria","id_convocatoria");
+            $crud->edit_fields("matricula", "carrera_tiene","carrera_categoria","fecha","id_convocatoria");
+            $crud->required_fields('matricula', "carrera_tiene","id_convocatoria");
+
+            $crud->set_relation('id_convocatoria','convocatoria','nombre',null,'id_convocatoria asc');
+
+            $crud->field_type('carrera_tiene','true_false');
+
+            $data_view['output'] = $crud->render();
+            $data_view['title'] = "Solicitud";
+
+            $vista = $this->load->view('admin/admin.tpl.php', $data_view, true);
+            $this->template->setMainContent($vista);
+            $this->template->getTemplate();
+        }
+         
+
 
          /**
           * Función que hace la gestión del estado
@@ -817,7 +843,7 @@ class Catalogo extends MY_Controller {
               $crud->set_subject('estado_solicitud');
               $crud->set_primary_key('cve_estado_solicitud');
 
-              $crud->columns("cve_estado_solicitud","nombre_estado", "activo","config","transicion");
+              $crud->columns("cve_estado_solicitud","nombre_estado",     "activo","config","transicion");
               //$crud->fields("cve_estado_solicitud","nombre_estado", "descripcion", "activo","config","transicion");
               //$crud->change_field_type('lang', 'hidden');
               $crud->change_field_type('cve_estado_solicitud', 'hidden');
