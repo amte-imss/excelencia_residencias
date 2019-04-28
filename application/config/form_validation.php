@@ -152,16 +152,37 @@ $config["form_registro_excelencia"] = array(
         'label' => '¿Qué categoría tiene?',
         'rules' => 'trim',
     ),
-    /*array(
-        'field' => 'pnpc',
-        'label' => '¿Tiene PNPC?',
-        'rules' => 'trim|required',
+);
+
+$config["form_registro_excelencia1"] = array(
+    array(
+        'field' => 'carrera',
+        'label' => '¿Tiene carrera docente?',
+        'rules' => 'required',
     ),
     array(
-        'field' => 'pnpc_anio',
-        'label' => 'De qué año',
-        'rules' => 'trim',
-    ),*/
+        'field' => 'tipo_categoria',
+        'label' => '¿Qué categoría tiene?',
+        'rules' => 'required',
+    ),
+    array(
+        'field' => 'solicitud_gen',
+        'label' => 'Solicitud',
+        'rules' => 'required',
+    ),
+);
+
+$config["form_registro_excelencia0"] = array(
+    array(
+        'field' => 'carrera',
+        'label' => '¿Tiene carrera docente?',
+        'rules' => 'required',
+    ),
+    array(
+        'field' => 'solicitud_gen',
+        'label' => 'Solicitud',
+        'rules' => 'required',
+    ),
 );
 
 $config["login"] = array(
@@ -186,10 +207,10 @@ $config["login"] = array(
         'label' => 'Código de verificación',
         'rules' => 'required|check_captcha',
     ),
-    /* 'errors' => array(
-      'required' => 'El campo %s es obligatorio, favor de ingresarlo.',
-      'check_captcha' => "El texto no coincide con la imagen, favor de verificarlo."
-      ), */ 
+        /* 'errors' => array(
+          'required' => 'El campo %s es obligatorio, favor de ingresarlo.',
+          'check_captcha' => "El texto no coincide con la imagen, favor de verificarlo."
+          ), */
 );
 
 $config['form_user_update_password'] = array(
@@ -386,11 +407,11 @@ $config['form_registro_usuario_internos'] = array(
         'label' => 'Captcha',
         'rules' => 'required|check_captcha'
     ),
-    /*array(
-        'field' => 'reg_captcha',
-        'label' => 'Captcha',
-        'rules' => 'required|check_captcha'
-    ),*/
+        /* array(
+          'field' => 'reg_captcha',
+          'label' => 'Captcha',
+          'rules' => 'required|check_captcha'
+          ), */
 //    array(
 //        'field' => 'pais_institucion',
 //        'label' => '',
@@ -401,21 +422,21 @@ $config['form_registro_usuario_internos'] = array(
 //        'label' => '',
 //        'rules' => 'required'
 //    ),
-    /*array(
-        'field' => 'telefono_oficina',
-        'label' => '',
-        'rules' => 'max[50]|alpha_numeric_accent_space_dot'
-    ),
-    array(
-        'field' => 'telefono_personal',
-        'label' => '',
-        'rules' => 'required|max[50]|alpha_numeric_accent_space_dot'
-    ),
-    array(
-        'field' => 'pais_origen',
-        'label' => '',
-        'rules' => 'required'
-    )*/
+        /* array(
+          'field' => 'telefono_oficina',
+          'label' => '',
+          'rules' => 'max[50]|alpha_numeric_accent_space_dot'
+          ),
+          array(
+          'field' => 'telefono_personal',
+          'label' => '',
+          'rules' => 'required|max[50]|alpha_numeric_accent_space_dot'
+          ),
+          array(
+          'field' => 'pais_origen',
+          'label' => '',
+          'rules' => 'required'
+          ) */
 );
 $config['form_registro_usuario_externos'] = array(
     array(

@@ -160,6 +160,8 @@ class Registro extends MY_Controller {
 
     public function cargar_archivo() {
         if ($_FILES && $this->input->post(null, true)) {
+            $idioma = $this->obtener_idioma();
+            $language_text = $this->obtener_grupos_texto(array('registro_excelencia'), $idioma);
             $post = $this->input->post(null, true);
             $datos_sesion = $this->get_datos_sesion();
             $id_informacion_usuario = $datos_sesion['username'];
@@ -183,20 +185,21 @@ class Registro extends MY_Controller {
                         if ($actualizaCurso['tp_msg'] == En_tpmsg::SUCCESS) {
 //                            $this->delete_file('.' . $archivos_solicitud['ruta']);
                             $actualizaCurso['url'] = $filename;
-                            $actualizaCurso['messaje'] = 'El archivo se actualizo correctamente';
+                            $actualizaCurso['messaje'] = $language_text['registro_excelencia']['registro_excelencia'];
+//                                    'El archivo se actualizo correctamente';
                             header('Content-Type: application/json;charset=utf-8');
                             echo json_encode($actualizaCurso);
                             exit();
                         } else {
-                            echo 'No fue posible guardar el archivo. Por favor intentelo mas tarde';
+                            echo $language_text['registro_excelencia']['danger_guardar_archivo'];
                             exit();
                         }
                     } else {
-                        echo 'No fue posible guardar el archivo. Por favor intentelo mas tarde';
+                        echo $language_text['registro_excelencia']['danger_guardar_archivo'];
                         exit();
                     }
                 } else {
-                    echo 'No fue posible guardar el archivo. Por favor intentelo mas tarde';
+                    echo $language_text['registro_excelencia']['danger_guardar_archivo'];
                     exit();
                 }
             } else {
@@ -349,6 +352,8 @@ class Registro extends MY_Controller {
                 //Editar registro
                 $this->editar_cursos($post);
             } else {
+                $idioma = $this->obtener_idioma();
+                $language_text = $this->obtener_grupos_texto(array('registro_excelencia'), $idioma);
 //                exit();
                 $this->config->load('form_validation'); //Cargar archivo
                 $validations = $this->config->item('form_guarda_curso_participado'); //Obtener validaciones de archivo general
@@ -378,11 +383,11 @@ class Registro extends MY_Controller {
                             $result_insert = $this->registro_excelencia->insert_registro_general('excelencia.curso', $datos_curso, 'id_curso');
                             if ($result_insert['tp_msg'] == En_tpmsg::SUCCESS) {
                                 $result['tp_msg'] = En_tpmsg::SUCCESS;
-                                $result['html'] = 'Se guardo el registro exitosamente';
+                                $result['html'] = $language_text['registro_excelencia']['success_guardar_gen'];
                                 header('Content-Type: application/json;charset=utf-8');
                                 echo json_encode($result);
                             } else {
-                                echo 'No fue posible guardar el curso. Por favor intentelo mas tarde';
+                                echo $language_text['registro_excelencia']['danger_guardar_gen'];
                                 exit();
                             }
                         } else {
@@ -419,6 +424,8 @@ class Registro extends MY_Controller {
         $this->form_validation->set_data($post); //Añadir validaciones
         $this->form_validation->set_rules($validations); //Añadir validaciones
         if ($this->form_validation->run() == TRUE) {
+            $idioma = $this->obtener_idioma();
+            $language_text = $this->obtener_grupos_texto(array('registro_excelencia'), $idioma);
             if ($cambio_archivo) {//Actualiza archivo
                 $data_sesion = $this->get_datos_sesion();
                 $carga_file = $this->save_file('cursos_participacion', $data_sesion['matricula'], 'cp', 'archivo_curso');
@@ -441,20 +448,21 @@ class Registro extends MY_Controller {
                         if ($actualizaCurso['tp_msg'] == En_tpmsg::SUCCESS) {
                             $this->delete_file($file['ruta']);
                             $result['tp_msg'] = $actualizaCurso['tp_msg'];
-                            $result['html'] = 'Se actualizo el registro exitosamente';
+                            $result['html'] = $language_text['registro_excelencia']['success_actualizacion_gen'];
+//                            $result['html'] = $language_text['registro_excelencia'][''];
                             header('Content-Type: application/json;charset=utf-8');
                             echo json_encode($result);
                         } else {//La información del curso no se actualizo
-                            echo 'No fue posible actualizar el curso. Por favor intentelo mas tarde';
+                            echo $language_text['registro_excelencia']['danger_actualizacion_gen'];
                             exit();
                         }
                     } else {//No se actualizo el archivo en la base de datos
                         $this->delete_file($file_url);
-                        echo 'No fue posible actualizar el curso. Por favor intentelo mas tarde';
+                        echo $language_text['registro_excelencia']['danger_actualizacion_gen'];
                         exit();
                     }
                 } else {//No guardo fisicamente el archivo
-                    echo 'No fue posible actualizar el curso. Por favor intentelo mas tarde';
+                    echo $language_text['registro_excelencia']['danger_actualizacion_gen'];
                     exit();
                 }
             } else {//No existio cambio de archivo 
@@ -467,11 +475,11 @@ class Registro extends MY_Controller {
                 $actualizaCurso = $this->registro_excelencia->update_registro_general('excelencia.curso', $datos_curso, $where);
                 if ($actualizaCurso['tp_msg'] == En_tpmsg::SUCCESS) {
                     $result['tp_msg'] = $actualizaCurso['tp_msg'];
-                    $result['html'] = 'Se actualizo el registro exitosamente';
+                    $result['html'] = $language_text['registro_excelencia']['success_actualizacion_gen'];
                     header('Content-Type: application/json;charset=utf-8');
                     echo json_encode($result);
                 } else {//La información del curso no se actualizo
-                    echo 'No fue posible actualizar el curso. Por favor intentelo mas tarde';
+                    echo $language_text['registro_excelencia']['danger_actualizacion_gen'];
                     exit();
                 }
             }
@@ -493,15 +501,16 @@ class Registro extends MY_Controller {
 
     public function eliminar_curso($id_curso = null) {
         $output = [];
+        $idioma = $this->obtener_idioma();
+        $language_text = $this->obtener_grupos_texto(array('registro_excelencia'), $idioma);
         $output['result'] = false;
-        $output['msg'] = 'Ocurrió un error durante la eliminación.';
+        $output['msg'] = $language_text['registro_excelencia']['danger_elimina_gen'];
         if (!is_null($id_curso)) {
+
             $datos_sesion = $this->get_datos_sesion(); //Se obtienen datos de sesión para validar que solo el usuario pueda hacer modificaciones
             $id_informacion_usuario = $datos_sesion['username'];
 
             $idioma = $this->obtener_idioma(); //Carga de textos a utilizar
-            $lan_txt = $this->obtener_grupos_texto(array('registro_excelencia', 'template_general', 'registro_usuario'), $idioma);
-
             ///Validación de pertenencia con usuario con sesión
             $datos_curso = $this->registro_excelencia->get_curso_solicitud(array('where' => array('matricula' => $id_informacion_usuario, 'id_curso' => $id_curso)));
             //pr($datos_curso);
@@ -515,7 +524,7 @@ class Registro extends MY_Controller {
                     }
                 }
                 $output['result'] = true;
-                $output['msg'] = 'Eliminación realizada.';
+                $output['msg'] = $language_text['registro_excelencia']['success_eliminar_gen'];
             }
         }
         header('Content-Type: application/json; charset=utf-8;');
@@ -584,6 +593,39 @@ class Registro extends MY_Controller {
             return $archivo_curso[0];
         }
         return null;
+    }
+
+    public function actualiza_datos_generales() {
+        if ($this->input->post(null, true)) {
+            $post = $this->input->post(null, true);
+            $idioma = $this->obtener_idioma();
+            $language_text = $this->obtener_grupos_texto(array('registro_excelencia'), $idioma);
+//            pr($language_text);
+            $this->config->load('form_validation'); //Cargar archivo
+            $validations = $this->config->item('form_registro_excelencia' . $post['carrera']); //Obtener validaciones de archivo general
+            //$this->set_textos_campos_validacion($validations, $lan_txt['registro_trabajo']);
+            $this->form_validation->set_rules($validations); //Añadir validaciones
+            if ($this->form_validation->run() == TRUE) {
+                if ($post['carrera'] == '0') {
+                    $post['tipo_categoria'] = null;
+                }
+                $datos_curso = [
+                    'carrera_tiene' => $post['carrera'],
+                    'carrera_categoria' => $post['tipo_categoria']
+                ];
+                $where = ['id_solicitud' => $post['solicitud_gen']];
+                $actualizaCurso = $this->registro_excelencia->update_registro_general('excelencia.solicitud', $datos_curso, $where);
+                if ($actualizaCurso['tp_msg'] == En_tpmsg::SUCCESS) {
+                    $actualizaCurso['html'] = $language_text['registro_excelencia']['success_actualizacion_gen'];
+                    header('Content-Type: application/json;charset=utf-8');
+                    echo json_encode($actualizaCurso);
+                } else {
+                    echo $language_text['registro_excelencia']['danger_actualizacion_gen'];
+                }
+            } else {
+                echo validation_errors();
+            }
+        }
     }
 
 }

@@ -89,31 +89,34 @@
                                     echo 'checked';
                             }
                             ?> <?php
-                            if (isset($solicitud_excelencia['id_solicitud'])) {
-                                echo 'disabled';
-                            }
+//                            if (isset($solicitud_excelencia['id_solicitud'])) {
+//                                echo 'disabled';
+//                            }
                             ?>><?php echo $language_text['template_general']['si_op']; ?><br>
                             <input type="radio" name="carrera" value="0" onclick="javascript:habilitar_categoria();" <?php
                             if (isset($solicitud_excelencia['carrera_tiene'])) {
                                 if ($solicitud_excelencia['carrera_tiene'] == '0')
                                     echo 'checked';
                             }
-                            ?> <?php
-                            if (isset($solicitud_excelencia['id_solicitud'])) {
-                                echo 'disabled';
-                            }
-                            ?>><?php echo $language_text['template_general']['no_op']; ?><br>
+                            ?> 
+                            <?php
+//                            if (isset($solicitud_excelencia['id_solicitud'])) {
+//                                echo 'disabled';
+//                            }
+                            ?>>
+                                <?php echo $language_text['template_general']['no_op']; ?><br>
                         </div><div style="clear:both;"></div>
                         <?php echo form_error_format('carrera'); ?>
+                        
                     </div>
 
                     <div id="div_carrera_categoria" class="form-group">
                         <label for="tipo_categoria" class="col-sm-3 control-label"><?php echo $language_text['registro_excelencia']['tipo_categoria']; ?>*:</label>
                         <div class="col-sm-9">
                             <select id="tipo_categoria" name="tipo_categoria" class="form-control" <?php
-                            if (isset($solicitud_excelencia['id_solicitud'])) {
-                                echo 'disabled';
-                            }
+//                            if (isset($solicitud_excelencia['id_solicitud'])) {
+//                                echo 'disabled';
+//                            }
                             ?>>
                                         <?php
                                         echo '<option value="">' . $language_text['template_general']['sin_op'] . '</option>';
@@ -135,10 +138,10 @@
                     </div>
 
                     <!--div class="form-group">
-                            <label for="pnpc" class="col-sm-3 control-label"><?php //echo $language_text['registro_excelencia']['pnpc_tiene'];                     ?>*</label>
+                            <label for="pnpc" class="col-sm-3 control-label"><?php //echo $language_text['registro_excelencia']['pnpc_tiene'];                      ?>*</label>
                             <div class="col-sm-9">
-                                            <input type="radio" name="pnpc" value="1" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='1') echo 'checked';}                    ?>><?php //echo $language_text['template_general']['si_op'];                    ?><br>
-                                            <input type="radio" name="pnpc" value="0" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='0') echo 'checked';}                     ?>><?php //echo $language_text['template_general']['no_op'];                     ?><br>
+                                            <input type="radio" name="pnpc" value="1" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='1') echo 'checked';}                     ?>><?php //echo $language_text['template_general']['si_op'];                     ?><br>
+                                            <input type="radio" name="pnpc" value="0" <?php //if(isset($solicitud_excelencia['pnpc'])){ if($solicitud_excelencia['pnpc']=='0') echo 'checked';}                      ?>><?php //echo $language_text['template_general']['no_op'];                      ?><br>
                             </div><div style="clear:both;"></div>
                     <?php //echo form_error_format('pnpc'); ?>
                     </div -->
@@ -147,7 +150,24 @@
                         <div class="panel-footer text-right">
                             <button class="btn btn-theme animated flipInY visible" id="btn_envio_general" name="btn_envio_general" type="button"><?php echo $language_text['registro_excelencia']['guardar_solicitud']; ?></button>
                         </div>
-                    <?php } ?>
+                    <?php }else {?>
+                        <?php if (isset($estado_solicitud['config']['modificar_datos_generales']) && $estado_solicitud['config']['modificar_datos_generales'] == "true") { ?>
+                            <input type="hidden" id="solicitud_gen" name="solicitud_gen" value="<?php echo $solicitud_excelencia['id_solicitud']; ?>">
+                            <div id="datos_gen_msg">
+                                <!--<div class="alert alert-success" role="alert">Saludos</div>-->
+                            </div>
+                            <div class="panel-footer text-right">
+                                <button class="btn btn-theme animated flipInY visible" 
+                                        id="btn_actualizar_general" 
+                                        name="btn_actualizar_general"
+                                        data-divres="datos_gen_msg"
+                                        data-formulario="form_registro_solicitud_general"
+                                        type="button">
+                                            <?php echo $language_text['registro_excelencia']['reg_btn_actualizar']; ?>
+                                </button>
+                            </div>
+                        <?php }?>
+                    <?php }?>
                 </div>
 
                 <?php echo form_close(); ?>
@@ -155,9 +175,9 @@
                 <?php if (isset($observaciones)) { ?>
                     <br>
                     <div class="col-sm-offset-1 col-sm-10 panel">
-                        <div class="panel-heading"><h2><?php echo 'Observaciones por parte del revisor'; ?></h2></div>
-                    <!--<label for="curso" class="col-sm-12 control-label"><?php // echo 'Observaciones por parte del revisor'; ?></label>-->
-                        <strong><p style="color:red; size: 9">Nota: Recuerde que es importante tomar en cuenta las observaciones realizadas por el Comité evaluador ya que de ello depende su correcta participación para el Premio a la Excelencia Docente.</p></strong>
+                        <div class="panel-heading"><h2><?php echo $language_text['registro_excelencia']['lbl_obseraciones_revisor_solicitud']; ?></h2></div>
+                    <!--<label for="curso" class="col-sm-12 control-label"><?php // echo 'Observaciones por parte del revisor';  ?></label>-->
+                        <strong><p style="color:red; size: 9"><?php echo $language_text['registro_excelencia']['nota_revision_registro'];?></p></strong>
                         <div class="alert alert-info" role="alert">
                             <?php echo $observaciones; ?>
                         </div>
@@ -348,7 +368,7 @@
                     </div>
                 </div><!--col-->
             </div> <!--row-->
-                        
+
             <div class="row">
                 <div class="col-sm-offset-2 col-sm-8" id="msg"></div>
             </div><!--row-->
@@ -358,7 +378,7 @@
                     <div class="col-sm-offset-2 col-sm-8" >
                         <center>
                             <button class="btn btn-theme animated flipInY visible" id="btn_envio" name="btn_envio" type="button"><?php echo $language_text['registro_excelencia']['registrar_solicitud']; ?></button>
-                            <!--a href="<?php // echo site_url('registro_investigacion');                   ?>" class="btn btn-theme animated flipInY visible"><?php // echo $language_text['template_general']['cancelar'];                   ?></a-->
+                            <!--a href="<?php // echo site_url('registro_investigacion');                    ?>" class="btn btn-theme animated flipInY visible"><?php // echo $language_text['template_general']['cancelar'];                    ?></a-->
                         </center>
                     </div>
                 </div><!--row-->
@@ -381,6 +401,12 @@
         });
         $('#btn_editar_curso').click(function () {
             agregar_curso();
+        });
+        $('#btn_editar_curso').click(function () {
+            agregar_curso();
+        });
+        $('#btn_actualizar_general').click(function () {
+            actualiza_datos_generales(this);
         });
 <?php if (isset($solicitud_excelencia['id_solicitud'])) { ?>
             get_listado_cursos(<?php echo $solicitud_excelencia['id_solicitud']; ?>);
