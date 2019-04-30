@@ -6,12 +6,14 @@
           if(count($data_revisados['result']) > 0)
           {
 ?>
+            <div class="col-sm-12"><button class="col-sm-12 btn btn-theme animated flipInY visible" style="background-color:#D4C19C; border-color:#D4C19C;" type="button">Cerrar proceso</button> <br><br><br></div>
+
             <!--h4> <?php //echo $opciones_secciones['nota_fecha_limite'];?> </h4-->
-            <div class="col-md-4"></div>
             <div class="col-md-2"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_1'];?></h3><h4 class="text-center"><?php echo $configuracion['nivel_1']; ?></h4></div>
             <div class="col-md-2"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_2'];?></h3><h4 class="text-center"><?php echo $configuracion['nivel_2']; ?></h4></div>
             <div class="col-md-2"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_3'];?></h3><h4 class="text-center"><?php echo $configuracion['nivel_3']; ?></h4></div>
-            <div class="col-md-2 text-center"><br><button class="btn btn-theme animated flipInY visible" type="button">Guardar informacion</button></div>
+            <div class="col-sm-2"></div>
+            <div class="col-md-4 text-center"><br><button class="btn btn-theme animated flipInY visible" type="button">Guardar información</button></div>
 
             <br><br>
 
