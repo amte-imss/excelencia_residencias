@@ -13,14 +13,25 @@
             <div class="col-md-2"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_2'];?></h3><h4 class="text-center"><?php echo $configuracion['nivel_2']; ?></h4></div>
             <div class="col-md-2"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_3'];?></h3><h4 class="text-center"><?php echo $configuracion['nivel_3']; ?></h4></div>
             <div class="col-sm-2"></div>
-            <div class="col-md-4 text-center"><br><button class="btn btn-theme animated flipInY visible" type="button">Guardar información</button></div>
+            <div class="col-md-4 text-center"><br>
+                </button>
+                <button class="btn btn-theme animated flipInY visible" 
+                        id="btn_guardar_informacion_dictamen" 
+                        data-formulario="form_informacion_dictamen"
+                        data-divmsg="msg_guarda_dictamen"
+                        name="btn_guardar_informacion_dictamen" type="button">
+                    Guardar información
+                </button>
+            </div>
+            <div class="col-sm-12" id="msg_guarda_dictamen"></div>
 
             <br><br>
+            <?php echo form_open('gestion_revision/guarda_informacion_dictamen', array('id' => 'form_informacion_dictamen', 'class' => 'form-horizontal')); ?>
 
             <table class="table">
            
               <thead>
-                <tr>
+                  <tr >
                     <th scope="col"><?php echo $opciones_secciones['col_nivel'];?></th>
                   <th scope="col"><?php echo $opciones_secciones['col_matricula'];?></th>
                   <th scope="col"><?php echo $opciones_secciones['col_nombre'];?></th>
@@ -46,6 +57,7 @@
               $h=1;
               foreach ($data_revisados['result'] as $row)
               {
+                  $row['id_solicitud'];
                   $nivel = 'Sin nivel';
                   if($h<=$configuracion['nivel_1']){
                         $nivel = 'Nivel 1';
@@ -54,8 +66,19 @@
                     } elseif($h<=($configuracion['nivel_1']+$configuracion['nivel_2']+$configuracion['nivel_3'])){
                         $nivel = 'Nivel 3';
                   }
+                  $check_gano_premio='';
+                  $value_nivel='';
+                  $dictaminado_style='style="background: #F3E9D1"';
+                  if(isset($data_dictamen[$row['id_solicitud']])){
+                    if($data_dictamen[$row['id_solicitud']]['premio_anterior']){
+                        $check_gano_premio = 'checked="checked"';
+                    }
+                    $dictaminado_style = '';
+                    $value_nivel = $data_dictamen[$row['id_solicitud']]['id_nivel'];
+                  }
 ?>
-                  <tr>
+              <input type="hidden" name="solicitud[]" value="<?php echo $row['id_solicitud'];?>">
+              <tr <?php echo $dictaminado_style; ?>>
                       <td scope="row"><?php echo $nivel; ?></td>
                     <td><?php echo $row['matricula'];?></td>
                     <td><?php echo $row['nombre'];?></td>
@@ -70,13 +93,24 @@
                     <td><?php  echo ($row['puntaje_pnpc']+$row['puntaje_sa_et']+$row['puntaje_sa_satisfaccion']+$row['puntaje_carrera_docente']+$row['total_puntos_anios_cursos']);?></td>
                     <!--td><?php  echo $row['total'];?></td>
                     <td><?php echo $row['revisor']; ?></td-->
-                    <td align="center"><input type="checkbox" class="form-check-input" id="exampleCheck1"></td>
+                    <td align="center"><input type="checkbox" <?php echo $check_gano_premio; ?> class="form-check-input"  name="con_premio[<?php echo $row['id_solicitud'];?>]"></td>
                     <td align="center"> 
-                    <select id="tipo_categoria" name="tipo_categoria" class="form-control">
-                                <option>Nivel 1</option>
-                                <option>Nivel 2</option>
-                                <option>Nivel 3</option>
-                            </select>
+                        <?php echo $this->form_complete->create_element(
+                            array(
+//                                'id' => 'nivel'.$row['id_solicitud'], 
+                                'id' => 'nivel['.$row['id_solicitud'].']',
+                                'type' => 'dropdown',
+//                                'name'=>'nivel[]'.$row['id_solicitud'].']',
+                                'name'=>'nivel[]',
+                                'options' => $niveles,
+                                'first' => array('' => 'Selecciona nivel'),
+                                'value' => $value_nivel,
+                    //                'value' => (isset($value['valor'])) ? $value['valor'] : '',
+                                'attributes' => [
+                                    "class"=>"form-control"
+                                ],
+                            )
+                        );?>
                     </td>
                     <td>
 
@@ -86,6 +120,7 @@
 <?php
                 $h++;
               }
+              echo form_close();
           }
           else
           {
@@ -126,3 +161,4 @@
   $("#candidatos").addClass("active")
   $("#rechazados").removeClass()
   </script>
+<?php echo js('trabajo_investigacion/control_dictamen.js'); ?>

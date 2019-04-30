@@ -546,4 +546,27 @@ class Registro_excelencia_model extends CI_Model {
         return $result;
     }
 
+    public function delete_registro_general($entidad, $array_where) {
+        $result = ['tp_msg' => En_tpmsg::DANGER, 'mensaje' => ''];
+        $this->db->trans_begin();
+        if (!is_null($array_where)) {
+            foreach ($array_where as $key => $value) {
+                if (is_array($value)) {
+                    $typeWhere = $value['typeWhere'];
+                    $this->db->{$typeWhere}($key, $value);
+                } else {
+                    $this->db->where($key, $value);
+                }
+            }
+            $this->db->delete($entidad);
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+            } else {
+                $this->db->trans_commit();
+                $result = ['tp_msg' => En_tpmsg::SUCCESS, 'mensaje' => ''];
+            }
+        }
+        return $result;
+    }
+
 }

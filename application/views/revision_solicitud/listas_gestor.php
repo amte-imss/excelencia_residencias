@@ -10,6 +10,8 @@
             <?php if(isset($textos_idioma_nav['tab_ca']) && $textos_idioma_nav['tab_ca']!=''){ ?>
               <li id="candidatos" onclick="ponerActivo(this)"> <a href="<?php echo base_url("index.php/gestion_revision/listado_control/".strtolower(En_estado_solicitud::CANDIDATOS)); ?>"><strong><?php echo $textos_idioma_nav['tab_ca']; ?></strong></a></li>
             <?php } ?>
+            <li id="aceptados" onclick="ponerActivo(this)"> <a href="<?php echo base_url("index.php/gestion_revision/listado_control/".strtolower(En_estado_solicitud::ACEPTADOS)); ?>"><strong><?php echo $textos_idioma_nav['tab_ac']; ?></strong></a></li>
+            <li id="rechazados" onclick="ponerActivo(this)"> <a href="<?php echo base_url("index.php/gestion_revision/listado_control/".strtolower(En_estado_solicitud::RECHAZADOS)); ?>"><strong><?php echo $textos_idioma_nav['tab_rx']; ?></strong></a></li>
             <!--li id="aceptados" onclick="ponerActivo(this)"> <a href="<?php //echo base_url("index.php/gestion_revision/listado_control/5"); ?>"><strong><?php echo $textos_idioma_nav['tab_ac']; ?></strong> <br/></a></li>
             <li id="rechazados" onclick="ponerActivo(this)"> <a href="<?php //echo base_url("index.php/gestion_revision/listado_control/6"); ?>"><strong><?php echo $textos_idioma_nav['tab_rx']; ?></strong> <br/></a></li-->
         </ul>

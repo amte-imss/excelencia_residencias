@@ -306,7 +306,13 @@
 
                         <?php echo form_open_multipart('registro/solicitud', array('id' => 'form_registro_solicitud_documentacion', 'class' => 'form-horizontal', 'data-toggle' => "validator", 'role' => "form", 'accept-charset' => "utf-8")); ?>
 
-                        <?php foreach ($tipo_documentos as $key => $value) { ?>
+                        <?php foreach ($tipo_documentos as $key => $value) { 
+//                            pr($value);
+//                            pr($key);
+//                            pr($documento);
+//                            pr($tipo_documentos);
+//                            pr($documento[$value['id_tipo_documento']]);
+                            ?>
                             <div class="form-group" style="background-color: #EEE;">
                                 <div class="col-sm-4">
                                     <label for="trabajo_archivo" class="control-label"><?php echo ( ++$key) . ") " . $value['nombre']; ?></label>

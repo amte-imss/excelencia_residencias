@@ -15,6 +15,8 @@ class En_estado_solicitud {
             REVISADOS = 'REVISADO',
             CANDIDATOS = 'CANDIDATOS',
             NO_CALIFICO = 'NO_CALIFICO',
-            CORRECCION = 'CORRECCION'
+            CORRECCION = 'CORRECCION',
+            ACEPTADOS = 'ACEPTADOS',
+            RECHAZADOS = 'RECHAZADOS'
     ;
 }

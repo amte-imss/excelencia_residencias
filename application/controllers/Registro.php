@@ -167,7 +167,7 @@ class Registro extends MY_Controller {
             $id_informacion_usuario = $datos_sesion['username'];
             $id_tipo_documento = $this->input->post('id_tipo_documento', TRUE);
             $id_solicitud = $this->input->post('id_solicitud', TRUE);
-            $archivos = $this->archivos($_FILES, array('id_informacion_usuario' => $id_informacion_usuario, 'id_tipo_documento' => $id_tipo_documento));
+//            $archivos = $this->archivos($_FILES, array('id_informacion_usuario' => $id_informacion_usuario, 'id_tipo_documento' => $id_tipo_documento));
             //pr($_POST);
             if (isset($post['documento'])) {//Edicion de archivo
                 $documento = $this->input->post('documento', TRUE);
@@ -175,6 +175,9 @@ class Registro extends MY_Controller {
 //                pr($archivos_solicitud);
 //                pr($archivos);
                 if (!is_null($archivos_solicitud)) {
+//                    $this->delete_file($ruta);
+//                    $this->delete_file('.' . $archivos_solicitud['ruta']);
+//                    exit();
                     $archivos = $this->archivos($_FILES, array('id_informacion_usuario' => $id_informacion_usuario, 'id_tipo_documento' => $id_tipo_documento));
                     if ($archivos['resultado'] == 1 && isset($archivos['data']) && !empty($archivos['data'])) {
                         $filename = $archivos['data']['ruta'] . $archivos['data']['file_name'];
@@ -183,9 +186,8 @@ class Registro extends MY_Controller {
                         $where = ['id_documento' => $archivos_solicitud['id_documento']];
                         $actualizaCurso = $this->registro_excelencia->update_registro_general('excelencia.documento', $datos_curso, $where);
                         if ($actualizaCurso['tp_msg'] == En_tpmsg::SUCCESS) {
-//                            $this->delete_file('.' . $archivos_solicitud['ruta']);
                             $actualizaCurso['url'] = $filename;
-                            $actualizaCurso['messaje'] = $language_text['registro_excelencia']['registro_excelencia'];
+                            $actualizaCurso['messaje'] = $language_text['registro_excelencia']['succes_actualizar_archivo'];
 //                                    'El archivo se actualizo correctamente';
                             header('Content-Type: application/json;charset=utf-8');
                             echo json_encode($actualizaCurso);
