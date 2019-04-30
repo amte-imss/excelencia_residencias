@@ -73,12 +73,7 @@ insert into excelencia.nivel(id_nivel, descripcion)  values
 ('n3','{"es":"Nivel 3","en":""}')
 ;
 
---'gestion_revision/guarda_informacion_dictamen'
-
-/*
-insert into idiomas.traduccion values('','insert_update','registro_excelencia','{"es":"","en":""}');
-insert into idiomas.traduccion values('','insert_update','registro_excelencia','{"es":"","en":""}');
-
-insert into idiomas.traduccion values('','lbl','registro_excelencia','{"es":"","en":""}');
-insert into idiomas.traduccion values('','lbl','registro_excelencia','{"es":"","en":""}');
-*/
+insert into sistema.modulos (clave_modulo, nombre,url, activo, modulo_padre_clave, orden, clave_configurador_modulo) values 
+('SAVE_GUARDAR_DICT',	'{"es":"Guardar dictamen","en":""}',	'/gestion_revision/guarda_informacion_dictamen',true,'M2nxOiMxoD',1,'ACCION');
+insert into sistema.roles_modulos (clave_modulo, clave_rol, activo) values
+('SAVE_GUARDAR_DICT','ADMIN',true);
