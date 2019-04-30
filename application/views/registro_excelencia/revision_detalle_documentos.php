@@ -19,29 +19,10 @@
             <tr>
                 <td><?php echo $value['nombre'] ?></td>
                 <td><?php echo str_replace('||X||', base_url() . $documento[$value['id_tipo_documento']]['ruta'], $language_text['registro_excelencia']['reg_liga_msg_descarga']); ?></td>
-                <td><?php
-                    $aux = null;
-                    if (isset($evaluacion[$documento[$value['id_tipo_documento']]['id_documento']])) {//Valida que exista el documento
-                        $aux = $evaluacion[$documento[$value['id_tipo_documento']]['id_documento']];
-                    }
-//                    pr($aux);
-                    foreach ($opciones_curso as $opciones) {
-                        $check = '';
-                        if (!is_null($aux) && $aux['id_opcion'] == $opciones['id_opcion']) {
-                            $check = 'checked';
-                        }
-//                        pr($aux);
-//                        pr($opciones);
-//                        pr($check);
-                        ?>
-                        <input type="radio" disabled name="opcion_documento_<?php echo $documento[$value['id_tipo_documento']]['id_documento']; ?>" value="<?php echo $opciones['id_opcion']; ?>" <?php echo $check; ?> ><?php echo $opciones['opcion']; ?><br>
-                        <?php
-                    }
-                    ?>
-                </td>
             </tr>
         <?php } ?>
         </tbody>
     </table>
+
     <?php echo form_close(); ?>
 </div>

@@ -28,22 +28,7 @@
                 <td><?php echo $curso['anios']; ?></td>
                 <td><a href="<?php echo base_url() . trim($curso['ruta'], '.'); ?>" target="_blank"><?php echo $language_text['registro_excelencia']['reg_liga_descarga']; ?></a></td>
                 <td><?php echo ($curso['obtuvo_pnpc']) ? 'Si' : 'No'; ?></td>
-                <td><?php
-                    $aux = null;
-                    if (isset($evaluacion[$curso['id_documento_curso']])) {//Valida que exista el documento
-                        $aux = $evaluacion[$curso['id_documento_curso']];
-                    }
-                    foreach ($opciones_curso as $opciones) {
-                        $check = '';
-                        if (!is_null($aux) && $aux['id_opcion'] == $opciones['id_opcion']) {
-                            $check = 'checked';
-                        }
-                        ?>
-                        <input type="radio" disabled name="opcion_curso_<?php echo $curso['id_documento_curso']; ?>" value="<?php echo $opciones['id_opcion']; ?>" <?php echo $check; ?> ><?php echo $opciones['opcion']; ?><br>
-                        <?php
-                    }
-                    ?>
-                </td>
+              
             </tr>
         <?php } ?>
         </tbody>
