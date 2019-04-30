@@ -4,16 +4,23 @@
     }
 
     .div-borde {
-        margin-top: 10px;
-        border: #cdcdcd medium solid;
+        margin-top: 4px;
+        border: #cdcdcd 1px solid;
         border-radius: 5px;
         -moz-border-radius: 5px;
         -webkit-border-radius: 5px;
-        padding: 0.5em;
+        padding: 0.2em;
+    }
+   .control-label{
+        font-size:13px;
     }
 
     .delrow{
         visibility: hidden;
+    }
+
+    .table{
+        font-size:13px;
     }
 </style>
 
