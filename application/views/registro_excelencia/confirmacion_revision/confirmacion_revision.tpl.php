@@ -24,11 +24,10 @@
     }
 </style>
 
-
-<div class="panel panel-default from-trabajos">
-    <h3 class="page-head-line text-center"><?php echo $language_text['registro_excelencia']['titulo_registro']; ?></h3>
-    <div class="panel-body">
-        <div class="container">
+<div class="panel  from-trabajos">
+    <h3 class="page-head-line text-center">Confirmación de revisión</h3><br>
+    <div class="">
+        <div class="">
             <div class="row">
                 <div class="col-sm-offset-1 col-sm-10">
 
@@ -38,18 +37,18 @@
                 </div>
             </div>
             <!--row-->
-            <?php if($total_revisiones>0){ ?>
+            <?php //if($total_revisiones>0){ ?>
             <div class="row">
-                <div class="col-sm-offset-2 col-sm-8">
-                    <strong>La solicitud de premio,  ya ha sido revisada anteriormente, por tal motivo le sugerimos realizar una revisión exhaustiva</strong>
+                <div class="col-sm-offset-2 col-sm-10">
+                    <strong class="text-center" style="font-size:13px;">La solicitud de premio,  ya ha sido revisada anteriormente, por tal motivo le sugerimos realizar una revisión exhaustiva.</strong>
                 </div>
             </div><!--row-->
-            <?php } ?>
+            <?php// } ?>
             <br>
             <div class="row">
-                <div class="col-sm-offset-1 col-sm-10 panel">
-                    <div class="panel-heading"><h2><?php echo $language_text['registro_excelencia']['reg_titulo_general']; ?></h2></div>
-                    <div class="panel-body">
+                <div class="col-sm-offset-1 col-sm-10">
+                    <div class="col-sm-12"><h4><?php echo $language_text['registro_excelencia']['reg_titulo_general']; ?></h4></div>
+                    <div class="">
 
                         <div class="col-sm-6">
                             <div class="div-borde" >
@@ -135,20 +134,20 @@
                             <br><br>
                         </div>
                     </div>
-                    <hr class="col-sm-11" style="border:1px solid;">
+                    <hr class="col-sm-12" style="solid;">
                     <?php if (isset($cursos_participacion)) { ?>
                         <div id="revision_cursos" class="col-sm-12 col-lg-12 col-md-12">
                             <?php echo $cursos_participacion; ?>
                         </div>
                     <?php } ?>
 
-                    <hr class="col-sm-11" style="border:1px solid;">
+                    <hr class="col-sm-11" style=" solid;">
                     <?php if (isset($documentos_participacion)) { ?>
                         <div id="revision_documentos" class="col-sm-12 col-lg-12 col-md-12">
                             <?php echo $documentos_participacion; ?>
                         </div>
                     <?php } ?>
-                    <hr class="col-sm-11" style="border:1px solid;">
+                    <hr class="col-sm-11" style=" solid;">
                     <?php echo form_open('revision/terminar_revision', array('id' => 'form_finaliza_revision', 'class' => 'form-horizontal')); ?>
                     <input type="hidden" id="solicitud" name="solicitud" value="<?php echo $solicitud_excelencia['id_solicitud']; ?>">
                     <div id="finalizar_msg" class="col-sm-12 form-group">

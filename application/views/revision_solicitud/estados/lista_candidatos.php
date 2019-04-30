@@ -7,11 +7,16 @@
           {
 ?>
             <!--h4> <?php //echo $opciones_secciones['nota_fecha_limite'];?> </h4-->
-            <div class="col-md-4"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_1'];?></h3><h4 class="text-center"><?php echo $configuracion['nivel_1']; ?></h4></div>
-            <div class="col-md-4"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_2'];?></h3><h4 class="text-center"><?php echo $configuracion['nivel_2']; ?></h4></div>
-            <div class="col-md-4"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_3'];?></h3><h4 class="text-center"><?php echo $configuracion['nivel_3']; ?></h4></div>
+            <div class="col-md-4"></div>
+            <div class="col-md-2"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_1'];?></h3><h4 class="text-center"><?php echo $configuracion['nivel_1']; ?></h4></div>
+            <div class="col-md-2"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_2'];?></h3><h4 class="text-center"><?php echo $configuracion['nivel_2']; ?></h4></div>
+            <div class="col-md-2"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_3'];?></h3><h4 class="text-center"><?php echo $configuracion['nivel_3']; ?></h4></div>
+            <div class="col-md-2 text-center"><br><button class="btn btn-theme animated flipInY visible" type="button">Guardar informacion</button></div>
+
             <br><br>
+
             <table class="table">
+           
               <thead>
                 <tr>
                     <th scope="col"><?php echo $opciones_secciones['col_nivel'];?></th>
@@ -28,6 +33,8 @@
                   <th scope="col"><?php echo $opciones_secciones['col_pun_carrera'];?></th>
                   <th scope="col"><?php echo $opciones_secciones['col_pun_permanencia'];?></th>
                   <th scope="col"><?php echo $opciones_secciones['col_pun_excelencia'];?></th>
+                  <th scope="col">Ganó premio</th>
+                  <th scope="col">Nivel</th>
                   <th scope="col"><?php echo $opciones_secciones['col_opciones'];?></th>
                 </tr>
               </thead>
@@ -61,7 +68,16 @@
                     <td><?php  echo ($row['puntaje_pnpc']+$row['puntaje_sa_et']+$row['puntaje_sa_satisfaccion']+$row['puntaje_carrera_docente']+$row['total_puntos_anios_cursos']);?></td>
                     <!--td><?php  echo $row['total'];?></td>
                     <td><?php echo $row['revisor']; ?></td-->
+                    <td align="center"><input type="checkbox" class="form-check-input" id="exampleCheck1"></td>
+                    <td align="center"> 
+                    <select id="tipo_categoria" name="tipo_categoria" class="form-control">
+                                <option>Nivel 1</option>
+                                <option>Nivel 2</option>
+                                <option>Nivel 3</option>
+                            </select>
+                    </td>
                     <td>
+
                       <a href="<?php echo site_url().'/revision/index/'.$row['id_solicitud']; ?>" type="button"><?php echo $opciones_secciones['btn_ver'];?> <span class="glyphicon glyphicon-new-window"/></a>
                     </td>
                   </tr>
@@ -87,6 +103,7 @@
 
     </tbody>
   </table>
+
 <?php
   }
   else
@@ -96,6 +113,7 @@
 <?php
   }
 ?>
+
 
   <script>
   $("#comite").removeClass()
