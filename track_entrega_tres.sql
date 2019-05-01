@@ -1,11 +1,6 @@
 update excelencia.estado_solicitud set 
 config='{"btn_agregar_curso":"true","btn_editar_curso":"true","btn_elimina_curso":"true","btn_envio_doctos":"true","btn_envio":"true","modificar_archivos":"true","modificar_datos_generales":"true"}'
-where cve_estado_solicitud = 'EN_REVISION';
-
-update excelencia.estado_solicitud set 
-config='{"btn_agregar_curso":"false","btn_editar_curso":"true","btn_envio_datos":"true","btn_envio":"true","btn_elimina_curso":"false","modificar_archivos":"true","modificar_datos_generales":"true"}'
-where cve_estado_solicitud = 'EN_REVISION';
-
+where cve_estado_solicitud = 'REGISTRO';
 
 
 insert into sistema.modulos (clave_modulo, nombre,url, activo, modulo_padre_clave, orden, clave_configurador_modulo) values 

@@ -117,7 +117,7 @@ class Gestion_revision_model extends MY_Model {
             }
             $result = $this->db->get('excelencia.solicitud s'); //pr($this->db->last_query());
             $salida = $result->result_array();
-            pr($this->db->last_query());
+//            pr($this->db->last_query());
             $result->free_result();
             $this->db->flush_cache();
             $this->db->reset_query();

@@ -53,6 +53,8 @@ class Gestion_revision extends General_revision {
                 $this->load->model('Registro_excelencia_model', 'registro');
                 $datos['data_revisados'] = $this->candidatos();
                 $datos['data_dictamen'] = $this->get_dictamen();
+                $datos['total_registrados_nivel'] = $this->get_dictamen_total_nivel();
+                
 //                pr($datos);
                 $datos['niveles'] = dropdown_options($this->get_niveles(), 'id_nivel', 'descripcion');
                 $conf = $this->gestion_revision->get_configuracion(array('where' => "llave='cupo'"));
@@ -120,6 +122,24 @@ class Gestion_revision extends General_revision {
         return $dictamen;
     }
 
+    /**
+     * @author LEAS 01/05/2019
+     * @return types
+     * Obtine el total de dictaminados por nivel
+     */
+    private function get_dictamen_total_nivel() {
+
+        $select = [
+            "sum((case when id_nivel = 'n1' and aceptado then 1 else 0 end)) nivel_1",
+            "sum((case when id_nivel = 'n2' and aceptado then 1 else 0 end)) nivel_2"
+            , "sum((case when id_nivel = 'n3' and aceptado then 1 else 0 end)) nivel_3"
+        ];
+        $total_nivel = $this->registro->getConsutasGenerales('excelencia.dictamen', $select);
+//        pr($dictamen_r);
+        
+        return $total_nivel[0];
+    }
+
     public function guarda_informacion_dictamen() {
         if ($this->input->post(null, true)) {
             $post = $this->input->post(null, true);
@@ -185,7 +205,7 @@ class Gestion_revision extends General_revision {
                         ];
                     }
                 }
-            }else{
+            } else {
                 if (isset($data_dictamen[$value])) {//actualiza registro
                     $where = ['id_dictamen' => $data_dictamen[$value]['id_dictamen'], 'id_solicitud' => $value];
                     $update = $this->registro->delete_registro_general('excelencia.dictamen', $where);

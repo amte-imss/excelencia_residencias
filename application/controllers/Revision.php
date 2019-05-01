@@ -11,6 +11,11 @@ class Revision extends MY_Controller {
 
     const TIPO_OPCION_CURSO_PARTICIPANTE = "VALIDA_CURSO",
             TIPO_OPCION_DOCUMENTOS_PARTICIPANTE = "VALIDA_DOCUMENTOS";
+    const TIPO_VISTA_DETALLE_REVISION = 'detalle',
+            TIPO_VISTA_NORMAL_REVISION = 'normal',
+            TIPO_VISTA_REVISION = 'revision'
+
+    ;
 
     function __construct() {
         $this->grupo_language_text = ['registro_excelencia', 'mensajes', 'en_revision']; //Grupo de idiomas para el controlador actual
@@ -29,7 +34,7 @@ class Revision extends MY_Controller {
         $this->load->model('Revision_model', 'revision');
     }
 
-    public function index($id_solicitud = null) {
+    public function index($id_solicitud = null, $tipo_vista = self::TIPO_VISTA_NORMAL_REVISION) {
         $output = [];
         if (is_null($id_solicitud) || !is_numeric($id_solicitud)) {
             $main_content = $this->load->view('registro_excelencia/registro_no_disponible.tpl.php', $output, true);
@@ -56,8 +61,8 @@ class Revision extends MY_Controller {
             $output['estado_solicitud'] = $this->get_estado_solicitud($output['solicitud_excelencia']['cve_estado_solicitud']);
             $output['datos_generales'] = $this->usuario->get_usuarios(array('where' => array("usuarios.username" => $output['solicitud_excelencia']['matricula'])))[0];
             $output['tipo_categoria'] = $this->registro_excelencia->tipo_categoria();
-            $output['cursos_participacion'] = $this->get_view_listado_cursos($output['solicitud_excelencia'], 'detalle');
-            $output['documentos_participacion'] = $this->get_view_listado_documentos($output['solicitud_excelencia'], 'detalle');
+            $output['cursos_participacion'] = $this->get_view_listado_cursos($output['solicitud_excelencia'], $tipo_vista);
+            $output['documentos_participacion'] = $this->get_view_listado_documentos($output['solicitud_excelencia'], $tipo_vista);
             // echo $output;
             $this->template->setTitle('Premio a la Excelencia Docente');
 //        $this->get_cursos_participacion($solicitud)
@@ -100,7 +105,7 @@ class Revision extends MY_Controller {
                 $output['datos_revision'] = $this->get_revision($id_solicitud);
                 $total_revisiones = $this->get_total_revisiones_solicitud($id_solicitud);
                 $output['total_revisiones'] = 0;
-                if(!empty($total_revisiones)){
+                if (!empty($total_revisiones)) {
                     $output['total_revisiones'] = $total_revisiones['total_revisiones'];
                 }
                 $output['datos_generales'] = $this->usuario->get_usuarios(array('where' => array("usuarios.username" => $output['solicitud_excelencia']['matricula'])))[0];
@@ -136,7 +141,7 @@ class Revision extends MY_Controller {
         $this->template->getTemplate();
     }
 
-    private function get_view_listado_cursos($solicitud_excelencia, $tipo = null) {
+    private function get_view_listado_cursos($solicitud_excelencia, $tipo = self::TIPO_VISTA_REVISION) {
 //        $where = ['c.id_solicitud' => $output['solicitud']['id_solicitud']];
         $where = ['c.id_solicitud' => $solicitud_excelencia['id_solicitud']];
         $output['cursos_participantes'] = $this->registro_excelencia->curso_participantes($where);
@@ -150,15 +155,28 @@ class Revision extends MY_Controller {
         $output['solicitud']['id_solicitud'] = $solicitud_excelencia['id_solicitud'];
         $output['evaluacion'] = $this->get_revision_curso($solicitud_excelencia['id_solicitud']);
 //        pr($output['evaluacion']);
+        switch ($tipo) {
+            case self::TIPO_VISTA_DETALLE_REVISION:
+                $output['mostrar_opciones_revision'] = true;
+                $cursos_doc = $this->load->view('registro_excelencia/revision_detalle_cursos.php', $output, true);
+                break;
+            case self::TIPO_VISTA_NORMAL_REVISION:
+                $output['mostrar_opciones_revision'] = false;
+                $cursos_doc = $this->load->view('registro_excelencia/revision_detalle_cursos.php', $output, true);
+                break;
+            case self::TIPO_VISTA_REVISION:
+                $cursos_doc = $this->load->view('registro_excelencia/revision_cursos.php', $output, true);
+                break;
+        }
         if (!is_null($tipo)) {
-            $cursos_doc = $this->load->view('registro_excelencia/revision_detalle_cursos.php', $output, true);
+            
         } else {
-            $cursos_doc = $this->load->view('registro_excelencia/revision_cursos.php', $output, true);
+            
         }
         return $cursos_doc;
     }
 
-    private function get_view_listado_documentos($solicitud_excelencia, $tipo = null) {
+    private function get_view_listado_documentos($solicitud_excelencia, $tipo = self::TIPO_VISTA_REVISION) {
         $output['tipo_documentos'] = $this->registro_excelencia->tipo_documentos(array('estado' => '1', 'id_tipo_documento<>' => 9));
 //        $output['estado_solicitud'] = $this->get_estado_solicitud($output['solicitud_excelencia']['cve_estado_solicitud']);
         $documentos = $this->registro_excelencia->get_documento(array('where' => 'id_solicitud=' . $solicitud_excelencia['id_solicitud']));
@@ -174,10 +192,18 @@ class Revision extends MY_Controller {
         $output['solicitud']['id_solicitud'] = $solicitud_excelencia['id_solicitud'];
         $output['evaluacion'] = $this->get_revision_documentos($solicitud_excelencia['id_solicitud']);
 //        pr($output['evaluacion']);
-        if (!is_null($tipo)) {
-            $documentos_doc = $this->load->view('registro_excelencia/revision_detalle_documentos.php', $output, true);
-        } else {
-            $documentos_doc = $this->load->view('registro_excelencia/revision_documentos.php', $output, true);
+        switch ($tipo) {
+            case self::TIPO_VISTA_DETALLE_REVISION:
+                $output['mostrar_opciones_revision'] = true;
+                $documentos_doc = $this->load->view('registro_excelencia/revision_detalle_documentos.php', $output, true);
+                break;
+            case self::TIPO_VISTA_NORMAL_REVISION:
+                $output['mostrar_opciones_revision'] = false;
+                $documentos_doc = $this->load->view('registro_excelencia/revision_detalle_documentos.php', $output, true);
+                break;
+            case self::TIPO_VISTA_REVISION:
+                $documentos_doc = $this->load->view('registro_excelencia/revision_documentos.php', $output, true);
+                break;
         }
         return $documentos_doc;
     }
@@ -590,6 +616,7 @@ class Revision extends MY_Controller {
         }
         return null;
     }
+
     private function get_total_revisiones_solicitud($id_solicitud) {
         $select = ['count(*) total_revisiones'
         ];
@@ -600,8 +627,6 @@ class Revision extends MY_Controller {
         }
         return null;
     }
-    
-    
 
     private function get_revision_curso($id_solicitud = null, $id_revision = null) {
         if (is_null($id_solicitud) && is_null($id_revision)) {

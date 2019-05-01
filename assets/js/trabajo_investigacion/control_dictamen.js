@@ -32,10 +32,13 @@ function guarda_inf_dictamen(element) {
                     var resp = $.parseJSON(data);
                     if (typeof resp.html !== 'undefined') {
                         if (resp.tp_msg === 'success') {
+//                            var sh = $('.table').scrollLeft();
+//                            $(".timeline").animate({scrollX: $('.timeline')[0].scrollHeight}, 1000, 'easeOutBounce');
+                            $('.timeline').stop().animate({scrollLeft: 2}, 1300, 'easeOutBounce');
                             $(div_respuesta).html('<div class="alert alert-success" role="alert">' + resp.html + '</div>');
                             setTimeout("$('" + div_respuesta + "').html('')", 6000);
                             var link = site_url + '/gestion_revision/listado_control/candidatos';
-                            
+
                             setTimeout("location.reload();", 2500);
                         } else if (resp.tp_msg === 'warning') {
                             $(div_respuesta).html('<div class="alert alert-warning" role="alert">' + resp.html + '</div>');
