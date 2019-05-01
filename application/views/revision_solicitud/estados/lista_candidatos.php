@@ -86,8 +86,9 @@ if (isset($data_revisados)) {
                         <td><?php echo ($row['puntaje_sa_et'] + $row['puntaje_sa_satisfaccion']); ?></td>
                         <td><?php echo $row['puntaje_carrera_docente']; ?></td>
                         <td><?php echo $row['total_puntos_anios_cursos']; ?></td>
-                        <td><?php echo ($row['puntaje_pnpc'] + $row['puntaje_sa_et'] + $row['puntaje_sa_satisfaccion'] + $row['puntaje_carrera_docente'] + $row['total_puntos_anios_cursos']); ?></td>
-                        <!--td><?php echo $row['total']; ?></td>
+                        <!--<td><?php // echo ($row['puntaje_pnpc'] + $row['puntaje_sa_et'] + $row['puntaje_sa_satisfaccion'] + $row['puntaje_carrera_docente'] + $row['total_puntos_anios_cursos']); ?></td>-->
+                        <td><?php echo $row['total_suma_puntos']; ?></td>
+                        <!--td><?php // echo $row['total']; ?></td>
                         <td><?php echo $row['revisor']; ?></td-->
                         <td align="center"><input type="checkbox" <?php echo $check_gano_premio; ?> class="form-check-input"  name="con_premio[<?php echo $row['id_solicitud']; ?>]"></td>
                         <td align="center"> 

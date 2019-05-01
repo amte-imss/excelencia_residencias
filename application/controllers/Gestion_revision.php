@@ -177,11 +177,12 @@ class Gestion_revision extends General_revision {
                     $nivel = $post['nivel'][$value];
                 }
                 $detalle_revisado = $data_candidatos[$value];
-                if (!is_null($detalle_revisado['id_evaluacion']) && !empty($detalle_revisado['id_evaluacion'])) {
-                    $total_promedio = ($detalle_revisado['puntaje_pnpc'] + $detalle_revisado['puntaje_sa_et'] + $detalle_revisado['puntaje_sa_satisfaccion'] + $detalle_revisado['puntaje_carrera_docente'] + $detalle_revisado['total_puntos_anios_cursos']);
-                } else {
-                    $total_promedio = floatval($detalle_revisado['total_puntos_anios_cursos']);
-                }
+                $total_promedio = $detalle_revisado['total_suma_puntos'];
+//                if (!is_null($detalle_revisado['id_evaluacion']) && !empty($detalle_revisado['id_evaluacion'])) {
+//                    $total_promedio = ($detalle_revisado['puntaje_pnpc'] + $detalle_revisado['puntaje_sa_et'] + $detalle_revisado['puntaje_sa_satisfaccion'] + $detalle_revisado['puntaje_carrera_docente'] + $detalle_revisado['total_puntos_anios_cursos']);
+//                } else {
+//                    $total_promedio = floatval($detalle_revisado['total_puntos_anios_cursos']);
+//                }
                 $data = ['id_solicitud' => $value, 'id_usuario' => $usuario_dictamen,
                     'id_nivel' => $nivel,
                     'aceptado' => !$con_premio,
@@ -352,7 +353,8 @@ class Gestion_revision extends General_revision {
 
     private function candidatos() {
         $lenguaje = obtener_lenguaje_actual();
-        $respuesta_model = $this->gestion_revision->get_candidatos();
+        $param = ['order'=>'17 desc, 7 desc '];//El 17 equivale a total de suma de puntos y l 7 a la fecha
+        $respuesta_model = $this->gestion_revision->get_candidatos($param);
         $result = array('success' => $respuesta_model['success'], 'msg' => $respuesta_model['msg'], 'result' => []);
         foreach ($respuesta_model['result'] as $row) {
             $result['result'][$row['id_solicitud']] = $row;
