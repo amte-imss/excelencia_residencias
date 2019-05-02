@@ -448,7 +448,14 @@ class Registro extends MY_Controller {
                         $where = ['id_curso' => $post['curso_row']];
                         $actualizaCurso = $this->registro_excelencia->update_registro_general('excelencia.curso', $datos_curso, $where);
                         if ($actualizaCurso['tp_msg'] == En_tpmsg::SUCCESS) {
-                            $this->delete_file($file['ruta']);
+                            /*pr($file);//viejo archivo
+                            pr($file_url);
+                            pr($carga_file);//Nuevo archivo
+                            */
+                            if($file['ruta'] != $file_url){
+                                $this->delete_file($file['ruta']);
+                            }
+                            //$this->delete_file($file['ruta']);
                             $result['tp_msg'] = $actualizaCurso['tp_msg'];
                             $result['html'] = $language_text['registro_excelencia']['success_actualizacion_gen'];
 //                            $result['html'] = $language_text['registro_excelencia'][''];
