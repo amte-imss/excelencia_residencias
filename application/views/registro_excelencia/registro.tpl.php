@@ -329,7 +329,7 @@
                                         ?>
                                         <div class="col-sm-<?php echo $tam; ?>">
                                             <label class="control-label" id="lbl_<?php echo $value['id_tipo_documento']; ?>">
-                                                <?php echo str_replace('||X||', base_url() . $documento[$value['id_tipo_documento']]['ruta'], $language_text['registro_excelencia']['reg_liga_msg_descarga']); ?>
+                                                <?php echo str_replace('||X||', base_url() . $documento[$value['id_tipo_documento']]['ruta'].'?'.date("YmdHis"), $language_text['registro_excelencia']['reg_liga_msg_descarga']); ?>
                                             </label>
                                         </div>
 
