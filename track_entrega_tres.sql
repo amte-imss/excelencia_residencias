@@ -108,5 +108,9 @@ WITH (
 );
 
 
+update excelencia.estado_solicitud set 
+config='{"btn_agregar_curso":"false","btn_editar_curso":"true","btn_envio_datos":"true","btn_envio":"true","btn_elimina_curso":"false","modificar_archivos":"true","modificar_datos_generales":"true"}'
+where cve_estado_solicitud = 'CORRECCION';
+
 
 commit;
