@@ -12,9 +12,10 @@ class My_phpmailer {
     	$config_email = $this->CI->config->item('email');
 		// pr(ENVIRONMENT);
     	$mail = new PHPMailer();
-
+        $mail->Timeout=30;
         //Tell PHPMailer to use SMTP
         $mail->isSMTP();
+        $mail->charSet = "UTF-8";
         $mail->SMTPDebug = isset($config_email['debug'])?$config_email['debug']:0;
         $mail->SMTPAuth = true;
         //$mail->SMTPAuth = false;

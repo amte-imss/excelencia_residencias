@@ -443,26 +443,38 @@ class MY_Controller extends CI_Controller {
      * @param type $subject Se refiere al asunto del correo
      * @author LEAS 21042019
      */
-    protected function enviar_correo_electronico($view = 'correo_foro/recepcion.php', $email, $datos, $subject) {
-        $this->load->config('email');
-        $this->load->library('My_phpmailer');
-        $mailStatus = $this->my_phpmailer->phpmailerclass();
+    protected function enviar_correo_electronico($view = 'correo_foro/recepcion.php', $email, $datos, $subject, $tiempo = 200) {
+        try {
 
-        /*  $mailStatus->SMTPOptions = array(
-          'ssl' => array(
-          'verify_peer' => false,
-          'verify_peer_name' => false,
-          'allow_self_signed' => true
-          )
-          ); */
+
+            $this->load->config('email');
+            $this->load->library('My_phpmailer');
+            $mailStatus = $this->my_phpmailer->phpmailerclass();
+            $mailStatus->Timeout = $tiempo;
+            /*  $mailStatus->SMTPOptions = array(
+              'ssl' => array(
+              'verify_peer' => false,
+              'verify_peer_name' => false,
+              'allow_self_signed' => true
+              )
+              ); */
 
 //        $mailStatus->SMTPAuth = false;
-        $emailStatus = $this->load->view($view, $datos, true);
-        //$emailStatus = $this->procesar_correo($texto, array('{{$folio}}' => $folio, '{{$titulo}}' => $titulo));
-        $mailStatus->addAddress($email);
-        $mailStatus->Subject = $subject;
-        $mailStatus->msgHTML($emailStatus);
-        $mailStatus->send();
+            $emailStatus = $this->load->view($view, $datos, true);
+            //$emailStatus = $this->procesar_correo($texto, array('{{$folio}}' => $folio, '{{$titulo}}' => $titulo));
+            $mailStatus->addAddress($email);
+            $mailStatus->Subject = $subject;
+            $mailStatus->msgHTML($emailStatus);
+
+            $mailStatus->send();
+            return true;
+        } catch (phpmailerException $e) {
+//            echo $e->errorMessage(); //Pretty error messages from PHPMailer
+            return FALSE;
+        } catch (Exception $e) {
+//            echo $e->getMessage(); //Boring error messages from anything else!
+            return FALSE;
+        }
     }
 
 //    public function obtener_catalogo_idiomas($idiomas, $lenguaje) {

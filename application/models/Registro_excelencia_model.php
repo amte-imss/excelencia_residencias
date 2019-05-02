@@ -118,6 +118,7 @@ class Registro_excelencia_model extends CI_Model {
             $this->db->trans_commit();
             $respuesta = array('tp_msg' => En_tpmsg::SUCCESS, 'mensaje' => 'Se ha enviado su solicitud.');
         }
+            $this->db->trans_rollback();
         return $respuesta;
     }
 

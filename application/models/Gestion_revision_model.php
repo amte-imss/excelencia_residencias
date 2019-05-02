@@ -18,10 +18,10 @@ class Gestion_revision_model extends MY_Model {
      * @date 21/05/2018
      * @return array
      */
-    /*public function get_detalle_evaluacion($param) {
-        $result = [];
-        return $resut;
-    }*/
+    /* public function get_detalle_evaluacion($param) {
+      $result = [];
+      return $resut;
+      } */
 
     /**
      * Devuelve la información de los registros de la tabla catalogos
@@ -34,15 +34,15 @@ class Gestion_revision_model extends MY_Model {
             $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
             $this->db->flush_cache();
             $this->db->reset_query();
-            /*$this->db->select(array('hr.folio folio', 'ti.titulo titulo', 'ma.lang metodologia'));
-            $this->db->join('foro.trabajo_investigacion ti', 'hr.folio = ti.folio', 'left');
-            $this->db->join('foro.tipo_metodologia ma', 'ti.id_tipo_metodologia = ma.id_tipo_metodologia', 'left');
-            $this->db->join('foro.convocatoria cc', 'cc.id_convocatoria = ti.id_convocatoria', 'inner');
-            $this->db->where('cc.activo', true);
-            $this->db->where('clave_estado', 'sin_asignacion');
-            $this->db->where('actual', true);*/
+            /* $this->db->select(array('hr.folio folio', 'ti.titulo titulo', 'ma.lang metodologia'));
+              $this->db->join('foro.trabajo_investigacion ti', 'hr.folio = ti.folio', 'left');
+              $this->db->join('foro.tipo_metodologia ma', 'ti.id_tipo_metodologia = ma.id_tipo_metodologia', 'left');
+              $this->db->join('foro.convocatoria cc', 'cc.id_convocatoria = ti.id_convocatoria', 'inner');
+              $this->db->where('cc.activo', true);
+              $this->db->where('clave_estado', 'sin_asignacion');
+              $this->db->where('actual', true); */
 
-            $this->db->select(array('s.id_solicitud', 's.matricula', 'i.nombre', 'i.apellido_paterno', 'i.apellido_materno', 'del.nombre as delegacion', 's.fecha','(select count(*) from excelencia.revision rev where rev.id_solicitud=s.id_solicitud and estatus=false) as total'));
+            $this->db->select(array('s.id_solicitud', 's.matricula', 'i.nombre', 'i.apellido_paterno', 'i.apellido_materno', 'del.nombre as delegacion', 's.fecha', '(select count(*) from excelencia.revision rev where rev.id_solicitud=s.id_solicitud and estatus=false) as total'));
             $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and hs.actual=true', 'left', false);
             $this->db->join('sistema.informacion_usuario i', 'i.matricula=s.matricula', 'left');
             $this->db->join('excelencia.convocatoria cc', 'cc.id_convocatoria=s.id_convocatoria and cc.activo=true', 'left', false);
@@ -86,20 +86,20 @@ class Gestion_revision_model extends MY_Model {
             $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
             $this->db->flush_cache();
             $this->db->reset_query();
-            /*$this->db->select(array('hr.folio folio', 'ti.titulo titulo', 'ma.lang metodologia', 'rn.id_usuario', 'rn.revisado',
-                "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario WHERE id_usuario=rn.id_usuario) revisor", 'hr.clave_estado',
-                "CAST(rn.fecha_asignacion AS timestamp) + CAST('" . $dias_revision . " days' AS INTERVAL) fecha_limite_revision",
-                "(CASE WHEN CAST(rn.fecha_asignacion AS timestamp) + CAST('" . $dias_revision . " days' AS INTERVAL) < now() THEN true ELSE false END) fuera_tiempo",
-            ));
-            $this->db->join('foro.trabajo_investigacion ti', 'hr.folio = ti.folio', 'left');
-            $this->db->join('foro.tipo_metodologia ma', 'ti.id_tipo_metodologia = ma.id_tipo_metodologia', 'left');
-            $this->db->join('foro.revision rn', 'hr.folio = rn.folio', 'left');
-            $this->db->join('foro.convocatoria cc', 'cc.id_convocatoria = ti.id_convocatoria', 'inner');
-            $this->db->where('cc.activo', true);
-            $this->db->where_in('hr.clave_estado', array('fuera_tiempo', 'discrepancia', 'conflicto_interes', 'asignado'));
-            $this->db->where('actual', true);
-            $this->db->where('rn.activo', true);*/
-            $this->db->select(array('s.id_solicitud', 's.matricula', 'i.nombre', 'i.apellido_paterno', 'i.apellido_materno', 'del.nombre as delegacion', 'to_char(s.fecha, \'DD/MM/YYYY HH:MI:SS\') as fecha','(select count(*) from excelencia.revision rev where rev.id_solicitud=s.id_solicitud and fecha_revision is not null) as total',
+            /* $this->db->select(array('hr.folio folio', 'ti.titulo titulo', 'ma.lang metodologia', 'rn.id_usuario', 'rn.revisado',
+              "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario WHERE id_usuario=rn.id_usuario) revisor", 'hr.clave_estado',
+              "CAST(rn.fecha_asignacion AS timestamp) + CAST('" . $dias_revision . " days' AS INTERVAL) fecha_limite_revision",
+              "(CASE WHEN CAST(rn.fecha_asignacion AS timestamp) + CAST('" . $dias_revision . " days' AS INTERVAL) < now() THEN true ELSE false END) fuera_tiempo",
+              ));
+              $this->db->join('foro.trabajo_investigacion ti', 'hr.folio = ti.folio', 'left');
+              $this->db->join('foro.tipo_metodologia ma', 'ti.id_tipo_metodologia = ma.id_tipo_metodologia', 'left');
+              $this->db->join('foro.revision rn', 'hr.folio = rn.folio', 'left');
+              $this->db->join('foro.convocatoria cc', 'cc.id_convocatoria = ti.id_convocatoria', 'inner');
+              $this->db->where('cc.activo', true);
+              $this->db->where_in('hr.clave_estado', array('fuera_tiempo', 'discrepancia', 'conflicto_interes', 'asignado'));
+              $this->db->where('actual', true);
+              $this->db->where('rn.activo', true); */
+            $this->db->select(array('s.id_solicitud', 's.matricula', 'i.nombre', 'i.apellido_paterno', 'i.apellido_materno', 'del.nombre as delegacion', 'to_char(s.fecha, \'DD/MM/YYYY HH:MI:SS\') as fecha', '(select count(*) from excelencia.revision rev where rev.id_solicitud=s.id_solicitud and fecha_revision is not null) as total',
                 "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario iu join excelencia.revision rev on rev.id_usuario_revision=iu.id_usuario WHERE rev.id_solicitud=s.id_solicitud and estatus=true) revisor"));
             $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and hs.actual=true', 'left', false);
             $this->db->join('sistema.informacion_usuario i', 'i.matricula=s.matricula', 'left');
@@ -144,20 +144,20 @@ class Gestion_revision_model extends MY_Model {
             $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
             $this->db->flush_cache();
             $this->db->reset_query();
-            /*$this->db->select(array('hr.folio folio', 'ti.titulo titulo', 'ma.lang metodologia', 'rn.id_usuario', 'rn.revisado',
-                "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario WHERE id_usuario=rn.id_usuario) revisor", 'hr.clave_estado',
-                "CAST(rn.fecha_asignacion AS timestamp) + CAST('" . $dias_revision . " days' AS INTERVAL) fecha_limite_revision",
-                "(CASE WHEN CAST(rn.fecha_asignacion AS timestamp) + CAST('" . $dias_revision . " days' AS INTERVAL) < now() THEN true ELSE false END) fuera_tiempo",
-            ));
-            $this->db->join('foro.trabajo_investigacion ti', 'hr.folio = ti.folio', 'left');
-            $this->db->join('foro.tipo_metodologia ma', 'ti.id_tipo_metodologia = ma.id_tipo_metodologia', 'left');
-            $this->db->join('foro.revision rn', 'hr.folio = rn.folio', 'left');
-            $this->db->join('foro.convocatoria cc', 'cc.id_convocatoria = ti.id_convocatoria', 'inner');
-            $this->db->where('cc.activo', true);
-            $this->db->where_in('hr.clave_estado', array('fuera_tiempo', 'discrepancia', 'conflicto_interes', 'asignado'));
-            $this->db->where('actual', true);
-            $this->db->where('rn.activo', true);*/
-            $this->db->select(array('s.id_solicitud', 's.matricula', 'i.nombre', 'i.apellido_paterno', 'i.apellido_materno', 'del.nombre as delegacion', 'to_char(s.fecha, \'DD/MM/YYYY HH:MI:SS\') as fecha','(select count(*) from excelencia.revision rev where rev.id_solicitud=s.id_solicitud and fecha_revision is not null) as total',
+            /* $this->db->select(array('hr.folio folio', 'ti.titulo titulo', 'ma.lang metodologia', 'rn.id_usuario', 'rn.revisado',
+              "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario WHERE id_usuario=rn.id_usuario) revisor", 'hr.clave_estado',
+              "CAST(rn.fecha_asignacion AS timestamp) + CAST('" . $dias_revision . " days' AS INTERVAL) fecha_limite_revision",
+              "(CASE WHEN CAST(rn.fecha_asignacion AS timestamp) + CAST('" . $dias_revision . " days' AS INTERVAL) < now() THEN true ELSE false END) fuera_tiempo",
+              ));
+              $this->db->join('foro.trabajo_investigacion ti', 'hr.folio = ti.folio', 'left');
+              $this->db->join('foro.tipo_metodologia ma', 'ti.id_tipo_metodologia = ma.id_tipo_metodologia', 'left');
+              $this->db->join('foro.revision rn', 'hr.folio = rn.folio', 'left');
+              $this->db->join('foro.convocatoria cc', 'cc.id_convocatoria = ti.id_convocatoria', 'inner');
+              $this->db->where('cc.activo', true);
+              $this->db->where_in('hr.clave_estado', array('fuera_tiempo', 'discrepancia', 'conflicto_interes', 'asignado'));
+              $this->db->where('actual', true);
+              $this->db->where('rn.activo', true); */
+            $this->db->select(array('s.id_solicitud', 's.matricula', 'i.nombre', 'i.apellido_paterno', 'i.apellido_materno', 'del.nombre as delegacion', 'to_char(s.fecha, \'DD/MM/YYYY HH:MI:SS\') as fecha', '(select count(*) from excelencia.revision rev where rev.id_solicitud=s.id_solicitud and fecha_revision is not null) as total',
                 "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario iu join excelencia.revision rev on rev.id_usuario_revision=iu.id_usuario WHERE rev.id_solicitud=s.id_solicitud and estatus=true) revisor"));
             $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and hs.actual=true', 'left', false);
             $this->db->join('sistema.informacion_usuario i', 'i.matricula=s.matricula', 'left');
@@ -195,18 +195,18 @@ class Gestion_revision_model extends MY_Model {
             $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
             $this->db->flush_cache();
             $this->db->reset_query();
-        
-            $this->db->select(array('s.id_solicitud', 's.matricula', 'i.nombre', 'i.apellido_paterno', 
+
+            $this->db->select(array('s.id_solicitud', 's.matricula', 'i.nombre', 'i.apellido_paterno',
                 'i.apellido_materno', 'del.nombre as delegacion', 'to_char(s.fecha, \'DD/MM/YYYY HH:MI:SS\') as fecha',
-                '(select count(*) from excelencia.revision rev where rev.id_solicitud=s.id_solicitud and fecha_revision is not null) as total',        
-              /*9*/  "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario iu join excelencia.revision rev on rev.id_usuario_revision=iu.id_usuario WHERE rev.id_solicitud=s.id_solicitud and estatus=true) revisor",
+                '(select count(*) from excelencia.revision rev where rev.id_solicitud=s.id_solicitud and fecha_revision is not null) as total',
+                /* 9 */ "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario iu join excelencia.revision rev on rev.id_usuario_revision=iu.id_usuario WHERE rev.id_solicitud=s.id_solicitud and estatus=true) revisor",
                 //"(SELECT total_puntos_anios_cursos FROM excelencia.revision rev WHERE rev.id_solicitud=s.id_solicitud and estatus=true) total_puntos_anios_cursos",
                 'eva.id_evaluacion',
-                're.total_puntos_anios_cursos','eva.puntaje_pnpc','eva.puntaje_carrera_docente', 
-                'eva.puntaje_sa_et','eva.puntaje_sa_satisfaccion','eva.puntaje_anios_docente'
+                're.total_puntos_anios_cursos', 'eva.puntaje_pnpc', 'eva.puntaje_carrera_docente',
+                'eva.puntaje_sa_et', 'eva.puntaje_sa_satisfaccion', 'eva.puntaje_anios_docente'
                 , '(coalesce(total_puntos_anios_cursos,0)+ coalesce(eva.puntaje_pnpc,0)+ coalesce(eva.puntaje_carrera_docente,0)+ coalesce(eva.puntaje_sa_et,0) + coalesce(eva.puntaje_sa_satisfaccion,0)) total_suma_puntos'
-                ));
-            
+            ));
+
             $this->db->join('excelencia.revision re', 're.id_solicitud= s.id_solicitud and re.estatus', 'inner');
             $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and hs.actual=true', 'left', false);
             $this->db->join('sistema.informacion_usuario i', 'i.matricula=s.matricula', 'left');
@@ -312,7 +312,7 @@ class Gestion_revision_model extends MY_Model {
             $i = 0; //pr($validar_folios);
             foreach ($datos['usuarios'] as $key_u => $usuario) { //Se recorren los usuarios por asociar
                 foreach ($validar_folios['result'] as $key_f => $folio) { //Se recorren los trabajos que fueron localizados
-                    $revision[$i]['id_solicitud'] =  $folio['id_solicitud'];
+                    $revision[$i]['id_solicitud'] = $folio['id_solicitud'];
                     $revision[$i]['estatus'] = true;
                     $revision[$i]['id_usuario_revision'] = $usuario;
                     $revision[$i]['fecha_asignacion'] = 'now()';
@@ -333,15 +333,15 @@ class Gestion_revision_model extends MY_Model {
             }
             $this->db->insert_batch('excelencia.historico_solicitud', $solicitud); //Inserción en tabla revision
 
-            /*$i = 0;
-            foreach ($validar_folios['result'] as $key_f => $folio) { //Se recorren los trabajos que fueron localizados
-                $historico[$i]['folio'] = $folio['folio'];
-                $historico[$i]['actual'] = true;
-                $historico[$i]['clave_estado'] = 'asignado';
-                $i++;
-            }
-            $this->db->insert_batch('excelencia.historico_revision', $historico); //Inserción en tabla historico_revision, se agrega nuevo estado para la revisión
-            */
+            /* $i = 0;
+              foreach ($validar_folios['result'] as $key_f => $folio) { //Se recorren los trabajos que fueron localizados
+              $historico[$i]['folio'] = $folio['folio'];
+              $historico[$i]['actual'] = true;
+              $historico[$i]['clave_estado'] = 'asignado';
+              $i++;
+              }
+              $this->db->insert_batch('excelencia.historico_revision', $historico); //Inserción en tabla historico_revision, se agrega nuevo estado para la revisión
+             */
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();
                 $resultado['result'] = FALSE;
@@ -389,5 +389,52 @@ class Gestion_revision_model extends MY_Model {
         return $estado;
     }
 
+    public function total_solicitudes() {
+        $this->db->flush_cache();
+        $this->db->reset_query();
+        return $this->db->count_all('excelencia.solicitud');
+    }
+
+    public function total_aceptados() {
+        $this->db->flush_cache();
+        $this->db->reset_query();
+        $this->db->select(['count(*) total_aceptados']);
+        $this->db->where(['aceptado' => true]);
+        $result = $this->db->get('excelencia.dictamen')->result_array()[0];
+//        pr($result);
+        return $result;
+    }
+
+    /**
+     * 
+     * @param type $id_solicitud Folio de la investigación
+     * @param type $estado_transicion estado de transición actual
+     * @return boolean true si se guardosatisfactoriamente
+     * Actualiza el último estado de la revision a false y agrega la el nuevo estado.
+     * 
+     */
+    public function guardar_historico_estado($id_solicitud, $estado_transicion) {
+//        $this->db->trans_begin();
+        $estado = TRUE;
+        $this->db->where("id_solicitud", $id_solicitud);
+        $this->db->update("excelencia.historico_solicitud", ["actual" => FALSE]);
+        if ($this->db->trans_status() === FALSE) {
+//            $this->db->trans_rollback();
+            $estado = FALSE;
+        } else {
+            $datos = ["id_solicitud" => $id_solicitud,
+                "cve_estado_solicitud" => $estado_transicion,
+                "actual" => true
+            ];
+            $this->db->insert("excelencia.historico_solicitud", $datos);
+            if ($this->db->trans_status() === FALSE) {
+//                $this->db->trans_commit();
+                $estado = FALSE;
+            }
+        }
+//        $this->db->trans_rollback();
+        return $estado;
+    }
     
+
 }

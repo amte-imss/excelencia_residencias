@@ -1,3 +1,4 @@
+begin TRANSACTION;
 update excelencia.estado_solicitud set 
 config='{"btn_agregar_curso":"true","btn_editar_curso":"true","btn_elimina_curso":"true","btn_envio_doctos":"true","btn_envio":"true","modificar_archivos":"true","modificar_datos_generales":"true"}'
 where cve_estado_solicitud = 'REGISTRO';
@@ -72,3 +73,27 @@ insert into sistema.modulos (clave_modulo, nombre,url, activo, modulo_padre_clav
 ('SAVE_GUARDAR_DICT',	'{"es":"Guardar dictamen","en":""}',	'/gestion_revision/guarda_informacion_dictamen',true,'M2nxOiMxoD',1,'ACCION');
 insert into sistema.roles_modulos (clave_modulo, clave_rol, activo) values
 ('SAVE_GUARDAR_DICT','ADMIN',true);
+
+insert into excelencia.estado_solicitud values('ACEPTADOS','Aceptado',null, true,null,null);
+insert into excelencia.estado_solicitud values('RECHAZADOS','Rechazado',null, true,null,null);
+
+CREATE TABLE excelencia.envio_correos_pendientes (
+	id_correo_pendiente serial,
+	id_convocatoria int NULL,
+	tipo_correo varchar(30) null,
+	profesor varchar(256),
+	matricula varchar(25),
+	correo_electronico varchar(100),
+	config text null,
+    fue_enviado boolean default false,
+	fecha timestamp default current_timestamp,
+	fecha_envio timestamp null,
+	PRIMARY KEY (id_correo_pendiente)
+)
+WITH (
+	OIDS=FALSE
+);
+
+
+
+commit;

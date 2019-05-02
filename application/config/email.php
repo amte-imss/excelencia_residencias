@@ -1,7 +1,7 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 $config['email'] = Array(
-	'debug' => 1,
+	'debug' => 0,
     /*'protocol' => 'smtp',
 	'crypt' => 'tls',
     //'host' => 'tls://smtp.gmail.com',
@@ -17,10 +17,15 @@ $config['email'] = Array(
     'host' => 'smtp.gmail.com',
     'port' => 587,
     'crypt' => 'tls',
-    'username' => "sied.ad.imss@gmail.com",
-    'password' => "s13d.4d.1mss",
-    'setFrom' => array('email'=>'sied.ad.imss@gmail.com', 'name'=>'Excelencia de residencias de Educación en Salud'),
+//    'username' => "sied.ad.imss@gmail.com",
+//    'password' => "s13d.4d.1mss",
+//    'setFrom' => array('email'=>'sied.ad.imss@gmail.com', 'name'=>'Excelencia de residencias de Educación en Salud'),
+//    'username' => "cenitluis.pumas@gmail.com",
+//    'password' => "3*2=6\$mexico",
 //    'setFrom' => array('email'=>'cenitluis.pumas@gmail.com', 'name'=>'Excelencia de residencias de Educación en Salud'),
+    'username' => "crisemi.1.3.4@gmail.com",
+    'password' => "cRISEMI$5=",
+    'setFrom' => array('email'=>'crisemi.1.3.4@gmail.com', 'name'=>'Excelencia de residencias de Educación en Salud'),
     /*'SMTPOptions' => array(
         'ssl' => array(
             'verify_peer' => false,

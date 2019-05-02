@@ -50,11 +50,10 @@ class Gestion_revision extends General_revision {
                 $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_revisados.php', $datos, true);
                 break;
             case strtolower(En_estado_solicitud::CANDIDATOS):
-                $this->load->model('Registro_excelencia_model', 'registro');
                 $datos['data_revisados'] = $this->candidatos();
                 $datos['data_dictamen'] = $this->get_dictamen();
                 $datos['total_registrados_nivel'] = $this->get_dictamen_total_nivel();
-                
+
 //                pr($datos);
                 $datos['niveles'] = dropdown_options($this->get_niveles(), 'id_nivel', 'descripcion');
                 $conf = $this->gestion_revision->get_configuracion(array('where' => "llave='cupo'"));
@@ -63,7 +62,6 @@ class Gestion_revision extends General_revision {
                 $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_candidatos.php', $datos, true); //pr($datos);
                 break;
             case strtolower(En_estado_solicitud::ACEPTADOS):
-                $this->load->model('Registro_excelencia_model', 'registro');
                 $datos['data_revisados'] = $this->candidatos();
                 $datos['data_dictamen'] = $this->get_dictamen(En_estado_solicitud::ACEPTADOS);
                 $datos['configuracion'] = (isset($conf['result'][0])) ? json_decode($conf['result'][0]['valor'], true) : null;
@@ -90,54 +88,6 @@ class Gestion_revision extends General_revision {
         $main_content = $this->load->view('revision_solicitud/listas_gestor.php', $output, true);
         $this->template->setMainContent($main_content);
         $this->template->getTemplate();
-    }
-
-    private function get_niveles() {
-        $idioma = $this->obtener_idioma();
-        $nivel = $this->registro->getConsutasGenerales('excelencia.nivel', '*', ['activo' => true]);
-        foreach ($nivel as &$value) {
-            $value['descripcion'] = json_decode($value['descripcion'], true)[$idioma];
-        }
-        return $nivel;
-    }
-
-    private function get_dictamen($condicion = 'all') {
-        $where = null;
-        switch ($condicion) {
-            case En_estado_solicitud::RECHAZADOS:
-                $where = ['aceptado' => FALSE, 'premio_anterior' => TRUE];
-                break;
-            case En_estado_solicitud::ACEPTADOS:
-                $where = ['aceptado' => TRUE, 'premio_anterior' => FALSE];
-                break;
-        }
-        $select = ["id_dictamen", "id_solicitud", "fecha",
-            "id_usuario", "id_nivel", "aceptado", "premio_anterior", "promedio"];
-        $dictamen_r = $this->registro->getConsutasGenerales('excelencia.dictamen', $select, $where);
-//        pr($dictamen_r);
-        $dictamen = [];
-        foreach ($dictamen_r as $value) {
-            $dictamen[$value['id_solicitud']] = $value;
-        }
-        return $dictamen;
-    }
-
-    /**
-     * @author LEAS 01/05/2019
-     * @return types
-     * Obtine el total de dictaminados por nivel
-     */
-    private function get_dictamen_total_nivel() {
-
-        $select = [
-            "sum((case when id_nivel = 'n1' and aceptado then 1 else 0 end)) nivel_1",
-            "sum((case when id_nivel = 'n2' and aceptado then 1 else 0 end)) nivel_2"
-            , "sum((case when id_nivel = 'n3' and aceptado then 1 else 0 end)) nivel_3"
-        ];
-        $total_nivel = $this->registro->getConsutasGenerales('excelencia.dictamen', $select);
-//        pr($dictamen_r);
-        
-        return $total_nivel[0];
     }
 
     public function guarda_informacion_dictamen() {
@@ -353,7 +303,7 @@ class Gestion_revision extends General_revision {
 
     private function candidatos() {
         $lenguaje = obtener_lenguaje_actual();
-        $param = ['order'=>'17 desc, 7 desc '];//El 17 equivale a total de suma de puntos y l 7 a la fecha
+        $param = ['order' => '17 desc, 7 desc ']; //El 17 equivale a total de suma de puntos y l 7 a la fecha
         $respuesta_model = $this->gestion_revision->get_candidatos($param);
         $result = array('success' => $respuesta_model['success'], 'msg' => $respuesta_model['msg'], 'result' => []);
         foreach ($respuesta_model['result'] as $row) {
@@ -533,6 +483,123 @@ class Gestion_revision extends General_revision {
                 $this->load->view('revision_trabajo_investigacion/asignar_revisor_bd.php', $datos);
             }
         }
+    }
+
+    private function actualiza_dictamen($id_dictamen, $data) {
+        $where = ['id_dictamen' => $id_dictamen];
+        $update = $this->registro->update_registro_general('excelencia.dictamen', $data, $where);
+        return $update;
+    }
+
+    public function cierre_convocatoria() {
+//        $subjet_mail = 'Dictamen de evaluaci&oacute;n';
+//        exit();
+        $subjet_mail = 'Dictamen de evaluación';
+//        $result = ['tp_msg'=> En_tpmsg::DANGER, 'html'=>'La información se guardo correctamente'];
+        $result = ['tp_msg' => En_tpmsg::SUCCESS, 'html' => 'La información se guardo correctamente'];
+        $output['solicitantes'] = $this->solicitantes();
+        $info_extra['total_solicitudes'] = $this->gestion_revision->total_solicitudes();
+        $info_extra['total_aceptados'] = $this->gestion_revision->total_aceptados()['total_aceptados'];
+        $info_extra['subject'] = $subjet_mail;
+//        pr($$info_extra);
+//        exit();
+//        $output['revisados'] = $this->revisados();
+        $output['dictamen'] = $this->get_dictamen();
+        $output['candidatos'] = $this->candidatos();
+//        pr($output['dictamen']);
+        $indicador_error = FALSE;
+        if (!empty($output['solicitantes']['result'])) {//Valida que existan candidatos
+            $solicitantes = $output['solicitantes']['result'];
+            if (!empty($output['candidatos']['result'])) {//Valida que existan candidatos
+                $numero = 0;
+                foreach ($output['candidatos']['result'] as $key => $val_candidatos) {
+//                pr($val_candidatos);
+                    $solicitante_data = array_merge($solicitantes[$val_candidatos['id_solicitud']], $info_extra);
+                    if (isset($output['dictamen'][$key])) {//Valida que este dictaminado
+                        $dictamen_reg = $output['dictamen'][$key];
+                        if ($dictamen_reg['aceptado'] == 1) {//aceptados
+                            ++$numero;
+                            $secuencial = sprintf("%04d", $numero);
+                            $folio_dictamen = $val_candidatos['id_solicitud'] . strtoupper($dictamen_reg['id_nivel']) . $secuencial;
+                            $result = $this->actualiza_dictamen($dictamen_reg['id_dictamen'], ['folio_dictamen' => $folio_dictamen]);
+                            if ($result['tp_msg'] == En_tpmsg::SUCCESS) {
+                                $solicitante_data['folio'] = $folio_dictamen;
+                                $solicitante_data['promedio'] = $dictamen_reg['promedio'];
+                                $solicitante_data['cve_estado_solicitud'] = En_estado_solicitud::ACEPTADOS;
+                                $config = ['folio', 'total_solicitudes', 'total_aceptados', 'subject', 'promedio'];
+                                $this->gestion_revision->guardar_historico_estado($val_candidatos['id_solicitud'], En_estado_solicitud::ACEPTADOS);
+                                $this->gurda_registros_correo_dictamen($solicitante_data, $config);
+//                                $this->enviar_correo_electronico('correo_excelencia/aceptado.php', $solicitante_data['email'], $solicitante_data, $subjet_mail);
+                                unset($solicitantes[$val_candidatos['id_solicitud']]); //Retira informacion del solicitante ya trabajado
+                            } else {
+                                if (!$indicador_error) {
+                                    $indicador_error = true;
+                                }
+                            }
+                        } else {//Rechazados
+                            $config = ['total_solicitudes', 'total_aceptados', 'subject'];
+                            $this->gestion_revision->guardar_historico_estado($val_candidatos['id_solicitud'], En_estado_solicitud::RECHAZADOS);
+                            $this->gurda_registros_correo_dictamen($solicitante_data, $config);
+//                            $this->enviar_correo_electronico('correo_excelencia/rechazado.php', $solicitante_data['email'], $solicitante_data, $subjet_mail);
+                            unset($solicitantes[$val_candidatos['id_solicitud']]); //Retira informacion del solicitante ya trabajado
+                        }
+                    } else {
+                        $config = ['total_solicitudes', 'total_aceptados', 'subject'];
+                        $this->gestion_revision->guardar_historico_estado($val_candidatos['id_solicitud'], En_estado_solicitud::RECHAZADOS);
+                        $this->gurda_registros_correo_dictamen($solicitante_data, $config);
+//                        $this->enviar_correo_electronico('correo_excelencia/rechazado.php', $solicitante_data['email'], $solicitante_data, $subjet_mail);
+                        unset($solicitantes[$val_candidatos['id_solicitud']]); //Retira informacion del solicitante ya trabajado
+                    }
+                }
+                $this->notifica_cierre_rechazados($solicitantes, $output['candidatos']['result'], $info_extra, $subjet_mail);
+                $this->cerrar_convocatoria(); //Cierra la convocatoria
+                $this->enviar_correo_control_envios_dictamen();//Envio de correoes
+                //Envia correos a todos los solicitantes que no partisipan
+                if ($result['tp_msg'] == En_tpmsg::SUCCESS) {
+//                    $result = ['tp_msg' => En_tpmsg::DANGER, 'html' => 'Ocurrio un error. Por favor intentelo nuevamente'];
+                    $result['html'] = 'La información se guardo correctamente';
+                }
+                header('Content-Type: application/json;charset=utf-8');
+                echo json_encode($result);
+            } else {
+                $result = ['tp_msg' => En_tpmsg::DANGER, 'html' => 'Ocurrio un error. Por favor intentelo nuevamente'];
+                header('Content-Type: application/json;charset=utf-8');
+                echo json_encode($result);
+            }
+        } else {
+
+            $result = ['tp_msg' => En_tpmsg::DANGER, 'html' => 'Ocurrio un error. Por favor intentelo nuevamente'];
+            header('Content-Type: application/json;charset=utf-8');
+            echo json_encode($result);
+        }
+    }
+
+    private function notifica_cierre_rechazados($solicitantes, $participantes, $extra, $subjet_mail) {
+//        pr($solicitantes);
+        $config = ['total_solicitudes', 'total_aceptados', 'subject'];
+        foreach ($solicitantes as $value) {
+            $value = array_merge($value, $extra);
+            $this->gestion_revision->guardar_historico_estado($value['id_solicitud'], En_estado_solicitud::RECHAZADOS);
+            $value['cve_estado_solicitud'] = En_estado_solicitud::RECHAZADOS;
+            $this->gurda_registros_correo_dictamen($value, $config);
+//            $this->enviar_correo_electronico('correo_excelencia/rechazado.php', $value['email'], $value, $subjet_mail);
+        }
+    }
+
+    private function cerrar_convocatoria() {
+        $where = ['activo' => true];
+        $set = [
+            'activo' => FALSE, 'registro' => FALSE, 'revision' => FALSE//, 'acceso' => FALSE
+        ];
+        $update = $this->registro->update_registro_general('excelencia.convocatoria', $set, $where);
+//        pr($update);
+        if ($update['tp_msg'] == En_tpmsg::DANGER) {
+            $result = ['tp_msg' => En_tpmsg::DANGER,
+                'html' => 'Ocurrió un error durante el proceso. Por favor intentelo nuevamente '
+            ];
+            return $result;
+        }
+        return $update;
     }
 
 }
