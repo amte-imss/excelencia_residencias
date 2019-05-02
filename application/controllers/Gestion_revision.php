@@ -601,5 +601,34 @@ class Gestion_revision extends General_revision {
         }
         return $update;
     }
+    
+    public function envio_correos_cierre_proceso()
+    {
+//        sss
+//        pr($this->db->schema);
+//        pr($this->db);
+        try {
+            $this->db->schema = 'excelencia';
+            $crud = $this->new_crud();
+            $crud->set_table('envio_correos_pendientes');
+            $crud->set_subject('Correo');
+            $crud->set_primary_key('id_correo_pendiente');
+            $crud->columns("id_correo_pendiente", "id_convocatoria", "tipo_correo", "profesor", "matricula", "correo_electronico", "config", "fue_enviado", "fecha", "fecha_envio");
+            $crud->fields("id_convocatoria", "tipo_correo", "profesor", "matricula", "correo_electronico", "config", "fue_enviado", "fecha", "fecha_envio");
+            $crud->required_fields("id_convocatoria", "tipo_correo", "profesor", "matricula", "correo_electronico", "config", "fue_enviado");
+            $crud->unset_texteditor('config', 'full_text');
+            $crud->unset_read();
+            $crud->unset_export();
+            $output = $crud->render();
+            $main_content = $this->load->view('registro_excelencia/gc_gestion_correo.tpl.php', $output, true);
+            $this->template->setMainContent($main_content);
+            $this->template->getTemplate();
+          } catch (Exception $e) {
+            show_error($e->getMessage() . ' --- ' . $e->getTraceAsString());
+        }
+      }
+    public function envio_correos_pendientes(){
+        $this->enviar_correo_control_envios_dictamen();
+    }
 
 }

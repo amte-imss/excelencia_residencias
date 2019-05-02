@@ -74,6 +74,19 @@ insert into sistema.modulos (clave_modulo, nombre,url, activo, modulo_padre_clav
 insert into sistema.roles_modulos (clave_modulo, clave_rol, activo) values
 ('SAVE_GUARDAR_DICT','ADMIN',true);
 
+insert into sistema.modulos (clave_modulo, nombre,url, activo, modulo_padre_clave, orden, clave_configurador_modulo) values 
+('SAVE_ENV_EMAIL_PEND',	'{"es":"Cerrar proceso","en":""}',	'/gestion_revision/envio_correos_pendientes',true,'M2nxOiMxoD',1,'ACCION'),
+('SAVE_ENV_EM_CIEPEND',	'{"es":"Enviar correos pendientes dictamen","en":""}',	'/gestion_revision/envio_correos_cierre_proceso',true,'ADMIN_CAT_FORO',1,'MENU'),
+('SAVE_CERRAR_PROCESO',	'{"es":"Enviar correos pendientes dictamen acción","en":""}',	'/gestion_revision/cierre_convocatoria',true,'M2nxOiMxoD',1,'ACCION')
+;
+--ADMIN_CAT_FORO, #menuADMIN_CAT_FORO
+insert into sistema.roles_modulos (clave_modulo, clave_rol, activo) values
+('SAVE_ENV_EMAIL_PEND','SUPERADMIN',true),
+('SAVE_ENV_EM_CIEPEND','SUPERADMIN',true),
+('SAVE_CERRAR_PROCESO','ADMIN',true);
+
+
+
 insert into excelencia.estado_solicitud values('ACEPTADOS','Aceptado',null, true,null,null);
 insert into excelencia.estado_solicitud values('RECHAZADOS','Rechazado',null, true,null,null);
 
