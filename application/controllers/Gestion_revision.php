@@ -62,21 +62,38 @@ class Gestion_revision extends General_revision {
                 $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_candidatos.php', $datos, true); //pr($datos);
                 break;
             case strtolower(En_estado_solicitud::ACEPTADOS):
-                $datos['data_revisados'] = $this->candidatos();
-                $datos['data_dictamen'] = $this->get_dictamen(En_estado_solicitud::ACEPTADOS);
-                $datos['configuracion'] = (isset($conf['result'][0])) ? json_decode($conf['result'][0]['valor'], true) : null;
-                $datos['niveles'] = dropdown_options($this->get_niveles(), 'id_nivel', 'descripcion');
+                $convocatoria = $this->get_convocatoria();
                 $datos['opciones_secciones'] = $this->obtener_grupos_texto('candidatos', $this->obtener_idioma())['candidatos'];
-                $output['lista_aceptados'] = $this->load->view('revision_solicitud/estados/lista_aceptados.php', $datos, true);
+                $datos['configuracion'] = (isset($conf['result'][0])) ? json_decode($conf['result'][0]['valor'], true) : null;
+                if (!empty($convocatoria) && $convocatoria[0]['activo']) {
+                    $datos['data_revisados'] = $this->candidatos();
+                    $datos['data_dictamen'] = $this->get_dictamen(En_estado_solicitud::ACEPTADOS);
+                    $datos['niveles'] = dropdown_options($this->get_niveles(), 'id_nivel', 'descripcion');
+                    $output['lista_aceptados'] = $this->load->view('revision_solicitud/estados/lista_aceptados.php', $datos, true);
+                } else if (!empty($convocatoria) && $convocatoria[0]['acceso']) {//muestra rechazados de la convocatoria
+                    $datos['data_revisados'] = $this->aceptados();
+                    $datos['configuracion'] = (isset($conf['result'][0])) ? json_decode($conf['result'][0]['valor'], true) : null;
+//                    pr($datos['data_revisados']);
+                    $output['list_rechazados'] = $this->load->view('revision_solicitud/estados/lista_aceptados_fin_dictamen.php', $datos, true);
+                }
                 break;
             case strtolower(En_estado_solicitud::RECHAZADOS):
-                $this->load->model('Registro_excelencia_model', 'registro');
-                $datos['data_revisados'] = $this->candidatos();
-                $datos['data_dictamen'] = $this->get_dictamen(En_estado_solicitud::RECHAZADOS);
+                $convocatoria = $this->get_convocatoria();
                 $datos['configuracion'] = (isset($conf['result'][0])) ? json_decode($conf['result'][0]['valor'], true) : null;
-                $datos['niveles'] = dropdown_options($this->get_niveles(), 'id_nivel', 'descripcion');
+//                pr($convocatoria);
                 $datos['opciones_secciones'] = $this->obtener_grupos_texto('candidatos', $this->obtener_idioma())['candidatos'];
-                $output['list_rechazados'] = $this->load->view('revision_solicitud/estados/lista_rechazados.php', $datos, true);
+                if (!empty($convocatoria) && $convocatoria[0]['activo']) {
+                    $datos['data_revisados'] = $this->candidatos();
+                    $datos['data_dictamen'] = $this->get_dictamen(En_estado_solicitud::RECHAZADOS);
+                    $datos['niveles'] = dropdown_options($this->get_niveles(), 'id_nivel', 'descripcion');
+                    $output['list_rechazados'] = $this->load->view('revision_solicitud/estados/lista_rechazados.php', $datos, true);
+                } else if (!empty($convocatoria) && $convocatoria[0]['acceso']) {//muestra rechazados de la convocatoria
+                    $datos['data_dictamen'] = $this->get_dictamen();
+                    $datos['data_revisados'] = $this->rechazados();
+                    $datos['configuracion'] = (isset($conf['result'][0])) ? json_decode($conf['result'][0]['valor'], true) : null;
+//                    pr($datos['data_revisados']);
+                    $output['list_rechazados'] = $this->load->view('revision_solicitud/estados/lista_rechazados_fin_dictamen.php', $datos, true);
+                }
                 break;
             default :
                 $datos['data_sn_comite'] = $this->sn_comite();
@@ -286,6 +303,42 @@ class Gestion_revision extends General_revision {
     private function revisados() {
         $lenguaje = obtener_lenguaje_actual();
         $respuesta_model = $this->gestion_revision->get_revisados();
+        $result = array('success' => $respuesta_model['success'], 'msg' => $respuesta_model['msg'], 'result' => []);
+        foreach ($respuesta_model['result'] as $row) {
+            $result['result'][$row['id_solicitud']] = $row;
+            /* $result['result'][$row['folio']]['folio'] = $row['folio'];
+              $result['result'][$row['folio']]['titulo'] = $row['titulo'];
+              $result['result'][$row['folio']]['clave_estado'] = $row['clave_estado'];
+              $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['revisor'] = $row['revisor'];
+              $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['clave_estado'] = ($row['revisado']==true) ? 'Revisado' : 'Sin revisar';
+              $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['fecha_limite_revision'] = $row['fecha_limite_revision'];
+              $metodologia = json_decode($row['metodologia'],true);
+              $result['result'][$row['folio']]['metodologia'] = $metodologia[$lenguaje]; */
+        }
+        return $result;
+    }
+
+    private function rechazados() {
+        $lenguaje = obtener_lenguaje_actual();
+        $respuesta_model = $this->gestion_revision->get_rechazados();
+        $result = array('success' => $respuesta_model['success'], 'msg' => $respuesta_model['msg'], 'result' => []);
+        foreach ($respuesta_model['result'] as $row) {
+            $result['result'][$row['id_solicitud']] = $row;
+            /* $result['result'][$row['folio']]['folio'] = $row['folio'];
+              $result['result'][$row['folio']]['titulo'] = $row['titulo'];
+              $result['result'][$row['folio']]['clave_estado'] = $row['clave_estado'];
+              $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['revisor'] = $row['revisor'];
+              $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['clave_estado'] = ($row['revisado']==true) ? 'Revisado' : 'Sin revisar';
+              $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['fecha_limite_revision'] = $row['fecha_limite_revision'];
+              $metodologia = json_decode($row['metodologia'],true);
+              $result['result'][$row['folio']]['metodologia'] = $metodologia[$lenguaje]; */
+        }
+        return $result;
+    }
+
+    private function aceptados() {
+        $lenguaje = obtener_lenguaje_actual();
+        $respuesta_model = $this->gestion_revision->get_aceptados();
         $result = array('success' => $respuesta_model['success'], 'msg' => $respuesta_model['msg'], 'result' => []);
         foreach ($respuesta_model['result'] as $row) {
             $result['result'][$row['id_solicitud']] = $row;
@@ -553,7 +606,7 @@ class Gestion_revision extends General_revision {
                 }
                 $this->notifica_cierre_rechazados($solicitantes, $output['candidatos']['result'], $info_extra, $subjet_mail);
                 $this->cerrar_convocatoria(); //Cierra la convocatoria
-                $this->enviar_correo_control_envios_dictamen();//Envio de correoes
+                $this->enviar_correo_control_envios_dictamen(); //Envio de correoes
                 //Envia correos a todos los solicitantes que no partisipan
                 if ($result['tp_msg'] == En_tpmsg::SUCCESS) {
 //                    $result = ['tp_msg' => En_tpmsg::DANGER, 'html' => 'Ocurrio un error. Por favor intentelo nuevamente'];
@@ -601,9 +654,8 @@ class Gestion_revision extends General_revision {
         }
         return $update;
     }
-    
-    public function envio_correos_cierre_proceso()
-    {
+
+    public function envio_correos_cierre_proceso() {
 //        sss
 //        pr($this->db->schema);
 //        pr($this->db);
@@ -623,11 +675,12 @@ class Gestion_revision extends General_revision {
             $main_content = $this->load->view('registro_excelencia/gc_gestion_correo.tpl.php', $output, true);
             $this->template->setMainContent($main_content);
             $this->template->getTemplate();
-          } catch (Exception $e) {
+        } catch (Exception $e) {
             show_error($e->getMessage() . ' --- ' . $e->getTraceAsString());
         }
-      }
-    public function envio_correos_pendientes(){
+    }
+
+    public function envio_correos_pendientes() {
         $this->enviar_correo_control_envios_dictamen();
     }
 

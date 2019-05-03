@@ -175,9 +175,11 @@ class Gestion_revision_model extends MY_Model {
             }
             $result = $this->db->get('excelencia.solicitud s'); //pr($this->db->last_query());
             $salida = $result->result_array();
+            pr($this->db->last_query());
             $result->free_result();
             $this->db->flush_cache();
             $this->db->reset_query();
+
             $estado['success'] = true;
             $estado['msg'] = "Se obtuvo el reporte con exito";
             $estado['result'] = $salida;
@@ -435,6 +437,112 @@ class Gestion_revision_model extends MY_Model {
 //        $this->db->trans_rollback();
         return $estado;
     }
-    
+
+    public function get_rechazados($param = []) {
+        $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        try {
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+            $this->db->flush_cache();
+            $this->db->reset_query();
+            /* $this->db->select(array('hr.folio folio', 'ti.titulo titulo', 'ma.lang metodologia', 'rn.id_usuario', 'rn.revisado',
+              "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario WHERE id_usuario=rn.id_usuario) revisor", 'hr.clave_estado',
+              "CAST(rn.fecha_asignacion AS timestamp) + CAST('" . $dias_revision . " days' AS INTERVAL) fecha_limite_revision",
+              "(CASE WHEN CAST(rn.fecha_asignacion AS timestamp) + CAST('" . $dias_revision . " days' AS INTERVAL) < now() THEN true ELSE false END) fuera_tiempo",
+              ));
+              $this->db->join('foro.trabajo_investigacion ti', 'hr.folio = ti.folio', 'left');
+              $this->db->join('foro.tipo_metodologia ma', 'ti.id_tipo_metodologia = ma.id_tipo_metodologia', 'left');
+              $this->db->join('foro.revision rn', 'hr.folio = rn.folio', 'left');
+              $this->db->join('foro.convocatoria cc', 'cc.id_convocatoria = ti.id_convocatoria', 'inner');
+              $this->db->where('cc.activo', true);
+              $this->db->where_in('hr.clave_estado', array('fuera_tiempo', 'discrepancia', 'conflicto_interes', 'asignado'));
+              $this->db->where('actual', true);
+              $this->db->where('rn.activo', true); */
+            $this->db->select(array('s.id_solicitud', 's.matricula', 'i.nombre', 'i.apellido_paterno', 'i.apellido_materno', 'del.nombre as delegacion', 'to_char(s.fecha, \'DD/MM/YYYY HH:MI:SS\') as fecha', '(select count(*) from excelencia.revision rev where rev.id_solicitud=s.id_solicitud and fecha_revision is not null) as total',
+                "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario iu join excelencia.revision rev on rev.id_usuario_revision=iu.id_usuario WHERE rev.id_solicitud=s.id_solicitud and estatus=true) revisor"));
+            $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and hs.actual=true', 'left', false);
+            $this->db->join('sistema.informacion_usuario i', 'i.matricula=s.matricula', 'left');
+            $this->db->join('excelencia.convocatoria cc', 'cc.id_convocatoria=s.id_convocatoria', 'left', false);
+            $this->db->join('catalogo.delegaciones del', 'del.clave_delegacional=i.clave_delegacional', 'left');
+            $this->db->where('hs.cve_estado_solicitud', En_estado_solicitud::RECHAZADOS);
+            $this->db->where('cc.acceso', true);
+            if (array_key_exists('fields', $param)) {
+                $this->db->select($param['fields']);
+            }
+            if (array_key_exists('conditions', $param)) {
+                $this->db->where($param['conditions']);
+            }
+            if (array_key_exists('order', $param)) {
+                $this->db->order_by($param['order']);
+            }
+            $result = $this->db->get('excelencia.solicitud s'); //pr($this->db->last_query());
+            $salida = $result->result_array();
+//            pr($this->db->last_query());
+            $result->free_result();
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            $estado['success'] = true;
+            $estado['msg'] = "Se obtuvo el reporte con exito";
+            $estado['result'] = $salida;
+        } catch (Exception $ex) {
+            //pedir a cesar el grupo con las tradcciones
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        }
+
+        return $estado;
+    }
+    public function get_aceptados($param = []) {
+        $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        try {
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+            $this->db->flush_cache();
+            $this->db->reset_query();
+            /* $this->db->select(array('hr.folio folio', 'ti.titulo titulo', 'ma.lang metodologia', 'rn.id_usuario', 'rn.revisado',
+              "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario WHERE id_usuario=rn.id_usuario) revisor", 'hr.clave_estado',
+              "CAST(rn.fecha_asignacion AS timestamp) + CAST('" . $dias_revision . " days' AS INTERVAL) fecha_limite_revision",
+              "(CASE WHEN CAST(rn.fecha_asignacion AS timestamp) + CAST('" . $dias_revision . " days' AS INTERVAL) < now() THEN true ELSE false END) fuera_tiempo",
+              ));
+              $this->db->join('foro.trabajo_investigacion ti', 'hr.folio = ti.folio', 'left');
+              $this->db->join('foro.tipo_metodologia ma', 'ti.id_tipo_metodologia = ma.id_tipo_metodologia', 'left');
+              $this->db->join('foro.revision rn', 'hr.folio = rn.folio', 'left');
+              $this->db->join('foro.convocatoria cc', 'cc.id_convocatoria = ti.id_convocatoria', 'inner');
+              $this->db->where('cc.activo', true);
+              $this->db->where_in('hr.clave_estado', array('fuera_tiempo', 'discrepancia', 'conflicto_interes', 'asignado'));
+              $this->db->where('actual', true);
+              $this->db->where('rn.activo', true); */
+            $this->db->select(array('s.id_solicitud', 's.matricula', 'i.nombre', 'i.apellido_paterno', 'i.apellido_materno', 'del.nombre as delegacion', 'to_char(s.fecha, \'DD/MM/YYYY HH:MI:SS\') as fecha', '(select count(*) from excelencia.revision rev where rev.id_solicitud=s.id_solicitud and fecha_revision is not null) as total',
+                "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario iu join excelencia.revision rev on rev.id_usuario_revision=iu.id_usuario WHERE rev.id_solicitud=s.id_solicitud and estatus=true) revisor"));
+            $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and hs.actual=true', 'left', false);
+            $this->db->join('sistema.informacion_usuario i', 'i.matricula=s.matricula', 'left');
+            $this->db->join('excelencia.convocatoria cc', 'cc.id_convocatoria=s.id_convocatoria', 'left', false);
+            $this->db->join('catalogo.delegaciones del', 'del.clave_delegacional=i.clave_delegacional', 'left');
+            $this->db->where('hs.cve_estado_solicitud', En_estado_solicitud::ACEPTADOS);
+            $this->db->where('cc.acceso', true);
+            if (array_key_exists('fields', $param)) {
+                $this->db->select($param['fields']);
+            }
+            if (array_key_exists('conditions', $param)) {
+                $this->db->where($param['conditions']);
+            }
+            if (array_key_exists('order', $param)) {
+                $this->db->order_by($param['order']);
+            }
+            $result = $this->db->get('excelencia.solicitud s'); //pr($this->db->last_query());
+            $salida = $result->result_array();
+//            pr($this->db->last_query());
+            $result->free_result();
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            $estado['success'] = true;
+            $estado['msg'] = "Se obtuvo el reporte con exito";
+            $estado['result'] = $salida;
+        } catch (Exception $ex) {
+            //pedir a cesar el grupo con las tradcciones
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        }
+
+        return $estado;
+    }
 
 }

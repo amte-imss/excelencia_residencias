@@ -78,12 +78,17 @@ insert into sistema.modulos (clave_modulo, nombre,url, activo, modulo_padre_clav
 ('SAVE_ENV_EMAIL_PEND',	'{"es":"Cerrar proceso","en":""}',	'/gestion_revision/envio_correos_pendientes',true,'M2nxOiMxoD',1,'ACCION'),
 ('SAVE_ENV_EM_CIEPEND',	'{"es":"Enviar correos pendientes dictamen","en":""}',	'/gestion_revision/envio_correos_cierre_proceso',true,'ADMIN_CAT_FORO',1,'MENU'),
 ('SAVE_CERRAR_PROCESO',	'{"es":"Enviar correos pendientes dictamen acción","en":""}',	'/gestion_revision/cierre_convocatoria',true,'M2nxOiMxoD',1,'ACCION')
+('CAT_EST_SOL',	'{"es":"Estados de solicitud","en":""}',	'/catalogo/gestion_estado_solicitud',true,'ADMIN_CAT_FORO',1,'MENU'),
+
 ;
 --ADMIN_CAT_FORO, #menuADMIN_CAT_FORO
 insert into sistema.roles_modulos (clave_modulo, clave_rol, activo) values
 ('SAVE_ENV_EMAIL_PEND','SUPERADMIN',true),
 ('SAVE_ENV_EM_CIEPEND','SUPERADMIN',true),
-('SAVE_CERRAR_PROCESO','ADMIN',true);
+('SAVE_CERRAR_PROCESO','ADMIN',true),
+('CAT_EST_SOL','SUPERADMIN',true)
+
+;
 
 
 
