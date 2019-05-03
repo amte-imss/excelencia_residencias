@@ -1,3 +1,6 @@
+<link rel="stylesheet" type="text/css" href="<?php echo asset_url(); ?>grocery_crud/themes/datatables/css/jquery.dataTables_1.10.19.css">
+ 
+<script type="text/javascript" charset="utf8" src="<?php echo asset_url(); ?>grocery_crud/themes/datatables/js/jquery.dataTables.js"></script>
 <?php
   echo form_open('gestion_revision/asignar_revisor/', array('id' => 'asignar_form', 'name' => 'asignar_form', 'autocomplete' => 'off'));
   if(isset($data_sn_comite))
@@ -10,7 +13,7 @@
             <!--button type="button" data-animation="flipInY" data-animation-delay="100" class="btn btn-theme btn-block submit-button btn-asignar-multiple" data-toggle="modal" data-target="#exampleModal"> <a  style="color:#fff;"><?php //echo $opciones_secciones['btn_asignar'];?></a> </button>
             <br-->
             <!-- lista sin comité -->
-            <table class="table">
+            <table class="table display compact hover" id="table_sin_comite">
               <thead>
                 <tr>
                   <!--th scope="col"></th-->
@@ -97,6 +100,7 @@ $(document).ready(function () {
             data_ajax(site_url + '/gestion_revision/asignar_revisor/', "#asignar_form", "#modal_contenido");
         }
     });*/
+    $('#table_sin_comite').DataTable();
 });
   $("#comite").addClass("active");
   $("#atencion").removeClass();

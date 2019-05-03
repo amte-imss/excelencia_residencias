@@ -7,6 +7,7 @@
           {
 ?>
             <br><br>
+            <label><?php echo $opciones_secciones['lbl_notas_aceptados']; ?></label>
 
             <table class="table">
            

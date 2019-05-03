@@ -59,6 +59,15 @@ class Gestion_revision extends General_revision {
                 $conf = $this->gestion_revision->get_configuracion(array('where' => "llave='cupo'"));
                 $datos['configuracion'] = (isset($conf['result'][0])) ? json_decode($conf['result'][0]['valor'], true) : null;
                 $datos['opciones_secciones'] = $this->obtener_grupos_texto('candidatos', $this->obtener_idioma())['candidatos'];
+                $datos['sesion'] = $this->get_datos_sesion();
+                $datos['super'] = false;
+                $this->load->library('LNiveles_acceso');
+                foreach ($datos['sesion']['niveles_acceso'] as $key_s => $sesion) {
+                    if($sesion['clave_rol']==LNiveles_acceso::Super){
+                        $datos['super'] = true;
+                    }
+                }
+                
                 $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_candidatos.php', $datos, true); //pr($datos);
                 break;
             case strtolower(En_estado_solicitud::ACEPTADOS):
@@ -356,7 +365,7 @@ class Gestion_revision extends General_revision {
 
     private function candidatos() {
         $lenguaje = obtener_lenguaje_actual();
-        $param = ['order' => '17 desc, 7 desc ']; //El 17 equivale a total de suma de puntos y l 7 a la fecha
+        $param = ['order' => 'tipo_contratacion desc, premio_anterior asc, id_nivel asc, 17 desc, 7 asc ']; //El 17 equivale a total de suma de puntos y l 7 a la fecha
         $respuesta_model = $this->gestion_revision->get_candidatos($param);
         $result = array('success' => $respuesta_model['success'], 'msg' => $respuesta_model['msg'], 'result' => []);
         foreach ($respuesta_model['result'] as $row) {

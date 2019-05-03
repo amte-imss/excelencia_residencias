@@ -1,10 +1,14 @@
 $(document).ready(function () {
 //    console.log("Cargame.......");
     $('#btn_guardar_informacion_dictamen').click(function () {
-        guarda_inf_dictamen(this);
+        if (window.confirm(texto_confirmacion_guardado)) {
+            guarda_inf_dictamen(this);
+        }
     });
     $('#btn_cerrar_proceso').click(function () {
-        cerrar_proceso(this);
+        if (window.confirm(texto_confirmacion_cierre)) {
+            cerrar_proceso(this);
+        }
     });
 });
 

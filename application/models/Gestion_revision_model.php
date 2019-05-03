@@ -175,7 +175,7 @@ class Gestion_revision_model extends MY_Model {
             }
             $result = $this->db->get('excelencia.solicitud s'); //pr($this->db->last_query());
             $salida = $result->result_array();
-            pr($this->db->last_query());
+            //pr($this->db->last_query());
             $result->free_result();
             $this->db->flush_cache();
             $this->db->reset_query();
@@ -204,15 +204,17 @@ class Gestion_revision_model extends MY_Model {
                 /* 9 */ "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario iu join excelencia.revision rev on rev.id_usuario_revision=iu.id_usuario WHERE rev.id_solicitud=s.id_solicitud and estatus=true) revisor",
                 //"(SELECT total_puntos_anios_cursos FROM excelencia.revision rev WHERE rev.id_solicitud=s.id_solicitud and estatus=true) total_puntos_anios_cursos",
                 'eva.id_evaluacion',
-                're.total_puntos_anios_cursos', 'eva.puntaje_pnpc', 'eva.puntaje_carrera_docente',
-                'eva.puntaje_sa_et', 'eva.puntaje_sa_satisfaccion', 'eva.puntaje_anios_docente'
-                , '(coalesce(total_puntos_anios_cursos,0)+ coalesce(eva.puntaje_pnpc,0)+ coalesce(eva.puntaje_carrera_docente,0)+ coalesce(eva.puntaje_sa_et,0) + coalesce(eva.puntaje_sa_satisfaccion,0)) total_suma_puntos'
+                'coalesce(re.total_puntos_anios_cursos,0) total_puntos_anios_cursos', 'coalesce(eva.puntaje_pnpc,0) puntaje_pnpc', 'coalesce(eva.puntaje_carrera_docente,0) puntaje_carrera_docente',
+                'coalesce(eva.puntaje_sa_et,0) puntaje_sa_et', 'coalesce(eva.puntaje_sa_satisfaccion,0) puntaje_sa_satisfaccion', 'coalesce(eva.puntaje_anios_docente,0) puntaje_anios_docente'
+                , '(coalesce(total_puntos_anios_cursos,0)+ coalesce(eva.puntaje_pnpc,0)+ coalesce(eva.puntaje_carrera_docente,0)+ coalesce(eva.puntaje_sa_et,0) + coalesce(eva.puntaje_sa_satisfaccion,0)) total_suma_puntos',
+                'dic.id_dictamen', 'dic.folio_dictamen', 'dic.fecha fecha_dictamen', 'dic.id_nivel', 'dic.aceptado', 'dic.premio_anterior', 'dic.promedio', "(case WHEN s.tipo_contratacion=2 THEN 1 ELSE 0 END) AS tipo_contratacion"
             ));
 
             $this->db->join('excelencia.revision re', 're.id_solicitud= s.id_solicitud and re.estatus', 'inner');
             $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and hs.actual=true', 'left', false);
             $this->db->join('sistema.informacion_usuario i', 'i.matricula=s.matricula', 'left');
             $this->db->join('excelencia.evaluacion eva', 'eva.matricula = i.matricula', 'left');
+            $this->db->join('excelencia.dictamen dic', 'dic.id_solicitud = s.id_solicitud', 'left');
             $this->db->join('excelencia.convocatoria cc', 'cc.id_convocatoria=s.id_convocatoria and cc.activo=true', 'left', false);
             $this->db->join('catalogo.delegaciones del', 'del.clave_delegacional=i.clave_delegacional', 'left');
             $this->db->where('hs.cve_estado_solicitud', 'REVISADO');
