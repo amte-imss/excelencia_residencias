@@ -1,3 +1,6 @@
+<link rel="stylesheet" type="text/css" href="<?php echo asset_url(); ?>grocery_crud/themes/datatables/css/jquery.dataTables_1.10.19.css">
+ 
+<script type="text/javascript" charset="utf8" src="<?php echo asset_url(); ?>grocery_crud/themes/datatables/js/jquery.dataTables.js"></script>
 <?php
   if(isset($data_revisados))
   {
@@ -8,7 +11,7 @@
 ?>
             <br><br>
 
-            <table class="table">
+            <table class="table" id="table_rechazados">
            
               <thead>
                   <tr >
@@ -138,6 +141,11 @@
 
 
   <script>
+  $(document).ready(function () {
+    <?php if($super===true){ ?>
+      $('#table_rechazados').DataTable();
+    <?php } ?>
+  });
   $("#comite").removeClass()
   $("#atencion").removeClass()
   $("#revision").removeClass()

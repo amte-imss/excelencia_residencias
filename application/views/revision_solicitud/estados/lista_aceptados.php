@@ -1,3 +1,6 @@
+<link rel="stylesheet" type="text/css" href="<?php echo asset_url(); ?>grocery_crud/themes/datatables/css/jquery.dataTables_1.10.19.css">
+ 
+<script type="text/javascript" charset="utf8" src="<?php echo asset_url(); ?>grocery_crud/themes/datatables/js/jquery.dataTables.js"></script>
 <?php
   if(isset($data_revisados))
   {
@@ -14,7 +17,7 @@
                     <br><br><br>
                 </div><div style="clear:both;"></div>
 
-            <table class="table">
+            <table class="table" id="table_aceptados">
            
               <thead>
                   <tr >
@@ -77,7 +80,7 @@
                     <td><?php  echo $row['delegacion'];?></td>
                     <td><?php  echo $row['email'];?></td>
                     <td><?php  echo $row['fecha'];?></td>
-                    <td><?php echo ($row['tipo_contratacion']==1) ? $opciones_secciones['lbl_es_base'] : ''; ?></td>
+                    <td><?php echo ($row['tipo_contratacion']==1) ? $opciones_secciones['lbl_es_base'] : ''; ?></td>  
                     <td><?php  echo $row['puntaje_pnpc'];?></td>
                     <td><?php  echo ($row['puntaje_sa_et']+$row['puntaje_sa_satisfaccion']);?></td>
                     <td><?php  echo $row['puntaje_carrera_docente'];?></td>
@@ -146,6 +149,11 @@
 
 
   <script>
+    $(document).ready(function () {
+    <?php if($super===true){ ?>
+      $('#table_aceptados').DataTable();
+    <?php } ?>
+  });
   $("#comite").removeClass()
   $("#atencion").removeClass()
   $("#revision").removeClass()
