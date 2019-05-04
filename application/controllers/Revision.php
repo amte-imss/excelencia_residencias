@@ -219,7 +219,7 @@ class Revision extends MY_Controller {
 //                pr($res_detalle );
 //                exit();
                 if ($validacion_completa['tp_msg'] == En_tpmsg::SUCCESS) {
-                    if ($res_detalle['val_detalle_documento']['total_no_validos'] > 0) {//Enviar a descalificado
+                    if ($res_detalle['val_detalle_documento']['total_no_validos'] > 0 || $res_detalle['val_detalle_curso']['total_no_validos'] > 0) {//Enviar a descalificado
 //                        $datos_rev = [
 //                            'estatus' => FALSE
 //                        ];

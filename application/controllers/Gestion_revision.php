@@ -32,7 +32,7 @@ class Gestion_revision extends General_revision {
         $datos['super'] = false;
         $this->load->library('LNiveles_acceso');
         foreach ($datos['sesion']['niveles_acceso'] as $key_s => $sesion) {
-            if($sesion['clave_rol']==LNiveles_acceso::Super){
+            if ($sesion['clave_rol'] == LNiveles_acceso::Super) {
                 $datos['super'] = true;
             }
         }
@@ -65,14 +65,14 @@ class Gestion_revision extends General_revision {
                 $conf = $this->gestion_revision->get_configuracion(array('where' => "llave='cupo'"));
                 $datos['configuracion'] = (isset($conf['result'][0])) ? json_decode($conf['result'][0]['valor'], true) : null;
                 $datos['opciones_secciones'] = $this->obtener_grupos_texto('candidatos', $this->obtener_idioma())['candidatos'];
-                
+
                 $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_candidatos.php', $datos, true); //pr($datos);
                 break;
-            case strtolower(En_estado_solicitud::ACEPTADOS): case strtolower(En_estado_solicitud::ACEPTADOS)."_e":
+            case strtolower(En_estado_solicitud::ACEPTADOS): case strtolower(En_estado_solicitud::ACEPTADOS) . "_e":
                 $convocatoria = $this->get_convocatoria();
                 $lang = $this->obtener_idioma();
                 $datos['language_text'] = $this->language_text; //obtiene textos del lenguaje
-        //        $output['listado'] = $this->trabajo->listado_trabajos_autor($id_informacion_usuario, $lang);
+                //        $output['listado'] = $this->trabajo->listado_trabajos_autor($id_informacion_usuario, $lang);
                 $datos['lang'] = $this->obtener_idioma();
                 $datos['opciones_secciones'] = $this->obtener_grupos_texto('candidatos', $this->obtener_idioma())['candidatos'];
                 $datos['configuracion'] = (isset($conf['result'][0])) ? json_decode($conf['result'][0]['valor'], true) : null;
@@ -80,7 +80,7 @@ class Gestion_revision extends General_revision {
                     $datos['data_revisados'] = $this->candidatos();
                     $datos['data_dictamen'] = $this->get_dictamen(En_estado_solicitud::ACEPTADOS);
                     $datos['niveles'] = dropdown_options($this->get_niveles(), 'id_nivel', 'descripcion');
-                    if($tipo==strtolower(En_estado_solicitud::ACEPTADOS)."_e"){
+                    if ($tipo == strtolower(En_estado_solicitud::ACEPTADOS) . "_e") {
                         $output['lista_aceptados'] = $this->load->view('revision_solicitud/estados/lista_aceptados_exportar.php', $datos, true);
                     } else {
                         $output['lista_aceptados'] = $this->load->view('revision_solicitud/estados/lista_aceptados.php', $datos, true);
@@ -92,17 +92,17 @@ class Gestion_revision extends General_revision {
                     $output['list_rechazados'] = $this->load->view('revision_solicitud/estados/lista_aceptados_fin_dictamen.php', $datos, true);
                 }
 
-                if($tipo==strtolower(En_estado_solicitud::ACEPTADOS)."_e"){
-                    if(isset($output['lista_aceptados'])){
+                if ($tipo == strtolower(En_estado_solicitud::ACEPTADOS) . "_e") {
+                    if (isset($output['lista_aceptados'])) {
                         // Convert to UTF-16LE and Prepend BOM
-                        $string_to_export = "\xFF\xFE" .mb_convert_encoding($output['lista_aceptados'], 'UTF-16LE', 'UTF-8');
-                        
+                        $string_to_export = "\xFF\xFE" . mb_convert_encoding($output['lista_aceptados'], 'UTF-16LE', 'UTF-8');
+
                         header("Content-Encoding: UTF-8");
                         header("Content-type: application/x-msexcel;charset=UTF-8");
                         header('Content-Disposition: attachment; filename="listado_aceptados_' . date('YmdHis') . '.xls";');
-                    
+
                         echo $string_to_export;
-                    
+
                         exit();
                     }
                 }
@@ -584,6 +584,7 @@ class Gestion_revision extends General_revision {
         $info_extra['total_solicitudes'] = $this->gestion_revision->total_solicitudes();
         $info_extra['total_aceptados'] = $this->gestion_revision->total_aceptados()['total_aceptados'];
         $info_extra['subject'] = $subjet_mail;
+//        pr($output['solicitantes']);
 //        pr($$info_extra);
 //        exit();
 //        $output['revisados'] = $this->revisados();
@@ -621,6 +622,7 @@ class Gestion_revision extends General_revision {
                             }
                         } else {//Rechazados
                             $config = ['total_solicitudes', 'total_aceptados', 'subject'];
+                            $solicitante_data['cve_estado_solicitud'] = En_estado_solicitud::RECHAZADOS;
                             $this->gestion_revision->guardar_historico_estado($val_candidatos['id_solicitud'], En_estado_solicitud::RECHAZADOS);
                             $this->gurda_registros_correo_dictamen($solicitante_data, $config);
 //                            $this->enviar_correo_electronico('correo_excelencia/rechazado.php', $solicitante_data['email'], $solicitante_data, $subjet_mail);
@@ -628,6 +630,7 @@ class Gestion_revision extends General_revision {
                         }
                     } else {
                         $config = ['total_solicitudes', 'total_aceptados', 'subject'];
+                        $solicitante_data['cve_estado_solicitud'] = En_estado_solicitud::RECHAZADOS;
                         $this->gestion_revision->guardar_historico_estado($val_candidatos['id_solicitud'], En_estado_solicitud::RECHAZADOS);
                         $this->gurda_registros_correo_dictamen($solicitante_data, $config);
 //                        $this->enviar_correo_electronico('correo_excelencia/rechazado.php', $solicitante_data['email'], $solicitante_data, $subjet_mail);
@@ -698,9 +701,10 @@ class Gestion_revision extends General_revision {
             $crud->columns("id_correo_pendiente", "id_convocatoria", "tipo_correo", "profesor", "matricula", "correo_electronico", "config", "fue_enviado", "fecha", "fecha_envio");
             $crud->fields("id_convocatoria", "tipo_correo", "profesor", "matricula", "correo_electronico", "config", "fue_enviado", "fecha", "fecha_envio");
             $crud->required_fields("id_convocatoria", "tipo_correo", "profesor", "matricula", "correo_electronico", "config", "fue_enviado");
+//            $crud->field_type('fue_enviado', 'dropdown', array('true' => 'NO', 'FALSE' => 'SI'));
             $crud->unset_texteditor('config', 'full_text');
             $crud->unset_read();
-            $crud->unset_export();
+//            $crud->unset_export();
             $output = $crud->render();
             $main_content = $this->load->view('registro_excelencia/gc_gestion_correo.tpl.php', $output, true);
             $this->template->setMainContent($main_content);

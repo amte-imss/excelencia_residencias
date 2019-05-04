@@ -529,7 +529,7 @@ class Gestion_revision_model extends MY_Model {
             if (array_key_exists('order', $param)) {
                 $this->db->order_by($param['order']);
             }
-            $result = $this->db->get('excelencia.solicitud s'); pr($this->db->last_query());
+            $result = $this->db->get('excelencia.solicitud s');
             $salida = $result->result_array();
 //            pr($this->db->last_query());
             $result->free_result();

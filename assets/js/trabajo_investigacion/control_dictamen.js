@@ -119,6 +119,7 @@ function cerrar_proceso(element) {
 
                 })
                 .fail(function (jqXHR, response) {
+                    location.reload();
 //                        $(div_respuesta).html(response);
                 })
                 .always(function () {

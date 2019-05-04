@@ -8,6 +8,8 @@ insert into sistema.roles_modulos (clave_modulo, clave_rol, activo) values
 ('CAT_EST_SOL','SUPERADMIN',true)
 ;
 
+ALTER TABLE excelencia.revision ALTER COLUMN total_puntos_anios_cursos TYPE numeric(4,2) USING total_puntos_anios_cursos::numeric ;
+
 alter table excelencia.solicitud add column tipo_contratacion int4 null; 
 
 insert into idiomas.traduccion values('col_tipo_contratacion','lbl','candidatos','{"es":"Tipo de contratación","en":"Tipo de contratación"}');
