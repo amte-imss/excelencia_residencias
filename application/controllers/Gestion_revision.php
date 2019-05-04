@@ -695,6 +695,7 @@ class Gestion_revision extends General_revision {
         try {
             $this->db->schema = 'excelencia';
             $crud = $this->new_crud();
+            $crud->set_theme('bootstrap');
             $crud->set_table('envio_correos_pendientes');
             $crud->set_subject('Correo');
             $crud->set_primary_key('id_correo_pendiente');
@@ -703,8 +704,8 @@ class Gestion_revision extends General_revision {
             $crud->required_fields("id_convocatoria", "tipo_correo", "profesor", "matricula", "correo_electronico", "config", "fue_enviado");
 //            $crud->field_type('fue_enviado', 'dropdown', array('true' => 'NO', 'FALSE' => 'SI'));
             $crud->unset_texteditor('config', 'full_text');
-            $crud->unset_read();
 //            $crud->unset_export();
+            $crud->unset_read();
             $output = $crud->render();
             $main_content = $this->load->view('registro_excelencia/gc_gestion_correo.tpl.php', $output, true);
             $this->template->setMainContent($main_content);

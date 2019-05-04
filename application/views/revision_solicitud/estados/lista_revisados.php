@@ -1,6 +1,5 @@
 <link rel="stylesheet" type="text/css" href="<?php echo asset_url(); ?>grocery_crud/themes/datatables/css/jquery.dataTables_1.10.19.css">
  
-<script type="text/javascript" charset="utf8" src="<?php echo asset_url(); ?>grocery_crud/themes/datatables/js/jquery.dataTables.js"></script>
 <?php
   if(isset($data_revisados))
   {
@@ -74,11 +73,19 @@
 <?php
   }
 ?>
+    
+    <?php echo js("jquery.dataTables.min.js"); ?>
 
   <script>
   $(document).ready(function () {
     <?php if($super===true){ ?>
-      $('#table_revisados').DataTable();
+      var ruta_language_datatable = url + "assets/spanish_table.json";
+      $('#table_revisados').DataTable({
+          "language": {
+    //                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                    "url": ruta_language_datatable
+                }
+      });
     <?php } ?>
   });
   $("#comite").removeClass()

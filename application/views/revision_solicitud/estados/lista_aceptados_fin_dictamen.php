@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="<?php echo asset_url(); ?>grocery_crud/themes/datatables/css/jquery.dataTables_1.10.19.css">
+ 
 <?php
   if(isset($data_revisados))
   {
@@ -8,7 +10,7 @@
 ?>
             <br><br>
 
-            <table class="table">
+            <table class="table" id="tabla_lista_aceptados_dic">
            
               <thead>
                   <tr >
@@ -104,8 +106,21 @@
   }
 ?>
 
-
+<?php echo js("jquery.dataTables.min.js"); ?>
   <script>
+      $(document).ready(function () {
+      <?php if($super===true){ ?>
+              var ruta_language_datatable = url + "assets/spanish_table.json";
+              console.log(ruta_language_datatable);
+      $('#tabla_lista_aceptados_dic').DataTable({
+          "language": {
+    //                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                    "url": ruta_language_datatable
+                }
+      });
+    <?php } ?>
+      });
+      
   $("#comite").removeClass()
   $("#atencion").removeClass()
   $("#revision").removeClass()

@@ -1,9 +1,7 @@
 <?php foreach ($css_files as $file): ?>
     <link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
 <?php endforeach; ?>
-<?php foreach ($js_files as $file): ?>
-    <script src="<?php echo $file; ?>"></script>
-<?php endforeach; ?>
+
 
 <div ng-class="panelClass" class="row">
     <div class="col col-sm-12">
@@ -44,57 +42,60 @@
     </div>
 </div>
 
+<?php foreach ($js_files as $file): ?>
+    <script src="<?php echo $file; ?>"></script>
+<?php endforeach; ?>
 <script>
-    function envio_correos(element) {
-        var prop = $(element);
-        var div_respuesta = '#' + prop.data('divmsg');
-        $.ajax({
+                                        function envio_correos(element) {
+                                            var prop = $(element);
+                                            var div_respuesta = '#' + prop.data('divmsg');
+                                            $.ajax({
 //                url: site_url + '/actividad_docente/datos_actividad',
-            url: site_url + '/gestion_revision/envio_correos_pendientes',
+                                                url: site_url + '/gestion_revision/envio_correos_pendientes',
 //            data: null,
-            type: 'POST',
-            mimeType: "multipart/form-data",
-            contentType: false,
-            cache: true,
-            processData: false,
+                                                type: 'POST',
+                                                mimeType: "multipart/form-data",
+                                                contentType: false,
+                                                cache: true,
+                                                processData: false,
 //                dataType: 'JSON',
-            beforeSend: function (xhr) {
+                                                beforeSend: function (xhr) {
 //            $('#tabla_actividades_docente').html(create_loader());
-                mostrar_loader();
-            }
-        })
-                .done(function (data) {
-                    try {//Cacha el error
-                        $(div_respuesta).empty();
-                        var resp = $.parseJSON(data);
-                        if (typeof resp.html !== 'undefined') {
-                            if (resp.tp_msg === 'success') {
-                                $(div_respuesta).html('<div class="alert alert-success" role="alert">' + resp.html + '</div>');
-                                setTimeout("$('" + div_respuesta + "').html('')", 10000);
-                            } else if (resp.tp_msg === 'warning') {
-                                $(div_respuesta).html('<div class="alert alert-warning" role="alert">' + resp.html + '</div>');
-                                setTimeout("$('" + div_respuesta + "').html('')", 15000);
-                            } else if (resp.tp_msg === 'danger') {
-                                $(div_respuesta).html('<div class="alert alert-danger" role="alert">' + resp.html + '</div>');
-                                setTimeout("$('" + div_respuesta + "').html('')", 15000);
-                            } else {
-                                $(div_respuesta).html(resp.html);
-                            }
-                            if (typeof resp.mensaje !== 'undefined') {//Muestra mensaje al usuario si este existe
+                                                    mostrar_loader();
+                                                }
+                                            })
+                                                    .done(function (data) {
+                                                        try {//Cacha el error
+                                                            $(div_respuesta).empty();
+                                                            var resp = $.parseJSON(data);
+                                                            if (typeof resp.html !== 'undefined') {
+                                                                if (resp.tp_msg === 'success') {
+                                                                    $(div_respuesta).html('<div class="alert alert-success" role="alert">' + resp.html + '</div>');
+                                                                    setTimeout("$('" + div_respuesta + "').html('')", 10000);
+                                                                } else if (resp.tp_msg === 'warning') {
+                                                                    $(div_respuesta).html('<div class="alert alert-warning" role="alert">' + resp.html + '</div>');
+                                                                    setTimeout("$('" + div_respuesta + "').html('')", 15000);
+                                                                } else if (resp.tp_msg === 'danger') {
+                                                                    $(div_respuesta).html('<div class="alert alert-danger" role="alert">' + resp.html + '</div>');
+                                                                    setTimeout("$('" + div_respuesta + "').html('')", 15000);
+                                                                } else {
+                                                                    $(div_respuesta).html(resp.html);
+                                                                }
+                                                                if (typeof resp.mensaje !== 'undefined') {//Muestra mensaje al usuario si este existe
 //                                get_mensaje_general(resp.mensaje, resp.tp_msg, 5000);
-                            }
-                        }
-                    } catch (e) {
+                                                                }
+                                                            }
+                                                        } catch (e) {
 //                        $(div_respuesta).html(data);
-                        $(div_respuesta).html('<div class="alert alert-danger" role="alert">' + data + '</div>');
-                    }
+                                                            $(div_respuesta).html('<div class="alert alert-danger" role="alert">' + data + '</div>');
+                                                        }
 
-                })
-                .fail(function (jqXHR, response) {
+                                                    })
+                                                    .fail(function (jqXHR, response) {
 //                        $(div_respuesta).html(response);
-                })
-                .always(function () {
-                    ocultar_loader();
-                });
-    }
+                                                    })
+                                                    .always(function () {
+                                                        ocultar_loader();
+                                                    });
+                                        }
 </script>        

@@ -288,6 +288,7 @@ class General_revision extends MY_Controller {
         foreach ($mail_pendientes as $value) {
             ++$num;
             $value = array_merge($value, json_decode($value['config'], TRUE));
+            $result = FALSE;
             switch ($value['tipo_correo']) {
                 case En_estado_solicitud::ACEPTADOS:
 //            pr($value);
