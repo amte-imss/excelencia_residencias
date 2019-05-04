@@ -18,6 +18,7 @@
                   <th scope="col"><?php echo $opciones_secciones['col_apellido_paterno'];?></th>
                   <th scope="col"><?php echo $opciones_secciones['col_apellido_materno'];?></th>
                   <th scope="col"><?php echo $opciones_secciones['col_delegacion'];?></th>
+                  <th scope="col"><?php echo $opciones_secciones['col_correo'];?></th>
                   <th scope="col"><?php echo $opciones_secciones['col_fecha_registro'];?></th>
                   <!--th scope="col"><?php echo $opciones_secciones['col_no_revisiones'];?></th>
                   <th scope="col"><?php echo $opciones_secciones['col_revisor'];?></th-->
@@ -67,6 +68,7 @@
                     <td><?php  echo $row['apellido_paterno'];?></td>
                     <td><?php  echo $row['apellido_materno'];?></td>
                     <td><?php  echo $row['delegacion'];?></td>
+                    <td><?php  echo $row['email'];?></td>
                     <td><?php  echo $row['fecha'];?></td>
                     <td><?php  echo $row['puntaje_pnpc'];?></td>
                     <td><?php  echo ($row['puntaje_sa_et']+$row['puntaje_sa_satisfaccion']);?></td>

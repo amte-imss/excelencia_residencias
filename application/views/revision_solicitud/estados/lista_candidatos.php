@@ -59,8 +59,8 @@ if (isset($data_revisados)) {
                         <th scope="col"><?php echo $opciones_secciones['col_pun_carrera']; ?></th>
                         <th scope="col"><?php echo $opciones_secciones['col_pun_permanencia']; ?></th>
                         <th scope="col"><?php echo $opciones_secciones['col_pun_excelencia']; ?></th>
-                        <th scope="col">Ganó premio</th>
-                        <th scope="col">Nivel</th>
+                        <th scope="col"><?php echo $opciones_secciones['col_gano_premio'];?></th>
+                        <th scope="col"><?php echo $opciones_secciones['col_nivel'];?></th>
                         <th scope="col"><?php echo $opciones_secciones['col_opciones']; ?></th>
                     </tr>
                 </thead>
@@ -80,7 +80,7 @@ if (isset($data_revisados)) {
                         }*/
                         $check_gano_premio = '';
                         $value_nivel = '';
-                        $dictaminado_style = 'style="background: #f1f1f1"';
+                        $dictaminado_style = 'style="background: #c8c8c8"';
                         if (isset($data_dictamen[$row['id_solicitud']])) {
                             if ($data_dictamen[$row['id_solicitud']]['premio_anterior']) {
                                 $check_gano_premio = 'checked="checked"';

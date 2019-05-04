@@ -19,6 +19,9 @@ insert into idiomas.traduccion values('texto_confirmacion_guardado','lbl','candi
 insert into idiomas.traduccion values('texto_confirmacion_cierre','lbl','candidatos','{"es":"Está seguro de querer cerrar el proceso?","en":"Está seguro de querer cerrar el proceso?"}');
 insert into idiomas.traduccion values('lbl_notas','lbl','candidatos','{"es":"Notas","en":"Notas"}');
 insert into idiomas.traduccion values('lbl_notas_aceptados','lbl','candidatos','{"es":"Notas","en":"Notas"}');
+insert into idiomas.traduccion values('btn_exportar_aceptados','lbl','candidatos','{"es":"Exportar","en":"Exportar"}');
+insert into idiomas.traduccion values('col_correo','lbl','candidatos','{"es":"Correo electrónico","en":"Correo electrónico"}');
+insert into idiomas.traduccion values('col_gano_premio','lbl','candidatos','{"es":"Ganó premio","en":"Ganó premio"}');
 
 
 commit;

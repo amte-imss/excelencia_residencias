@@ -102,7 +102,9 @@ if (isset($registro_valido)) {
             <div class="col-sm-2">
             </div>
             <div class="col-sm-8">
-                <input id="regform" type="button" data-animation="flipInY" data-animation-delay="100" class="btn btn-theme btn-block submit-button" value="<?php echo $language_text['registro_usuario']['registrar']; ?>" data-tpform="<?php echo $tipo_registro; ?>">
+                <?php if($convocatoria['registro']==1){ ?>
+                    <input id="regform" type="button" data-animation="flipInY" data-animation-delay="100" class="btn btn-theme btn-block submit-button" value="<?php echo $language_text['registro_usuario']['registrar']; ?>" data-tpform="<?php echo $tipo_registro; ?>">
+                <?php } ?>
             </div>
         </div>
         <div style="clear:both;" ></div>

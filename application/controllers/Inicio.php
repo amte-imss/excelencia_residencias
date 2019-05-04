@@ -146,6 +146,11 @@ class Inicio extends MY_Controller {
             redirect(site_url('inicio/inicio'));
         } else {//De inicio aquí es donde entra
             $data['language_text'] = $this->language_text; //Asigna textos de lenguaje para el template de login
+            $this->load->model('MY_Model', 'mm');
+            $convocatoria = $this->mm->get_convocatoria(array('where'=>'activo=true'));
+            if(count($convocatoria)>0){
+                $data['convocatoria'] = $convocatoria[0];
+            }
 
             $this->load->model('Catalogo_model', 'catalogo');
             $data['delegaciones'] = dropdown_options($this->catalogo->get_delegaciones(null, array('oficinas_centrales' => true)), 'clave_delegacional', 'nombre');

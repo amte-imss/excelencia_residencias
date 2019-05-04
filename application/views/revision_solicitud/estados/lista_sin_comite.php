@@ -100,7 +100,9 @@ $(document).ready(function () {
             data_ajax(site_url + '/gestion_revision/asignar_revisor/', "#asignar_form", "#modal_contenido");
         }
     });*/
-    $('#table_sin_comite').DataTable();
+    <?php if($super===true){ ?>
+      $('#table_sin_comite').DataTable();
+    <?php } ?>
 });
   $("#comite").addClass("active");
   $("#atencion").removeClass();

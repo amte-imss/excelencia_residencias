@@ -19,7 +19,7 @@ class MY_Model extends CI_Model {
         $this->load->database();   
     }
 
-    function get_convocatoria(){
+    function get_convocatoria($param=null){
         try {
             $this->db->flush_cache();
             $this->db->reset_query();
