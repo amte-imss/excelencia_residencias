@@ -53,7 +53,7 @@ class Registro extends MY_Controller {
         $id_informacion_usuario = $datos_sesion['username'];
 
         $this->load->model('MY_Model', 'my'); //Verificar convocatoria
-        $convocatoria = $this->my->get_convocatoria(array('where' => 'activo=' . true));
+        $convocatoria = $this->my->get_convocatoria(array('where' => 'activo=true'));
 
         $idioma = $this->obtener_idioma();
         $lan_txt = $this->obtener_grupos_texto(array('registro_excelencia', 'template_general', 'registro_usuario'), $idioma);
