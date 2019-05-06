@@ -70,7 +70,7 @@
                     <td><?php echo $row['revisor']; ?></td-->
                     <td>
 
-                      <a href="<?php echo site_url().'/revision/index/'.$row['id_solicitud']; ?>" type="button"><?php echo $opciones_secciones['btn_ver'];?> <span class="glyphicon glyphicon-new-window"/></a>
+                      <a href="<?php echo site_url().'/revision/index/'.$row['id_solicitud']; ?>/detalle" type="button"><?php echo $opciones_secciones['btn_ver'];?> <span class="glyphicon glyphicon-new-window"/></a>
                     </td>
                   </tr>
 <?php

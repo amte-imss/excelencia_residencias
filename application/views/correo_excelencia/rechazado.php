@@ -41,14 +41,26 @@
                 </tr>
                 <tr>
                   <td style="text-align:justify;">
-                    El Comité de Selección de trabajos de investigación para el <b>Premio a la Excelencia Docente</b>, a celebrarse del 04 al 09 de noviembre del 2018 en la Ciudad de Cancún, Quintana Roo, recibió más de <b>
-                     <?php echo $total_solicitudes;?> </b>trabajos. Sin embargo, por motivos de espacio solo fue posible aceptar <b>
-                     <?php echo $total_aceptados;?></b>.  por lo que lamentamos notificarle que su trabajo de investigación no fue seleccionado para presentarse.
-                  </td>
+					Por medio de la presente La Unidad de Educaci&oacute;n, Investigaci&oacute;n y Pol&iacute;ticas de Salud, a trav&eacute;s de la Coordinaci&oacute;n de Educaci&oacute;n en Salud, 
+					tiene el infortunio de informarle que la solicitud al PREMIO A LA EXCELENCIA DOCENTE 2019 que realiz&oacute;, 
+					NO ha sido seleccionada como una de las solicitudes ganadoras al premio.
+                   </td>
                 </tr>
                 <tr>
                   <td style="text-align:justify;">
-                    <br>Le enviamos un cordial saludo y agradecemos su interés y su valiosa participación en el <b>XV Foro Nacional y I Foro Internacional de Educación en Salud</b>.
+				  <br>Ante todo, nos gustar&iacute;a agradecer el inter&eacute;s mostrado y por su participaci&oacute;n en la presente convocatoria, del mismo modo por su tiempo,
+				  preparaci&oacute;n y dedicaci&oacute;n en la docencia.
+                  </td>
+                </tr>
+				<tr>
+                  <td style="text-align:justify;">
+				  <br>Nos despedimos de usted dese&aacute;ndole &eacute;xito en su carrera profesional y lo invitamos a continuar con su crecimiento profesional, 
+				  que enorgullece al instituto.
+                  </td>
+                </tr>
+				<tr>
+                  <td style="text-align:justify;">
+				  <br>Sin otro particular, le enviamos un cordial saludo.
                   </td>
                 </tr>
               </table>
@@ -57,7 +69,7 @@
           <tr>
             <td align="center" bgcolor="#ffffff" style="line-height: 0;">
               <b><p>Atentamente</p></b><br>
-              <b><p>Comité organizador</p></b>
+              <b><p>Coordinaci&oacute;n de Educaci&oacute;n en Salud</p></b>
             </td>
           </tr>
 

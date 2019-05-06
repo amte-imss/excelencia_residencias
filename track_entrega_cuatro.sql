@@ -19,11 +19,11 @@ insert into idiomas.traduccion values('btn_cerrar_proceso','lbl','candidatos','{
 
 insert into idiomas.traduccion values('texto_confirmacion_guardado','lbl','candidatos','{"es":"Está seguro de querer guardar los cambios?","en":"Está seguro de querer guardar los cambios?"}');
 insert into idiomas.traduccion values('texto_confirmacion_cierre','lbl','candidatos','{"es":"Está seguro de querer cerrar el proceso?","en":"Está seguro de querer cerrar el proceso?"}');
-insert into idiomas.traduccion values('lbl_notas','lbl','candidatos','{"es":"Notas","en":"Notas"}');
-insert into idiomas.traduccion values('lbl_notas_aceptados','lbl','candidatos','{"es":"Notas","en":"Notas"}');
+insert into idiomas.traduccion values('lbl_notas','lbl','candidatos','{"es":"Nomenclatura:<br>Gris: Solicitudes sin asignar lugar<br>Verde: Solicitudes con un lugar asignados<br>Rojo: Solicitudes rechazadas","en":"Notas"}');
+insert into idiomas.traduccion values('lbl_notas_aceptados','lbl','candidatos','{"es":" Este listado varía conforme a la asignación de las solicitudes en en listado de candidatos, hasta el cierre del proceso.","en":"Notas"}');
 insert into idiomas.traduccion values('btn_exportar_aceptados','lbl','candidatos','{"es":"Exportar","en":"Exportar"}');
 insert into idiomas.traduccion values('col_correo','lbl','candidatos','{"es":"Correo electrónico","en":"Correo electrónico"}');
-insert into idiomas.traduccion values('col_gano_premio','lbl','candidatos','{"es":"Ganó premio","en":"Ganó premio"}');
+insert into idiomas.traduccion values('col_gano_premio','lbl','candidatos','{"es":" ¿Ha ganado el premio anteriormente?","en":" ¿Ha ganado el premio anteriormente?"}');
 
 
 update excelencia.solicitud set tipo_contratacion=1 where matricula='2500981';
@@ -316,5 +316,8 @@ update excelencia.solicitud set tipo_contratacion=2 where matricula='991429570';
 update excelencia.solicitud set tipo_contratacion=2 where matricula='991429575';
 update excelencia.solicitud set tipo_contratacion=2 where matricula='991429735';
 
+insert into  idiomas.grupo (clave_grupo, nombre) 
+(select distinct clave_grupo, clave_grupo nombre from idiomas.traduccion where clave_grupo not in (select clave_grupo from idiomas.grupo))
+;
 
 commit;

@@ -27,11 +27,6 @@
                 </tr>
                 <tr>
                   <td>
-                    <?php echo $folio;?>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
                     Estimado Profesor(a)
                   </td>
                 </tr>
@@ -43,10 +38,28 @@
                 </tr>
                 <tr>
                   <td style="text-align:justify;">
-                    El Comit&eacute; de Selecci&oacute;n de candidatos para el<b>Premio a la Excelencia Docente</b>, 
-                    <b> <?php echo $total_solicitudes;?> </b>trabajos. Sin embargo, por motivos de espacio solo fue posible aceptar 
-                        <?php echo $total_aceptados;?>, por lo que tenemos el agrado de comentarle que su solicitud:
+					Por medio de la presente La Unidad de Educaci&oacute;n, Investigaci&oacute;n y Pol&iacute;ticas de Salud, a trav&eacute;s de la Coordinaci&oacute;n de Educaci&oacute;n en Salud, 
+					tiene el agrado de informarle que la solicitud al PREMIO A LA EXCELENCIA DOCENTE 2019 que realiz&oacute;, ha sido seleccionada como una 
+					de las solicitudes ganadoras al premio, posteriormente nos pondremos en contacto con usted, para indicarle los pasos a seguir para 
+					la de entrega de su premio.
                   </td>
+                </tr>
+				<tr>
+                  <td style="text-align:justify;">
+					<br>Ante todo, nos gustar&iacute;a agradecer el inter&eacute;s mostrado por su participaci&oacute;n en la presente convocatoria, del mismo modo por su tiempo, 
+					preparaci&oacute;n y dedicaci&oacute;n en la docencia.
+				  </td>
+                </tr>
+				<tr>
+                  <td style="text-align:justify;">
+					<br>Nos despedimos de usted dese&aacute;ndole &eacute;xito en su carrera profesional y lo invitamos a continuar con su crecimiento profesional, 
+					que enorgullece al instituto.
+				  </td>
+                </tr>
+				<tr>
+                  <td style="text-align:justify;">
+					<br>Sin otro particular, le enviamos un cordial saludo.
+				  </td>
                 </tr>
               </table>
             </td>
@@ -54,7 +67,7 @@
           <tr>
             <td align="center" bgcolor="#ffffff" style="line-height: 0;">
               <b><p>Atentamente</p></b><br>
-              <b><p>Comit&eacute; organizador</p></b>
+              <b><p>Coordinaci&oacute;n de Educaci&oacute;n en Salud</p></b>
             </td>
           </tr>
           <tr>
