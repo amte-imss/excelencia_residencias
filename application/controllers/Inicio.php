@@ -370,6 +370,11 @@ class Inicio extends MY_Controller {
             } else {
                 // pr(validation_errors());;
             }
+            $this->load->model('MY_Model', 'mm');
+            $convocatoria = $this->mm->get_convocatoria(array('where'=>'activo=true'));
+            if(count($convocatoria)>0){
+                $output['convocatoria'] = $convocatoria[0];
+            }
 //            }
             $this->load->model('Catalogo_model', 'catalogo');
             $output['delegaciones'] = dropdown_options($this->catalogo->get_delegaciones(null, null /* array('oficinas_centrales' => false) */), 'clave_delegacional', 'nombre');
