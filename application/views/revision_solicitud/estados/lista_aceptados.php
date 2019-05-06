@@ -10,7 +10,9 @@
           {
 ?>
             <br><br>
-            <label><?php echo $opciones_secciones['lbl_notas_aceptados']; ?></label><br>
+            <div class="col-sm-12" >
+                <label><?php echo $opciones_secciones['lbl_notas_aceptados']; ?></label><br>
+            </div>
             <div class="col-sm-12 text-right">
                     
                     <a href="<?php echo site_url('/gestion_revision/listado_control/'.strtolower(En_estado_solicitud::ACEPTADOS)."_e"); ?>" class=" btn btn-theme animated flipInY visible"><?php echo $opciones_secciones['btn_exportar_aceptados']; ?></a> 

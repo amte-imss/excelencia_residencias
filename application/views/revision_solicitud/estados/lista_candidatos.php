@@ -2,7 +2,7 @@
 if (isset($data_revisados)) {
     if ($data_revisados['success']) {
         if (count($data_revisados['result']) > 0) {
-            if($super===true){
+            if ($super === true) {
                 ?>
                 <div class="col-sm-12">
                     <button 
@@ -19,7 +19,7 @@ if (isset($data_revisados)) {
                 <div class="col-sm-12" id="msg_cerrar_proceso"></div><br>
             <?php } ?>
 
-                                                <!--h4> <?php //echo $opciones_secciones['nota_fecha_limite'];   ?> </h4-->
+                                                            <!--h4> <?php //echo $opciones_secciones['nota_fecha_limite'];    ?> </h4-->
             <div class="col-md-2"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_1']; ?></h3><h4 class="text-center"><?php echo $total_registrados_nivel['nivel_1'] . '/' . $configuracion['nivel_1']; ?></h4></div>
             <div class="col-md-2"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_2']; ?></h3><h4 class="text-center"><?php echo $total_registrados_nivel['nivel_2'] . '/' . $configuracion['nivel_2']; ?></h4></div>
             <div class="col-md-2"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_3']; ?></h3><h4 class="text-center"><?php echo $total_registrados_nivel['nivel_3'] . '/' . $configuracion['nivel_3']; ?></h4></div>
@@ -31,13 +31,17 @@ if (isset($data_revisados)) {
                         data-formulario="form_informacion_dictamen"
                         data-divmsg="msg_guarda_dictamen"
                         name="btn_guardar_informacion_dictamen" type="button">
-                        <?php echo $opciones_secciones['btn_guardar_seleccion']; ?>
+                            <?php echo $opciones_secciones['btn_guardar_seleccion']; ?>
                 </button>
             </div>
             <div class="col-sm-12" id="msg_guarda_dictamen"></div>
 
             <br><br>
-            <label><?php echo $opciones_secciones['lbl_notas']; ?></label>
+            <div class="col-sm-12" >
+                <label><?php echo $opciones_secciones['lbl_notas']; ?></label>
+            </div>
+
+            <?php // pr($opciones_secciones['lbl_notas']); ?>
             <?php echo form_open('gestion_revision/guarda_informacion_dictamen', array('id' => 'form_informacion_dictamen', 'class' => 'form-horizontal')); ?>
 
             <table class="table">
@@ -59,8 +63,8 @@ if (isset($data_revisados)) {
                         <th scope="col"><?php echo $opciones_secciones['col_pun_carrera']; ?></th>
                         <th scope="col"><?php echo $opciones_secciones['col_pun_permanencia']; ?></th>
                         <th scope="col"><?php echo $opciones_secciones['col_pun_excelencia']; ?></th>
-                        <th scope="col"><?php echo $opciones_secciones['col_gano_premio'];?></th>
-                        <th scope="col"><?php echo $opciones_secciones['col_nivel'];?></th>
+                        <th scope="col"><?php echo $opciones_secciones['col_gano_premio']; ?></th>
+                        <th scope="col"><?php echo $opciones_secciones['col_nivel']; ?></th>
                         <th scope="col"><?php echo $opciones_secciones['col_opciones']; ?></th>
                     </tr>
                 </thead>
@@ -70,14 +74,14 @@ if (isset($data_revisados)) {
                     $h = 1;
                     foreach ($data_revisados['result'] as $row) {
                         $row['id_solicitud'];
-                        /*$nivel = 'Sin nivel';
-                        if ($h <= $configuracion['nivel_1']) {
-                            $nivel = 'Nivel 1';
-                        } elseif ($h <= ($configuracion['nivel_1'] + $configuracion['nivel_2'])) {
-                            $nivel = 'Nivel 2';
-                        } elseif ($h <= ($configuracion['nivel_1'] + $configuracion['nivel_2'] + $configuracion['nivel_3'])) {
-                            $nivel = 'Nivel 3';
-                        }*/
+                        /* $nivel = 'Sin nivel';
+                          if ($h <= $configuracion['nivel_1']) {
+                          $nivel = 'Nivel 1';
+                          } elseif ($h <= ($configuracion['nivel_1'] + $configuracion['nivel_2'])) {
+                          $nivel = 'Nivel 2';
+                          } elseif ($h <= ($configuracion['nivel_1'] + $configuracion['nivel_2'] + $configuracion['nivel_3'])) {
+                          $nivel = 'Nivel 3';
+                          } */
                         $check_gano_premio = '';
                         $value_nivel = '';
                         $dictaminado_style = 'style="background: #c8c8c8"';
@@ -100,14 +104,14 @@ if (isset($data_revisados)) {
                         <td><?php echo $row['apellido_materno']; ?></td>
                         <td><?php echo $row['delegacion']; ?></td>
                         <td><?php echo $row['fecha']; ?></td>
-                        <td><?php echo ($row['tipo_contratacion']==1) ? $opciones_secciones['lbl_es_base'] : ''; ?></td>
+                        <td><?php echo ($row['tipo_contratacion'] == 1) ? $opciones_secciones['lbl_es_base'] : ''; ?></td>
                         <td><?php echo $row['puntaje_pnpc']; ?></td>
                         <td><?php echo ($row['puntaje_sa_et'] + $row['puntaje_sa_satisfaccion']); ?></td>
                         <td><?php echo $row['puntaje_carrera_docente']; ?></td>
                         <td><?php echo $row['total_puntos_anios_cursos']; ?></td>
-                        <!--<td><?php // echo ($row['puntaje_pnpc'] + $row['puntaje_sa_et'] + $row['puntaje_sa_satisfaccion'] + $row['puntaje_carrera_docente'] + $row['total_puntos_anios_cursos']);   ?></td>-->
+                        <!--<td><?php // echo ($row['puntaje_pnpc'] + $row['puntaje_sa_et'] + $row['puntaje_sa_satisfaccion'] + $row['puntaje_carrera_docente'] + $row['total_puntos_anios_cursos']);    ?></td>-->
                         <td><?php echo $row['total_suma_puntos']; ?></td>
-                        <!--td><?php // echo $row['total'];   ?></td>
+                        <!--td><?php // echo $row['total'];    ?></td>
                         <td><?php echo $row['revisor']; ?></td-->
                         <td align="center"><input type="checkbox" <?php echo $check_gano_premio; ?> class="form-check-input"  name="con_premio[<?php echo $row['id_solicitud']; ?>]"></td>
                         <td align="center"> 
