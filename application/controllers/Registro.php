@@ -131,7 +131,23 @@ class Registro extends MY_Controller {
 //          $output['estado'] = $this->get_estados_solicitud($output['solicitud_excelencia']['cve_estado_solicitud']);
             $main_content = $this->load->view('registro_excelencia/registro.tpl.php', $output, true);
         } else {
-            $main_content = $this->load->view('registro_excelencia/registro_no_disponible.tpl.php', $output, true);
+            if (!is_null($registro)) { //Se verifica que se haya enviado No. de solicitud y pertenencia al usuario
+                $se = $this->registro_excelencia->get_solicitud(array('where' => array("s.id_solicitud" => $registro, "u.username" => $id_informacion_usuario)));
+                if (count($se) <= 0) { //En caso de que no existan valores en bd para usuario se redirecciona para insertar solicitud
+                    redirect('/registro/solicitud');
+                }
+                $output['solicitud_excelencia'] = $se[0];
+                $id_solicitud = $output['solicitud_excelencia']['id_solicitud'];
+            } else {
+                $output['solicitud_excelencia'] = $this->registro_excelencia->get_solicitud(array('where' => array("u.username" => $id_informacion_usuario)));
+                if (isset($output['solicitud_excelencia'][0]) && count($output['solicitud_excelencia'][0]) > 0) {
+                    redirect('/registro/solicitud/' . $output['solicitud_excelencia'][0]['id_solicitud'], 'refresh');
+                } else {
+                    $id_solicitud = null;
+                }
+            }
+            redirect('revision/index/'.$id_solicitud);
+            //$main_content = $this->load->view('registro_excelencia/registro_no_disponible.tpl.php', $output, true);
         }
         $this->template->setMainContent($main_content);
         $this->template->getTemplate();

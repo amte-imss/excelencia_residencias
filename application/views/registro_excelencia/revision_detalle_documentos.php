@@ -15,10 +15,10 @@
             <?php ?>
             <?php ?>
             <?php foreach ($tipo_documentos as $key => $value) { ?>
-            <input type="hidden" id="cursos_rev" name="documento_rev[]" value="<?php echo $documento[$value['id_tipo_documento']]['id_documento']; ?>">
+            <input type="hidden" id="cursos_rev" name="documento_rev[]" value="<?php echo (isset($documento[$value['id_tipo_documento']]['id_documento'])) ? $documento[$value['id_tipo_documento']]['id_documento'] : ''; ?>">
             <tr>
                 <td><?php echo $value['nombre'] ?></td>
-                <td><?php echo str_replace('||X||', base_url() . $documento[$value['id_tipo_documento']]['ruta'], $language_text['registro_excelencia']['reg_liga_msg_descarga']); ?></td>
+                <td><?php echo (isset($documento[$value['id_tipo_documento']]['ruta'])) ? str_replace('||X||', base_url() . $documento[$value['id_tipo_documento']]['ruta'], $language_text['registro_excelencia']['reg_liga_msg_descarga']) : '-'; ?></td>
                 <?php if ($mostrar_opciones_revision) { ?>
                     <td><?php
                         $aux = null;
