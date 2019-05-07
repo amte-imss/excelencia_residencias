@@ -183,7 +183,7 @@ class Gestion_revision extends General_revision {
             'html' => 'La información se guardo correctamente.'
         ];
         $this->load->model('Registro_excelencia_model', 'registro');
-        $data_candidatos = $this->candidatos()['result'];
+        $data_candidatos = $this->candidatos_detalle()['result'];
         $data_dictamen = $this->get_dictamen();
 //        pr($data_candidatos);
 //        pr($post);
