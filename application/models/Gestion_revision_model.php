@@ -191,6 +191,160 @@ class Gestion_revision_model extends MY_Model {
         return $estado;
     }
 
+
+    public function get_revisados_detalle($param = [], $dias_revision = 3) {
+        $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        try {
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            $this->db->select(array('s.id_solicitud', 's.matricula', 'i.nombre', 'i.apellido_paterno', 'i.apellido_materno', 'del.nombre as delegacion', 'to_char(s.fecha, \'DD/MM/YYYY HH:MI:SS\') as fecha', 
+                "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario iu join excelencia.revision rev on rev.id_usuario_revision=iu.id_usuario WHERE rev.id_solicitud=s.id_solicitud and estatus=true) revisor"));
+            $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and hs.actual=true', 'left', false);
+            $this->db->join('sistema.informacion_usuario i', 'i.matricula=s.matricula', 'left');
+            $this->db->join('excelencia.convocatoria cc', 'cc.id_convocatoria=s.id_convocatoria and cc.activo=true', 'left', false);
+            $this->db->join('catalogo.delegaciones del', 'del.clave_delegacional=i.clave_delegacional', 'left');
+            $this->db->where("hs.cve_estado_solicitud IN ('REVISADO', 'CORRECCION')");
+            if (array_key_exists('fields', $param)) {
+                $this->db->select($param['fields']);
+            }
+            if (array_key_exists('conditions', $param)) {
+                $this->db->where($param['conditions']);
+            }
+            if (array_key_exists('order', $param)) {
+                $this->db->order_by($param['order']);
+            }
+            $result = $this->db->get('excelencia.solicitud s'); //pr($this->db->last_query());
+            $salida = $result->result_array();
+            //pr($this->db->last_query());
+            $result->free_result();
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            $estado['success'] = true;
+            $estado['msg'] = "Se obtuvo el reporte con exito";
+            $estado['result'] = $salida;
+        } catch (Exception $ex) {
+            //pedir a cesar el grupo con las tradcciones
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        }
+
+        return $estado;
+    }
+
+    public function get_revisados_detalle_cursos($param = []){
+        $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        try {
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            $this->db->select(array("r.id_solicitud", "r.id_revision", "drc.id_opcion", "count(*) as total"));
+            $this->db->join('excelencia.detalle_revision_curso drc', 'drc.id_revision=r.id_revision', 'left', false);
+            $this->db->where("r.estatus=true");
+            $this->db->group_by(array("r.id_solicitud", "r.id_revision", "drc.id_opcion"));
+
+            if (array_key_exists('fields', $param)) {
+                $this->db->select($param['fields']);
+            }
+            if (array_key_exists('conditions', $param)) {
+                $this->db->where($param['conditions']);
+            }
+            if (array_key_exists('order', $param)) {
+                $this->db->order_by($param['order']);
+            }
+            $result = $this->db->get('excelencia.revision r'); //pr($this->db->last_query());
+            $salida = $result->result_array();
+            //pr($this->db->last_query());
+            $result->free_result();
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            $estado['success'] = true;
+            $estado['msg'] = "Se obtuvo el reporte con exito";
+            $estado['result'] = $salida;
+        } catch (Exception $ex) {
+            //pedir a cesar el grupo con las tradcciones
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        }
+
+        return $estado;
+    }
+
+    public function get_revisados_detalle_documentos($param = []){
+        $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        try {
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            $this->db->select(array("r.id_solicitud", "r.id_revision", "drd.id_opcion", "count(*) as total"));
+            $this->db->join('excelencia.detalle_revision_documento drd', 'drd.id_revision=r.id_revision', 'left', false);
+            $this->db->where("r.estatus=true");
+            $this->db->group_by(array("r.id_solicitud", "r.id_revision", "drd.id_opcion"));
+
+            if (array_key_exists('fields', $param)) {
+                $this->db->select($param['fields']);
+            }
+            if (array_key_exists('conditions', $param)) {
+                $this->db->where($param['conditions']);
+            }
+            if (array_key_exists('order', $param)) {
+                $this->db->order_by($param['order']);
+            }
+            $result = $this->db->get('excelencia.revision r'); //pr($this->db->last_query());
+            $salida = $result->result_array();
+            //pr($this->db->last_query());
+            $result->free_result();
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            $estado['success'] = true;
+            $estado['msg'] = "Se obtuvo el reporte con exito";
+            $estado['result'] = $salida;
+        } catch (Exception $ex) {
+            //pedir a cesar el grupo con las tradcciones
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        }
+
+        return $estado;
+    }
+
+    public function get_opcion($param = []){
+        $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        try {
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            if (array_key_exists('fields', $param)) {
+                $this->db->select($param['fields']);
+            }
+            if (array_key_exists('conditions', $param)) {
+                $this->db->where($param['conditions']);
+            }
+            if (array_key_exists('order', $param)) {
+                $this->db->order_by($param['order']);
+            }
+            $result = $this->db->get('excelencia.opcion o'); //pr($this->db->last_query());
+            $salida = $result->result_array();
+            //pr($this->db->last_query());
+            $result->free_result();
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            $estado['success'] = true;
+            $estado['msg'] = "Se obtuvo el reporte con exito";
+            $estado['result'] = $salida;
+        } catch (Exception $ex) {
+            //pedir a cesar el grupo con las tradcciones
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        }
+
+        return $estado;
+    }
+
     public function get_candidatos($param = [], $dias_revision = 3) {
         $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
         try {
@@ -218,6 +372,59 @@ class Gestion_revision_model extends MY_Model {
             $this->db->join('excelencia.convocatoria cc', 'cc.id_convocatoria=s.id_convocatoria and cc.activo=true', 'left', false);
             $this->db->join('catalogo.delegaciones del', 'del.clave_delegacional=i.clave_delegacional', 'left');
             $this->db->where('hs.cve_estado_solicitud', 'REVISADO');
+            if (array_key_exists('fields', $param)) {
+                $this->db->select($param['fields']);
+            }
+            if (array_key_exists('conditions', $param)) {
+                $this->db->where($param['conditions']);
+            }
+            if (array_key_exists('order', $param)) {
+                $this->db->order_by($param['order']);
+            }
+            $result = $this->db->get('excelencia.solicitud s'); //pr($this->db->last_query());
+            $salida = $result->result_array();
+            $result->free_result();
+            $this->db->flush_cache();
+            $this->db->reset_query();
+//            pr($this->db->last_query());
+            $estado['success'] = true;
+            $estado['msg'] = "Se obtuvo el reporte con exito";
+            $estado['result'] = $salida;
+        } catch (Exception $ex) {
+            //pedir a cesar el grupo con las tradcciones
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        }
+
+        return $estado;
+    }
+
+    public function get_candidatos_detalle($param = [], $dias_revision = 3) {
+        $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+        try {
+            $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
+            $this->db->flush_cache();
+            $this->db->reset_query();
+
+            $this->db->select(array('s.id_solicitud', 's.matricula', 'i.nombre', 'i.apellido_paterno',
+                'i.apellido_materno', 'del.nombre as delegacion', 'to_char(s.fecha, \'DD/MM/YYYY HH:MI:SS\') as fecha',
+                '(select count(*) from excelencia.revision rev where rev.id_solicitud=s.id_solicitud and fecha_revision is not null) as total',
+                /* 9 */ "(SELECT concat(nombre,' ',apellido_paterno,' ',apellido_materno) FROM sistema.informacion_usuario iu join excelencia.revision rev on rev.id_usuario_revision=iu.id_usuario WHERE rev.id_solicitud=s.id_solicitud and estatus=true) revisor",
+                //"(SELECT total_puntos_anios_cursos FROM excelencia.revision rev WHERE rev.id_solicitud=s.id_solicitud and estatus=true) total_puntos_anios_cursos",
+                'eva.id_evaluacion',
+                'coalesce(re.total_puntos_anios_cursos,0) total_puntos_anios_cursos', 'coalesce(eva.puntaje_pnpc,0) puntaje_pnpc', 'coalesce(eva.puntaje_carrera_docente,0) puntaje_carrera_docente',
+                'coalesce(eva.puntaje_sa_et,0) puntaje_sa_et', 'coalesce(eva.puntaje_sa_satisfaccion,0) puntaje_sa_satisfaccion', 'coalesce(eva.puntaje_anios_docente,0) puntaje_anios_docente'
+                , '(coalesce(total_puntos_anios_cursos,0)+ coalesce(eva.puntaje_pnpc,0)+ coalesce(eva.puntaje_carrera_docente,0)+ coalesce(eva.puntaje_sa_et,0) + coalesce(eva.puntaje_sa_satisfaccion,0)) total_suma_puntos',
+                'dic.id_dictamen', 'dic.folio_dictamen', 'dic.fecha fecha_dictamen', 'dic.id_nivel', 'dic.aceptado', 'dic.premio_anterior', 'dic.promedio', "(case WHEN s.tipo_contratacion=2 THEN 1 ELSE 0 END) AS tipo_contratacion", "i.email"
+            ));
+
+            $this->db->join('excelencia.revision re', 're.id_solicitud= s.id_solicitud and re.estatus', 'inner');
+            $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and hs.actual=true', 'left', false);
+            $this->db->join('sistema.informacion_usuario i', 'i.matricula=s.matricula', 'left');
+            $this->db->join('excelencia.evaluacion eva', 'eva.matricula = i.matricula', 'left');
+            $this->db->join('excelencia.dictamen dic', 'dic.id_solicitud = s.id_solicitud', 'left');
+            $this->db->join('excelencia.convocatoria cc', 'cc.id_convocatoria=s.id_convocatoria and cc.activo=true', 'left', false);
+            $this->db->join('catalogo.delegaciones del', 'del.clave_delegacional=i.clave_delegacional', 'left');
+            $this->db->where("hs.cve_estado_solicitud IN ('REVISADO', 'CORRECCION')");
             if (array_key_exists('fields', $param)) {
                 $this->db->select($param['fields']);
             }

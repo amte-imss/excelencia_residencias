@@ -52,12 +52,36 @@ class Gestion_revision extends General_revision {
                 $datos['opciones_secciones'] = $this->obtener_grupos_texto('en_revision', $this->obtener_idioma())['en_revision'];
                 $output['list_en_revision'] = $this->load->view('revision_solicitud/estados/lista_en_revision.php', $datos, true);
                 break;
-            case strtolower(En_estado_solicitud::REVISADOS):
+            case strtolower(En_estado_solicitud::REVISADOS) . "_anterior":
                 $datos['data_revisados'] = $this->revisados();
                 $datos['opciones_secciones'] = $this->obtener_grupos_texto('revisados', $this->obtener_idioma())['revisados'];
                 $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_revisados.php', $datos, true);
                 break;
+            case strtolower(En_estado_solicitud::REVISADOS):
+                $datos['data_revisados'] = $this->revisados_detalle();
+                $opcion_curso = $this->gestion_revision->get_opcion(array('conditions'=>"tipo='VALIDA_CURSO'"));
+                $opcion_documento = $this->gestion_revision->get_opcion(array('conditions'=>"tipo='VALIDA_DOCUMENTOS'"));
+                $datos['opcion_curso'] = dropdown_options($opcion_curso['result'], 'id_opcion', 'opcion');
+                $datos['opcion_documento'] = dropdown_options($opcion_documento['result'], 'id_opcion', 'opcion');
+                $datos['opciones_secciones'] = $this->obtener_grupos_texto('revisados', $this->obtener_idioma())['revisados'];
+                $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_revisados_detalle.php', $datos, true);
+                break;
             case strtolower(En_estado_solicitud::CANDIDATOS):
+                $datos['data_revisados'] = $this->candidatos_detalle();
+                $opcion_curso = $this->gestion_revision->get_opcion(array('conditions'=>"tipo='VALIDA_CURSO'"));
+                $opcion_documento = $this->gestion_revision->get_opcion(array('conditions'=>"tipo='VALIDA_DOCUMENTOS'"));
+                $datos['opcion_curso'] = dropdown_options($opcion_curso['result'], 'id_opcion', 'opcion');
+                $datos['opcion_documento'] = dropdown_options($opcion_documento['result'], 'id_opcion', 'opcion');
+                $datos['data_dictamen'] = $this->get_dictamen();
+                $datos['total_registrados_nivel'] = $this->get_dictamen_total_nivel();
+                $datos['niveles'] = dropdown_options($this->get_niveles(), 'id_nivel', 'descripcion');
+                $conf = $this->gestion_revision->get_configuracion(array('where' => "llave='cupo'"));
+                $datos['configuracion'] = (isset($conf['result'][0])) ? json_decode($conf['result'][0]['valor'], true) : null;
+                $datos['opciones_secciones'] = $this->obtener_grupos_texto('candidatos', $this->obtener_idioma())['candidatos'];
+
+                $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_candidatos_detalle.php', $datos, true); //pr($datos);
+                break;
+            case strtolower(En_estado_solicitud::CANDIDATOS) . "_anterior":
                 $datos['data_revisados'] = $this->candidatos();
                 $datos['data_dictamen'] = $this->get_dictamen();
                 $datos['total_registrados_nivel'] = $this->get_dictamen_total_nivel();
@@ -348,6 +372,37 @@ class Gestion_revision extends General_revision {
         return $result;
     }
 
+    private function revisados_detalle() {
+        $lenguaje = obtener_lenguaje_actual();
+        $respuesta_model = $this->gestion_revision->get_revisados_detalle(); //Obtener listado de solicitudes
+        $ec = $this->gestion_revision->get_revisados_detalle_cursos(); //Obtener estatus de revisión de curso
+        $ed = $this->gestion_revision->get_revisados_detalle_documentos(); //Obtener estatus de revisión de documentos
+        
+        $estatus_documentos = $estatus_curso = array();
+        //pr($ec);
+        if(isset($ec['result']) and count($ec['result'])>0){
+            foreach ($ec['result'] as $key => $value) {
+                $estatus_curso[$value['id_solicitud']][$value['id_opcion']] = $value['total'];
+            }
+        }
+
+        if(isset($ed['result']) and count($ed['result'])>0){
+            foreach ($ed['result'] as $key_ed => $value_ed) {
+                $estatus_documentos[$value_ed['id_solicitud']][$value_ed['id_opcion']] = $value_ed['total'];
+            }
+        }
+        //pr($estatus_curso);
+        //pr($estatus_documentos);
+        $result = array('success' => $respuesta_model['success'], 'msg' => $respuesta_model['msg'], 'result' => []);
+        foreach ($respuesta_model['result'] as $row) {
+            $result['result'][$row['id_solicitud']] = $row;
+            $result['result'][$row['id_solicitud']]['estatus_curso'] = (isset($estatus_curso[$row['id_solicitud']])) ? $estatus_curso[$row['id_solicitud']] : array();
+            $result['result'][$row['id_solicitud']]['estatus_documentos'] = (isset($estatus_documentos[$row['id_solicitud']])) ? $estatus_documentos[$row['id_solicitud']] : array();
+        }
+        //pr($result);
+        return $result;
+    }
+
     private function rechazados() {
         $lenguaje = obtener_lenguaje_actual();
         $respuesta_model = $this->gestion_revision->get_rechazados();
@@ -401,6 +456,44 @@ class Gestion_revision extends General_revision {
               $result['result'][$row['folio']]['metodologia'] = $metodologia[$lenguaje]; */
         }
         return $result;
+    }
+
+    private function candidatos_detalle() {
+        $lenguaje = obtener_lenguaje_actual();
+        $param = ['order' => 'tipo_contratacion desc, premio_anterior asc, id_nivel asc, 17 desc, 7 asc ']; //El 17 equivale a total de suma de puntos y l 7 a la fecha
+        $respuesta_model = $this->gestion_revision->get_candidatos_detalle($param);
+        ///---------------------------------
+        $ec = $this->gestion_revision->get_revisados_detalle_cursos(); //Obtener estatus de revisión de curso
+        $ed = $this->gestion_revision->get_revisados_detalle_documentos(); //Obtener estatus de revisión de documentos
+        $estatus_documentos = $estatus_curso = array();
+        //pr($ec);
+        if(isset($ec['result']) and count($ec['result'])>0){
+            foreach ($ec['result'] as $key => $value) {
+                $estatus_curso[$value['id_solicitud']][$value['id_opcion']] = $value['total'];
+            }
+        }
+        if(isset($ed['result']) and count($ed['result'])>0){
+            foreach ($ed['result'] as $key_ed => $value_ed) {
+                $estatus_documentos[$value_ed['id_solicitud']][$value_ed['id_opcion']] = $value_ed['total'];
+            }
+        }
+
+        $result = array('success' => $respuesta_model['success'], 'msg' => $respuesta_model['msg'], 'result' => []);
+        foreach ($respuesta_model['result'] as $row) {
+            $result['result'][$row['id_solicitud']] = $row;
+            $result['result'][$row['id_solicitud']]['estatus_curso'] = (isset($estatus_curso[$row['id_solicitud']])) ? $estatus_curso[$row['id_solicitud']] : array();
+            $result['result'][$row['id_solicitud']]['estatus_documentos'] = (isset($estatus_documentos[$row['id_solicitud']])) ? $estatus_documentos[$row['id_solicitud']] : array();
+            /* $result['result'][$row['folio']]['folio'] = $row['folio'];
+              $result['result'][$row['folio']]['titulo'] = $row['titulo'];
+              $result['result'][$row['folio']]['clave_estado'] = $row['clave_estado'];
+              $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['revisor'] = $row['revisor'];
+              $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['clave_estado'] = ($row['revisado']==true) ? 'Revisado' : 'Sin revisar';
+              $result['result'][$row['folio']]['revisores'][$row['id_usuario']]['fecha_limite_revision'] = $row['fecha_limite_revision'];
+              $metodologia = json_decode($row['metodologia'],true);
+              $result['result'][$row['folio']]['metodologia'] = $metodologia[$lenguaje]; */
+        }
+        return $result;
+
     }
 
     /**
