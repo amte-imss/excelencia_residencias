@@ -101,7 +101,7 @@ class Gestion_revision extends General_revision {
                 $datos['opciones_secciones'] = $this->obtener_grupos_texto('candidatos', $this->obtener_idioma())['candidatos'];
                 $datos['configuracion'] = (isset($conf['result'][0])) ? json_decode($conf['result'][0]['valor'], true) : null;
                 if (!empty($convocatoria) && $convocatoria[0]['activo']) {
-                    $datos['data_revisados'] = $this->candidatos();
+                    $datos['data_revisados'] = $this->candidatos_detalle();
                     $datos['data_dictamen'] = $this->get_dictamen(En_estado_solicitud::ACEPTADOS);
                     $datos['niveles'] = dropdown_options($this->get_niveles(), 'id_nivel', 'descripcion');
                     if ($tipo == strtolower(En_estado_solicitud::ACEPTADOS) . "_e") {
@@ -137,7 +137,7 @@ class Gestion_revision extends General_revision {
 //                pr($convocatoria);
                 $datos['opciones_secciones'] = $this->obtener_grupos_texto('candidatos', $this->obtener_idioma())['candidatos'];
                 if (!empty($convocatoria) && $convocatoria[0]['activo']) {
-                    $datos['data_revisados'] = $this->candidatos();
+                    $datos['data_revisados'] = $this->candidatos_detalle();
                     $datos['data_dictamen'] = $this->get_dictamen(En_estado_solicitud::RECHAZADOS);
                     $datos['niveles'] = dropdown_options($this->get_niveles(), 'id_nivel', 'descripcion');
                     $output['list_rechazados'] = $this->load->view('revision_solicitud/estados/lista_rechazados.php', $datos, true);
