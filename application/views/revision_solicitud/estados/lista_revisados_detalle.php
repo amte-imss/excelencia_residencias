@@ -1,5 +1,13 @@
 <link rel="stylesheet" type="text/css" href="<?php echo asset_url(); ?>grocery_crud/themes/datatables/css/jquery.dataTables_1.10.19.css">
- 
+<style>
+.tab-content.lv2 .tab-pane {
+  padding: 20px 20px;
+}
+.timeline {
+  overflow: scroll;
+  height: 800px;
+}
+</style>
 <?php
   if(isset($data_revisados))
   {
@@ -10,13 +18,13 @@
 ?>
             <!--h4> <?php //echo $opciones_secciones['nota_fecha_limite'];?> </h4-->
             <br>
-            <table class="table" id="table_revisados">
+            <table class="table table-fixed" id="table_revisados">
               <thead>
                 <tr>
                   <th scope="col"><?php echo $opciones_secciones['col_matricula'];?></th>
                   <th scope="col"><?php echo $opciones_secciones['col_nombre'];?></th>
-                  <th scope="col"><?php echo $opciones_secciones['col_apellido_paterno'];?></th>
-                  <th scope="col"><?php echo $opciones_secciones['col_apellido_materno'];?></th>
+                  <!--th scope="col"><?php echo $opciones_secciones['col_apellido_paterno'];?></th>
+                  <th scope="col"><?php echo $opciones_secciones['col_apellido_materno'];?></th-->
                   <th scope="col"><?php echo $opciones_secciones['col_delegacion'];?></th>
                   <th scope="col"><?php echo $opciones_secciones['col_fecha_registro'];?></th>
                   <th scope="col"><?php echo $opciones_secciones['col_revisor'];?></th>
@@ -33,9 +41,10 @@
 ?>
                   <tr>
                     <td scope="row"><?php echo $row['matricula'];?></td>
-                    <td><?php echo $row['nombre'];?></td>
+                    <!--td><?php echo $row['nombre'];?></td>
                     <td><?php  echo $row['apellido_paterno'];?></td>
-                    <td><?php  echo $row['apellido_materno'];?></td>
+                    <td><?php  echo $row['apellido_materno'];?></td -->
+                    <td><?php  echo $row['nombre']." ".$row['apellido_paterno']." ".$row['apellido_materno'];?></td>
                     <td><?php  echo $row['delegacion'];?></td>
                     <td><?php  echo $row['fecha'];?></td>
                     <td><?php echo $row['revisor']; ?></td>

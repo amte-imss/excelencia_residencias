@@ -1,3 +1,12 @@
+<style>
+.tab-content.lv2 .tab-pane {
+  padding: 20px 20px;
+}
+.timeline {
+  overflow: scroll;
+  height: 800px;
+}
+</style>
 <?php
 if (isset($data_revisados)) {
     if ($data_revisados['success']) {
@@ -20,12 +29,14 @@ if (isset($data_revisados)) {
             <?php } ?>
 
                                                             <!--h4> <?php //echo $opciones_secciones['nota_fecha_limite'];    ?> </h4-->
-            <div class="col-md-2"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_1']; ?></h3><h4 class="text-center"><?php echo $total_registrados_nivel['nivel_1'] . '/' . $configuracion['nivel_1']; ?></h4></div>
-            <div class="col-md-2"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_2']; ?></h3><h4 class="text-center"><?php echo $total_registrados_nivel['nivel_2'] . '/' . $configuracion['nivel_2']; ?></h4></div>
-            <div class="col-md-2"><h3 class="text-center"><?php echo $opciones_secciones['lbl_nivel_3']; ?></h3><h4 class="text-center"><?php echo $total_registrados_nivel['nivel_3'] . '/' . $configuracion['nivel_3']; ?></h4></div>
-            <div class="col-sm-2"></div>
-            <div class="col-md-4 text-center"><br>
-                </button>
+            <div class="col-md-2"><h4 class="text-center"><?php echo $opciones_secciones['lbl_nivel_1']; ?></h4><h4 class="text-center"><?php echo $total_registrados_nivel['nivel_1'] . '/' . $configuracion['nivel_1']; ?></h4></div>
+            <div class="col-md-2"><h4 class="text-center"><?php echo $opciones_secciones['lbl_nivel_2']; ?></h4><h4 class="text-center"><?php echo $total_registrados_nivel['nivel_2'] . '/' . $configuracion['nivel_2']; ?></h4></div>
+            <div class="col-md-2"><h4 class="text-center"><?php echo $opciones_secciones['lbl_nivel_3']; ?></h4><h4 class="text-center"><?php echo $total_registrados_nivel['nivel_3'] . '/' . $configuracion['nivel_3']; ?></h4></div>
+            <div class="col-md-2"><h4 class="text-center"><?php echo $opciones_secciones['total_revisados']; ?></h4><h4 class="text-center"><?php echo $totales['total']; ?></h4></div>
+            <div class="col-md-2"><h4 class="text-center"><?php echo $opciones_secciones['total_rechazados']; ?></h4><h4 class="text-center"><?php echo $totales['rechazados']; ?></h4></div>
+            <div class="col-md-2"><h4 class="text-center"><?php echo $opciones_secciones['total_sin_asignar']; ?></h4><h4 class="text-center"><?php echo $totales['sin_asignar']; ?></h4></div>
+            <div class="col-md-2 text-center"></div>
+            <div class="col-md-4 text-center">
                 <button class="btn btn-theme animated flipInY visible" 
                         id="btn_guardar_informacion_dictamen" 
                         data-formulario="form_informacion_dictamen"
@@ -34,6 +45,11 @@ if (isset($data_revisados)) {
                             <?php echo $opciones_secciones['btn_guardar_seleccion']; ?>
                 </button>
             </div>
+            <div class="col-md-2 text-center"></div>
+            <div class="col-md-4 text-center">
+                <a href="<?php echo site_url('/gestion_revision/listado_control/'.strtolower(En_estado_solicitud::CANDIDATOS)."_e"); ?>" class=" btn btn-theme animated flipInY visible"><?php echo $opciones_secciones['btn_exportar_aceptados']; ?></a>
+            </div>
+            <br>
             <div class="col-sm-12" id="msg_guarda_dictamen"></div>
 
             <br><br>
@@ -51,8 +67,8 @@ if (isset($data_revisados)) {
                         <!--th scope="col"><?php echo $opciones_secciones['col_nivel']; ?></th-->
                         <th scope="col"><?php echo $opciones_secciones['col_matricula']; ?></th>
                         <th scope="col"><?php echo $opciones_secciones['col_nombre']; ?></th>
-                        <th scope="col"><?php echo $opciones_secciones['col_apellido_paterno']; ?></th>
-                        <th scope="col"><?php echo $opciones_secciones['col_apellido_materno']; ?></th>
+                        <!--th scope="col"><?php echo $opciones_secciones['col_apellido_paterno']; ?></th>
+                        <th scope="col"><?php echo $opciones_secciones['col_apellido_materno']; ?></th-->
                         <th scope="col"><?php echo $opciones_secciones['col_delegacion']; ?></th>
                         <th scope="col"><?php echo $opciones_secciones['col_fecha_registro']; ?></th>
                         <th scope="col"><?php echo $opciones_secciones['col_tipo_contratacion']; ?></th>
@@ -101,9 +117,10 @@ if (isset($data_revisados)) {
                     <tr <?php echo $dictaminado_style; ?>>
                         <!--td scope="row"><?php echo $nivel; ?></td-->
                         <td><?php echo $row['matricula']; ?></td>
-                        <td><?php echo $row['nombre']; ?></td>
+                        <!--td><?php echo $row['nombre']; ?></td>
                         <td><?php echo $row['apellido_paterno']; ?></td>
-                        <td><?php echo $row['apellido_materno']; ?></td>
+                        <td><?php echo $row['apellido_materno']; ?></td-->
+                        <td><?php  echo $row['nombre']." ".$row['apellido_paterno']." ".$row['apellido_materno'];?></td>
                         <td><?php echo $row['delegacion']; ?></td>
                         <td><?php echo $row['fecha']; ?></td>
                         <td><?php echo ($row['tipo_contratacion'] == 1) ? $opciones_secciones['lbl_es_base'] : ''; ?></td>

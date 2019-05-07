@@ -52,7 +52,7 @@ class Gestion_revision extends General_revision {
                 $datos['opciones_secciones'] = $this->obtener_grupos_texto('en_revision', $this->obtener_idioma())['en_revision'];
                 $output['list_en_revision'] = $this->load->view('revision_solicitud/estados/lista_en_revision.php', $datos, true);
                 break;
-            case strtolower(En_estado_solicitud::REVISADOS) . "_anterior":
+            case strtolower(En_estado_solicitud::REVISADOS) . "_anterior": //Listado obtenido en primera versión
                 $datos['data_revisados'] = $this->revisados();
                 $datos['opciones_secciones'] = $this->obtener_grupos_texto('revisados', $this->obtener_idioma())['revisados'];
                 $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_revisados.php', $datos, true);
@@ -66,7 +66,7 @@ class Gestion_revision extends General_revision {
                 $datos['opciones_secciones'] = $this->obtener_grupos_texto('revisados', $this->obtener_idioma())['revisados'];
                 $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_revisados_detalle.php', $datos, true);
                 break;
-            case strtolower(En_estado_solicitud::CANDIDATOS):
+            case strtolower(En_estado_solicitud::CANDIDATOS): case strtolower(En_estado_solicitud::CANDIDATOS) . "_e":
                 $datos['data_revisados'] = $this->candidatos_detalle();
                 $opcion_curso = $this->gestion_revision->get_opcion(array('conditions'=>"tipo='VALIDA_CURSO'"));
                 $opcion_documento = $this->gestion_revision->get_opcion(array('conditions'=>"tipo='VALIDA_DOCUMENTOS'"));
@@ -74,14 +74,35 @@ class Gestion_revision extends General_revision {
                 $datos['opcion_documento'] = dropdown_options($opcion_documento['result'], 'id_opcion', 'opcion');
                 $datos['data_dictamen'] = $this->get_dictamen();
                 $datos['total_registrados_nivel'] = $this->get_dictamen_total_nivel();
+                $datos['totales'] = $this->gestion_revision->get_candidatos_detalle(array('fields'=>array('count(*) as total, sum(case when "dic"."premio_anterior" = true and aceptado = false then 1 else 0 end) rechazados,
+                    sum(case when "dic"."id_dictamen" is null then 1 else 0 end) sin_asignar, sum(case when "dic"."id_dictamen" is not null and aceptado = true then 1 else 0 end) aceptados')))['result'][0];
                 $datos['niveles'] = dropdown_options($this->get_niveles(), 'id_nivel', 'descripcion');
                 $conf = $this->gestion_revision->get_configuracion(array('where' => "llave='cupo'"));
                 $datos['configuracion'] = (isset($conf['result'][0])) ? json_decode($conf['result'][0]['valor'], true) : null;
                 $datos['opciones_secciones'] = $this->obtener_grupos_texto('candidatos', $this->obtener_idioma())['candidatos'];
 
-                $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_candidatos_detalle.php', $datos, true); //pr($datos);
+                if ($tipo == strtolower(En_estado_solicitud::CANDIDATOS) . "_e") {
+                    $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_candidatos_detalle_exportar.php', $datos, true);
+                } else {
+                    $output['list_revisados'] = $this->load->view('revision_solicitud/estados/lista_candidatos_detalle.php', $datos, true); //pr($datos);
+                }
+
+                if ($tipo == strtolower(En_estado_solicitud::CANDIDATOS) . "_e") {
+                    if (isset($output['list_revisados'])) {
+                        // Convert to UTF-16LE and Prepend BOM
+                        $string_to_export = "\xFF\xFE" . mb_convert_encoding($output['list_revisados'], 'UTF-16LE', 'UTF-8');
+
+                        header("Content-Encoding: UTF-8");
+                        header("Content-type: application/x-msexcel;charset=UTF-8");
+                        header('Content-Disposition: attachment; filename="listado_candidatos_' . date('YmdHis') . '.xls";');
+
+                        echo $string_to_export;
+
+                        exit();
+                    }
+                }
                 break;
-            case strtolower(En_estado_solicitud::CANDIDATOS) . "_anterior":
+            case strtolower(En_estado_solicitud::CANDIDATOS) . "_anterior": //Listado obtenido en primera versión
                 $datos['data_revisados'] = $this->candidatos();
                 $datos['data_dictamen'] = $this->get_dictamen();
                 $datos['total_registrados_nivel'] = $this->get_dictamen_total_nivel();
