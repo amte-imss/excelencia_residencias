@@ -32,8 +32,8 @@ class Evaluacion extends MY_Controller {
             //$crud->unset_add(); //quito el botón addRecord
             $crud->set_primary_key('id_evaluacion');
 
-            $crud->fields("matricula", "id_solicitud", "puntaje_pnpc", "puntaje_carrera_docente", "puntaje_sa_et", "puntaje_sa_satisfaccion", "puntaje_anios_docente");
-            $crud->columns("matricula",  "id_solicitud", "puntaje_pnpc", "puntaje_carrera_docente", "puntaje_sa_et", "puntaje_sa_satisfaccion", "puntaje_anios_docente");
+            $crud->fields("matricula", "puntaje_pnpc", "puntaje_carrera_docente", "puntaje_sa_et", "puntaje_sa_satisfaccion", "puntaje_anios_docente", "observacion");
+            $crud->columns("matricula",  "puntaje_pnpc", "puntaje_carrera_docente", "puntaje_sa_et", "puntaje_sa_satisfaccion", "puntaje_anios_docente");
             
             //$crud->required_fields("matricula");
             
@@ -44,6 +44,9 @@ class Evaluacion extends MY_Controller {
             $crud->display_as("puntaje_sa_et", "Puntaje de Sede Académica por Eficiencia Terminal");
             $crud->display_as("puntaje_sa_satisfaccion", "Puntaje de Satisfacción por Sede Académica");
             $crud->display_as("puntaje_anios_docente", "Puntaje de Años de Docente");
+            $crud->display_as("observacion", "Observaciones");
+            $crud->unset_texteditor('observacion');
+
 
             $data_view['output'] = $crud->render();
             $data_view['title'] = "Evaluacion";

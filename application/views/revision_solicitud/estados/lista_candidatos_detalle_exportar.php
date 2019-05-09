@@ -45,6 +45,7 @@ if (isset($data_revisados)) {
                         <th scope="col"><?php echo $opciones_secciones['col_nivel']; ?></th>
                         <th scope="col"><?php echo $opciones_secciones['col_estatus_curso'];?></th>
                         <th scope="col"><?php echo $opciones_secciones['col_estatus_documentacion'];?></th>
+                        <th scope="col"><?php echo $opciones_secciones['btn_observacion'];?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -79,7 +80,7 @@ if (isset($data_revisados)) {
                         <td><?php echo $row['puntaje_pnpc']; ?></td>
                         <td><?php echo ($row['puntaje_sa_et'] + $row['puntaje_sa_satisfaccion']); ?></td>
                         <td><?php echo $row['puntaje_carrera_docente']; ?></td>
-                        <td><?php echo $row['total_puntos_anios_cursos']; ?></td>
+                        <td><?php echo $row['puntaje_anios_docente']; ?></td>
                         <!--<td><?php // echo ($row['puntaje_pnpc'] + $row['puntaje_sa_et'] + $row['puntaje_sa_satisfaccion'] + $row['puntaje_carrera_docente'] + $row['total_puntos_anios_cursos']);    ?></td>-->
                         <td><?php echo $row['total_suma_puntos']; ?></td>
                         
@@ -116,6 +117,7 @@ if (isset($data_revisados)) {
                         }
                         echo trim($str_d, ', '); 
                         ?></td>
+                        <td><?php echo $row['observacion']; ?></td>
                     </tr>
                     <?php
                     $h++;

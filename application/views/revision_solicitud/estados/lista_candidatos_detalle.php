@@ -127,7 +127,7 @@ if (isset($data_revisados)) {
                         <td><?php echo $row['puntaje_pnpc']; ?></td>
                         <td><?php echo ($row['puntaje_sa_et'] + $row['puntaje_sa_satisfaccion']); ?></td>
                         <td><?php echo $row['puntaje_carrera_docente']; ?></td>
-                        <td><?php echo $row['total_puntos_anios_cursos']; ?></td>
+                        <td><?php echo $row['puntaje_anios_docente']; ?></td>
                         <!--<td><?php // echo ($row['puntaje_pnpc'] + $row['puntaje_sa_et'] + $row['puntaje_sa_satisfaccion'] + $row['puntaje_carrera_docente'] + $row['total_puntos_anios_cursos']);    ?></td>-->
                         <td><?php echo $row['total_suma_puntos']; ?></td>
                         <!--td><?php // echo $row['total'];    ?></td>
@@ -161,6 +161,9 @@ if (isset($data_revisados)) {
                         } ?></td>
                         <td>
                             <a href="<?php echo site_url() . '/revision/index/' . $row['id_solicitud']; ?>/detalle" type="button"><?php echo $opciones_secciones['btn_ver']; ?> <span class="glyphicon glyphicon-new-window"/></a>
+                            <?php if(!empty($row['observacion'])) { ?>
+                                <br><a href="#" data-toggle="tooltip" title="<?php echo $row['observacion']; ?>" type="button"><?php echo $opciones_secciones['btn_observacion']; ?> <span class="glyphicon glyphicon-comment"/></a>
+                            <?php } ?>
                         </td>
                     </tr>
                     <?php
@@ -201,5 +204,8 @@ if (isset($data_revisados)) {
     $("#rechazados").removeClass();
     var texto_confirmacion_guardado = "<?php echo $opciones_secciones['texto_confirmacion_guardado']; ?>";
     var texto_confirmacion_cierre = "<?php echo $opciones_secciones['texto_confirmacion_cierre']; ?>";
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip(); 
+    });
 </script>
 <?php echo js('trabajo_investigacion/control_dictamen.js'); ?>

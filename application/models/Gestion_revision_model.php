@@ -416,12 +416,12 @@ class Gestion_revision_model extends MY_Model {
                     'eva.id_evaluacion',
                     'coalesce(re.total_puntos_anios_cursos,0) total_puntos_anios_cursos', 'coalesce(eva.puntaje_pnpc,0) puntaje_pnpc', 'coalesce(eva.puntaje_carrera_docente,0) puntaje_carrera_docente',
                     'coalesce(eva.puntaje_sa_et,0) puntaje_sa_et', 'coalesce(eva.puntaje_sa_satisfaccion,0) puntaje_sa_satisfaccion', 'coalesce(eva.puntaje_anios_docente,0) puntaje_anios_docente'
-                    , '(coalesce(total_puntos_anios_cursos,0)+ coalesce(eva.puntaje_pnpc,0)+ coalesce(eva.puntaje_carrera_docente,0)+ coalesce(eva.puntaje_sa_et,0) + coalesce(eva.puntaje_sa_satisfaccion,0)) total_suma_puntos',
-                    'dic.id_dictamen', 'dic.folio_dictamen', 'dic.fecha fecha_dictamen', 'dic.id_nivel', 'dic.aceptado', 'dic.premio_anterior', 'dic.promedio', "(case WHEN s.tipo_contratacion=2 THEN 1 ELSE 0 END) AS tipo_contratacion", "i.email"
+                    , '(coalesce(eva.puntaje_anios_docente,0)+ coalesce(eva.puntaje_pnpc,0)+ coalesce(eva.puntaje_carrera_docente,0)+ coalesce(eva.puntaje_sa_et,0) + coalesce(eva.puntaje_sa_satisfaccion,0)) total_suma_puntos',
+                    'dic.id_dictamen', 'dic.folio_dictamen', 'dic.fecha fecha_dictamen', 'dic.id_nivel', 'dic.aceptado', 'dic.premio_anterior', 'dic.promedio', "(case WHEN s.tipo_contratacion=2 THEN 1 ELSE 0 END) AS tipo_contratacion", "i.email", "eva.observacion"
                 ));
             }
 
-            $this->db->join('excelencia.revision re', 're.id_solicitud= s.id_solicitud and re.estatus', 'inner');
+            $this->db->join('excelencia.revision re', 're.id_solicitud= s.id_solicitud and re.estatus', 'left');
             $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and hs.actual=true', 'left', false);
             $this->db->join('sistema.informacion_usuario i', 'i.matricula=s.matricula', 'left');
             $this->db->join('excelencia.evaluacion eva', 'eva.matricula = i.matricula', 'left');
