@@ -345,7 +345,12 @@ class Gestion_revision_model extends MY_Model {
         return $estado;
     }
 
-    public function get_candidatos($param = [], $dias_revision = 3) {
+    public function     get_candidatos($param = [], $dias_revision = 3, $estados_candidatos='REVISADO') {
+        if(!is_null($estados_candidatos)){
+//            $estados_candidatos = [En_estado_solicitud::REVISADOS];
+            $this->db->where('hs.cve_estado_solicitud', 'REVISADO');
+//        En_estado_solicitud::EN_REVISION, En_estado_solicitud::CORRECCION, En_estado_solicitud::SIN_COMITE
+        }
         $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
         try {
             $estado = array('success' => false, 'msg' => 'Algo salio mal', 'result' => []);
@@ -371,7 +376,6 @@ class Gestion_revision_model extends MY_Model {
             $this->db->join('excelencia.dictamen dic', 'dic.id_solicitud = s.id_solicitud', 'left');
             $this->db->join('excelencia.convocatoria cc', 'cc.id_convocatoria=s.id_convocatoria and cc.activo=true', 'left', false);
             $this->db->join('catalogo.delegaciones del', 'del.clave_delegacional=i.clave_delegacional', 'left');
-            $this->db->where('hs.cve_estado_solicitud', 'REVISADO');
             if (array_key_exists('fields', $param)) {
                 $this->db->select($param['fields']);
             }

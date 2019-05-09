@@ -208,6 +208,7 @@ class Gestion_revision extends General_revision {
         $data_dictamen = $this->get_dictamen();
 //        pr($data_candidatos);
 //        pr($post);
+//        exit();
         foreach ($post['solicitud'] as $value) {
             $con_premio = FALSE;
             $nivel = null;
@@ -460,10 +461,11 @@ class Gestion_revision extends General_revision {
         return $result;
     }
 
-    private function candidatos() {
+    private function candidatos($estado = 'REVISADO') {
         $lenguaje = obtener_lenguaje_actual();
         $param = ['order' => 'tipo_contratacion desc, premio_anterior asc, id_nivel asc, 17 desc, 7 asc ']; //El 17 equivale a total de suma de puntos y l 7 a la fecha
-        $respuesta_model = $this->gestion_revision->get_candidatos($param);
+        
+        $respuesta_model = $this->gestion_revision->get_candidatos($param, 3, $estado);
         $result = array('success' => $respuesta_model['success'], 'msg' => $respuesta_model['msg'], 'result' => []);
         foreach ($respuesta_model['result'] as $row) {
             $result['result'][$row['id_solicitud']] = $row;
@@ -700,22 +702,26 @@ class Gestion_revision extends General_revision {
         $info_extra['subject'] = $subjet_mail;
 //        pr($output['solicitantes']);
 //        pr($$info_extra);
-//        exit();
 //        $output['revisados'] = $this->revisados();
         $output['dictamen'] = $this->get_dictamen();
-        $output['candidatos'] = $this->candidatos();
+        $output['candidatos'] = $this->candidatos(null);//con null obtiene todos los candidatos de todos los estados de solicitud
 //        pr($output['dictamen']);
+//        pr($output['solicitantes']['result']);
+//        exit();
         $indicador_error = FALSE;
         if (!empty($output['solicitantes']['result'])) {//Valida que existan candidatos
             $solicitantes = $output['solicitantes']['result'];
             if (!empty($output['candidatos']['result'])) {//Valida que existan candidatos
                 $numero = 0;
                 foreach ($output['candidatos']['result'] as $key => $val_candidatos) {
-//                pr($val_candidatos);
                     $solicitante_data = array_merge($solicitantes[$val_candidatos['id_solicitud']], $info_extra);
                     if (isset($output['dictamen'][$key])) {//Valida que este dictaminado
+//                    pr($key);
+//                pr($val_candidatos);
+//                    pr($output['dictamen'][$key]);
                         $dictamen_reg = $output['dictamen'][$key];
                         if ($dictamen_reg['aceptado'] == 1) {//aceptados
+//                            continue;
                             ++$numero;
                             $secuencial = sprintf("%04d", $numero);
                             $folio_dictamen = $val_candidatos['id_solicitud'] . strtoupper($dictamen_reg['id_nivel']) . $secuencial;
@@ -743,6 +749,7 @@ class Gestion_revision extends General_revision {
                             unset($solicitantes[$val_candidatos['id_solicitud']]); //Retira informacion del solicitante ya trabajado
                         }
                     } else {
+//                        continue;
                         $config = ['total_solicitudes', 'total_aceptados', 'subject'];
                         $solicitante_data['cve_estado_solicitud'] = En_estado_solicitud::RECHAZADOS;
                         $this->gestion_revision->guardar_historico_estado($val_candidatos['id_solicitud'], En_estado_solicitud::RECHAZADOS);
@@ -751,6 +758,7 @@ class Gestion_revision extends General_revision {
                         unset($solicitantes[$val_candidatos['id_solicitud']]); //Retira informacion del solicitante ya trabajado
                     }
                 }
+//                exit();
                 $this->notifica_cierre_rechazados($solicitantes, $output['candidatos']['result'], $info_extra, $subjet_mail);
                 $this->cerrar_convocatoria(); //Cierra la convocatoria
                 $this->enviar_correo_control_envios_dictamen(); //Envio de correoes
