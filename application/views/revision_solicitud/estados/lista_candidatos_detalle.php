@@ -83,6 +83,7 @@ if (isset($data_revisados)) {
                         <th scope="col"><?php echo $opciones_secciones['col_nivel']; ?></th>
                         <th scope="col"><?php echo $opciones_secciones['col_estatus_curso'];?></th>
                         <th scope="col"><?php echo $opciones_secciones['col_estatus_documentacion'];?></th>
+                        <th scope="col"><?php echo $opciones_secciones['btn_observacion'];?></th>
                         <th scope="col"><?php echo $opciones_secciones['col_opciones']; ?></th>
                     </tr>
                 </thead>
@@ -159,11 +160,9 @@ if (isset($data_revisados)) {
                         <td><?php foreach ($opcion_documento as $key_d => $documento) {
                             echo '<label><input type="checkbox" disabled="disabled" '.((array_key_exists($key_d, $row['estatus_documentos'])) ? 'checked="checked"' : '').' >'.$documento.'</label><br>'; 
                         } ?></td>
+                        <td><?php echo $row['observacion']; ?></td>
                         <td>
                             <a href="<?php echo site_url() . '/revision/index/' . $row['id_solicitud']; ?>/detalle" type="button"><?php echo $opciones_secciones['btn_ver']; ?> <span class="glyphicon glyphicon-new-window"/></a>
-                            <?php if(!empty($row['observacion'])) { ?>
-                                <br><a href="#" data-toggle="tooltip" title="<?php echo $row['observacion']; ?>" type="button"><?php echo $opciones_secciones['btn_observacion']; ?> <span class="glyphicon glyphicon-comment"/></a>
-                            <?php } ?>
                         </td>
                     </tr>
                     <?php
