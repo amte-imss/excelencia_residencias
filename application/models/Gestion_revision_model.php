@@ -421,7 +421,7 @@ class Gestion_revision_model extends MY_Model {
                     'coalesce(re.total_puntos_anios_cursos,0) total_puntos_anios_cursos', 'coalesce(eva.puntaje_pnpc,0) puntaje_pnpc', 'coalesce(eva.puntaje_carrera_docente,0) puntaje_carrera_docente',
                     'coalesce(eva.puntaje_sa_et,0) puntaje_sa_et', 'coalesce(eva.puntaje_sa_satisfaccion,0) puntaje_sa_satisfaccion', 'coalesce(eva.puntaje_anios_docente,0) puntaje_anios_docente'
                     , '(coalesce(eva.puntaje_anios_docente,0)+ coalesce(eva.puntaje_pnpc,0)+ coalesce(eva.puntaje_carrera_docente,0)+ coalesce(eva.puntaje_sa_et,0) + coalesce(eva.puntaje_sa_satisfaccion,0)) total_suma_puntos',
-                    'dic.id_dictamen', 'dic.folio_dictamen', 'dic.fecha fecha_dictamen', 'dic.id_nivel', 'dic.aceptado', 'dic.premio_anterior', 'dic.promedio', "(case WHEN s.tipo_contratacion=2 THEN 1 ELSE 0 END) AS tipo_contratacion", "i.email", "eva.observacion"
+                    'dic.id_dictamen', 'dic.folio_dictamen', 'dic.fecha fecha_dictamen', 'dic.id_nivel', 'dic.aceptado', 'dic.premio_anterior', 'dic.promedio', "(case WHEN s.tipo_contratacion=2 THEN 1 ELSE 0 END) AS tipo_contratacion", "i.email", "re.observaciones as observacion"
                 ));
             }
 
