@@ -241,9 +241,13 @@ class Revision extends MY_Controller {
 //                        }
                         $res_val = $this->aplica_validaciones_correccion();
                         if ($res_val['tp_msg'] == En_tpmsg::SUCCESS) {
+                            $total_anios_cursos_validos = $res_detalle['val_detalle_curso']['total_anios_cursos_validos'];
+                            $total_puntos_cursos_validos = (isset($res_detalle['tab_anios_permanencia']['puntaje'])) ? $res_detalle['tab_anios_permanencia']['puntaje'] : 0;
+
                             $datos_rev = [
                                 'observaciones' => $post['observaciones'],
-//                                'estatus' => FALSE
+                                'total_anios_curso' => $total_anios_cursos_validos,
+                                'total_puntos_anios_cursos' => $total_puntos_cursos_validos
                             ];
                             $res_update_rev = $this->actualizar_registro_revision($post['solicitud'], $datos_rev);
                             if ($res_update_rev['tp_msg'] == En_tpmsg::SUCCESS) {
@@ -272,9 +276,12 @@ class Revision extends MY_Controller {
                     } else if ($res_detalle['val_detalle_documento']['total_correccion'] > 0 || $res_detalle['val_detalle_curso']['total_correccion'] > 0) {//Enviar a correccion, es obligatorio que ponga observaciones
                         $res_val = $this->aplica_validaciones_correccion();
                         if ($res_val['tp_msg'] == En_tpmsg::SUCCESS) {
+                            $total_anios_cursos_validos = $res_detalle['val_detalle_curso']['total_anios_cursos_validos'];
+                            $total_puntos_cursos_validos = (isset($res_detalle['tab_anios_permanencia']['puntaje'])) ? $res_detalle['tab_anios_permanencia']['puntaje'] : 0;
                             $datos_rev = [
                                 'observaciones' => $post['observaciones'],
-//                                'estatus' => FALSE
+                                'total_anios_curso' => $total_anios_cursos_validos,
+                                'total_puntos_anios_cursos' => $total_puntos_cursos_validos
                             ];
                             $res_update_rev = $this->actualizar_registro_revision($post['solicitud'], $datos_rev);
                             if ($res_update_rev['tp_msg'] == En_tpmsg::SUCCESS) {
@@ -305,6 +312,7 @@ class Revision extends MY_Controller {
                         $total_puntos_cursos_validos = (isset($res_detalle['tab_anios_permanencia']['puntaje'])) ? $res_detalle['tab_anios_permanencia']['puntaje'] : 0;
                         $datos_rev = [
 //                            'estatus' => FALSE,
+                            'observaciones' => $post['observaciones'],
                             'total_anios_curso' => $total_anios_cursos_validos,
                             'total_puntos_anios_cursos' => $total_puntos_cursos_validos
                         ];
