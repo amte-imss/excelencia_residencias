@@ -887,6 +887,30 @@ class Catalogo extends MY_Controller {
               $this->template->getTemplate();
           }
 
+          public function gestion_ganador(){
+            $this->db->schema = 'excelencia';
+            $crud = $this->new_crud();
+            $crud->set_table('ganador');
+            $crud->set_subject('ganador');
+            $crud->set_primary_key('id_ganador');
+
+            $crud->columns("matricula", "nombre", "apellido_paterno", "apellido_materno", "delegacion", "puntaje_excelencia_docente", "nivel", "estatus_documentacion");
+            $crud->fields("matricula", "puntaje_excelencia_docente", "nivel", "estatus_documentacion");
+
+            $crud->add_fields("matricula", "puntaje_excelencia_docente", "nivel", "estatus_documentacion");
+            $crud->edit_fields("matricula", "puntaje_excelencia_docente", "nivel", "estatus_documentacion");
+
+            $crud->change_field_type('nombre', 'hidden');
+            $crud->change_field_type('apellido_paterno', 'hidden');
+
+            $data_view['output'] = $crud->render();
+            $data_view['title'] = "Ganadores";
+
+            $vista = $this->load->view('admin/admin.tpl.php', $data_view, true);
+            $this->template->setMainContent($vista);
+            $this->template->getTemplate();
+        }
+
 
           /**
            * Función que hace la gestión de opciones

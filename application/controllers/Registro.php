@@ -653,4 +653,29 @@ class Registro extends MY_Controller {
         }
     }
 
+    public function ganador() {
+        $output = [];
+
+        $output['language_text'] = $this->grupo_language_text;
+        $output['opciones_secciones'] = $this->obtener_grupos_texto('ganador', $this->obtener_idioma())['ganador'];
+        //pr($datos);
+        $output['listado'] = $this->registro_excelencia->get_ganador_completa(array('order_by'=>'g.nivel, g.puntaje_excelencia_docente desc, i.apellido_paterno'));
+
+        $output['sesion'] = $this->get_datos_sesion();
+        $output['super'] = false;
+        $this->load->library('LNiveles_acceso');
+        foreach ($output['sesion']['niveles_acceso'] as $key_s => $sesion) {
+            if ($sesion['clave_rol'] == LNiveles_acceso::Super) {
+                $output['super'] = true;
+            }
+        }
+
+        //pr($output);
+        $this->template->setTitle('Premio a la Excelencia Docente :: Ganadores');
+        //$this->template->setNav($this->load->view('tc_template/menu.tpl.php', null, TRUE));
+        $main_content = $this->load->view('registro_excelencia/lista_ganador', $output, true);
+        $this->template->setMainContent($main_content);
+        $this->template->getTemplate(true, 'tc_template/index_login.tpl.php');
+    }
+
 }
