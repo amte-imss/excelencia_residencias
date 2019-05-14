@@ -570,4 +570,51 @@ class Registro_excelencia_model extends CI_Model {
         return $result;
     }
 
+    public function get_ganador($param = []) {
+        try {
+            $this->db->flush_cache();
+            $this->db->reset_query();
+            /*if (isset($param['select'])) {
+                $this->db->select($param['select']);
+            } else {
+                $this->db->select(array('s.*', 'u.email', 'i.*', 'h.*', 'hs.cve_estado_solicitud', 'hs.fecha as fecha_hs', 'del.nombre as delegacion', 'dep.nombre as departamento', 'unidad.nombre as unidad', 'unidad.es_umae', "to_char(s.fecha, 'yyyy-dd-mm hh:MI:ss') as fecha_format", "conv.*", "i.nombre as nombre_ui"));
+            }
+            $this->db->join('excelencia.historico_solicitud hs', 'hs.id_solicitud=s.id_solicitud and actual=true', 'left', false);
+            $this->db->join('excelencia.convocatoria conv', 'conv.id_convocatoria=s.id_convocatoria and conv.activo=true', 'left', false);
+            $this->db->join('sistema.usuarios u', 'u.username=s.matricula', 'left');
+            $this->db->join('sistema.informacion_usuario i', 'i.matricula=u.username', 'left');
+            $this->db->join('sistema.historico_informacion_usuario h', 'h.id_informacion_usuario=i.id_informacion_usuario', 'left');
+            $this->db->join('catalogo.delegaciones del', 'i.clave_delegacional=del.clave_delegacional', 'left');
+            $this->db->join('catalogo.departamento dep', 'dep.clave_departamental=h.clave_departamental', 'left');*/
+            $this->db->join('excelencia.ganador g', 'g.matricula=s.matricula', 'left');
+
+            if (isset($param['where'])) {
+                $this->db->where($param['where']);
+            }
+
+            if (isset($param['where_in'])) {
+                $this->db->where_in($param['where_in'][0], $param['where_in'][1]);
+            }
+
+            if (isset($param['order_by'])) {
+                $this->db->order_by($param['order_by']);
+            }
+
+            if (isset($param['group_by'])) {
+                $this->db->group_by($param['group_by']);
+            }
+
+            $res = $this->db->get('excelencia.solicitud s');
+            //pr($this->db->last_query());
+            $this->db->flush_cache();
+            $this->db->reset_query();
+            $resultado_mapeo = $res->result_array();
+            //$resultado_mapeo = $this->mapear_formato($reusltado);
+
+            return $resultado_mapeo;
+        } catch (Exception $ex) {
+            return [];
+        }
+    }
+
 }

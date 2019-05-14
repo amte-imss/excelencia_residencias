@@ -120,16 +120,44 @@ class Inicio extends MY_Controller {
         $this->template->getTemplate();
     }
 
+    public function mensaje() {
+        $output = [];
+        //$output['language_text'] = $this->language_text; //Asigna textos de lenguaje para el template de login
+        $datos_sesion = $this->get_datos_sesion();
+        $id_informacion_usuario = $datos_sesion['username'];
+        //pr($id_informacion_usuario);
+        $idioma = $this->obtener_idioma();
+        $output['language_text'] = $this->obtener_grupos_texto(array('ganador'), $idioma);
+        $this->language_text = $output['language_text'];
+        $this->load->model('Registro_excelencia_model', 'registro_excelencia');
+        $output['listado'] = $this->registro_excelencia->get_ganador(array('where'=>"s.matricula='".$id_informacion_usuario."'"));
+        $output['texto'] = $output['language_text']['ganador']['lbl_no_ganador'];
+        if(count($output['listado'])>0){
+            if(isset($output['listado'][0]['id_ganador']) && !empty($output['listado'][0]['id_ganador'])){
+                $output['texto'] = $this->reemplazar_texto($output['language_text']['ganador']['lbl_ganador'], $output['listado'][0]);
+            }
+        }
+
+        //pr($output);
+        $main_content = $this->load->view('ganador.php', $output, TRUE);
+        $this->template->setMainContent($main_content);
+        $this->template->getTemplate();
+    }
+
+    private function reemplazar_texto($texto, $datos){
+        $texto = str_replace('$$nombre$$', $datos['nombre'], str_replace('$$apellido_paterno$$', $datos['apellido_paterno'], str_replace('$$apellido_materno$$', $datos['apellido_materno'], str_replace('$$matricula$$', $datos['matricula'], str_replace('$$nivel$$', $datos['nivel'], $texto)))));
+        return $texto;
+    }
+
     private function redireccion_inicio(&$foro_educacion) {
-        pr($foro_educacion); //exit();
-        $redirect = array(LNiveles_acceso::Investigador => '/registro/solicitud',
+        $redirect = array(LNiveles_acceso::Investigador => '/inicio/mensaje',
             LNiveles_acceso::Revisor => '/revision/solicitud_revision',
             'default' => 'inicio/inicio',
         );
         ///Redirección de investigador
         if (isset($foro_educacion['usuario']['niveles_acceso'][0]['clave_rol'])) {
             $rol = $foro_educacion['usuario']['niveles_acceso'][0]['clave_rol'];
-            pr($redirect[$rol]); 
+            //pr($redirect[$rol]); 
             if (isset($redirect[$rol])) {
                 redirect(site_url($redirect[$rol])); //Redirección de moderador
             } else {
